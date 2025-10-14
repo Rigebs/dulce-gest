@@ -1,16 +1,30 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.DulceGest" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+    <style name="Theme.DulceGest" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Colores principales -->
+        <item name="colorPrimary">@color/chocolate_900</item>
+        <item name="colorPrimaryVariant">@color/chocolate_700</item>
+        <item name="colorOnPrimary">@color/cream</item>
+
+        <!-- Colores secundarios / acento -->
+        <item name="colorSecondary">@color/raspberry</item>
+        <item name="colorSecondaryVariant">@color/golden</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <!-- Fondo y superficie -->
+        <item name="android:colorBackground">@color/bg_dark</item>
+        <item name="colorSurface">@color/card_dark</item>
+        <item name="colorOnSurface">@color/text_primary_dark</item>
+
+        <!-- Textos -->
+        <item name="android:textColorPrimary">@color/text_primary_dark</item>
+        <item name="android:textColorSecondary">@color/text_secondary_dark</item>
+
+        <!-- Estados -->
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Status bar y navegación -->
+        <item name="android:statusBarColor">@color/chocolate_900</item>
+        <item name="android:navigationBarColor">@color/bg_dark</item>
     </style>
 </resources>

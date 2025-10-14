@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- neutrales -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="bg_light">#FFF8F2</color>        <!-- fondo claro, crema -->
+    <color name="bg_dark">#1B1A18</color>         <!-- fondo oscuro -->
+
+    <!-- primarios -->
+    <color name="chocolate_900">#3E2A1F</color>
+    <color name="chocolate_700">#6B4A39</color>
+    <color name="cream">#F6E7D9</color>
+
+    <!-- acentos -->
+    <color name="raspberry">#E94F6E</color>       <!-- acento frambuesa -->
+    <color name="golden">#F2B33D</color>          <!-- acento dorado (decoración) -->
+
+    <!-- estados -->
+    <color name="success">#2E8B57</color>
+    <color name="error">#D32F2F</color>
+
+    <!-- surfaces/cards -->
+    <color name="card_light">#FFFFFF</color>
+    <color name="card_dark">#2A2724</color>
+
+    <!-- text -->
+    <color name="text_primary_light">#281914</color>
+    <color name="text_secondary_light">#6B4A39</color>
+    <color name="text_primary_dark">#F5EDE8</color>
+    <color name="text_secondary_dark">#D7C6BD</color>
 </resources>
