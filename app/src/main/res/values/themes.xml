@@ -23,11 +23,31 @@
         <item name="colorError">@color/error</item>
         <item name="colorOnError">@color/white</item>
 
-        <!-- Status bar y navegación -->
+        <!-- Diálogos (mejor contraste) -->
+        <item name="alertDialogTheme">@style/ThemeOverlay.DulceGest.Dialog.Light</item>
+
+        <!-- BottomNavigationView y barras -->
         <item name="android:statusBarColor">@color/chocolate_900</item>
         <item name="android:navigationBarColor">@color/bg_light</item>
+        <item name="bottomNavigationStyle">@style/Widget.DulceGest.BottomNav.Light</item>
 
-        <!-- Opcional: activa el estilo de borde o forma de componentes -->
+        <!-- Formas -->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MaterialComponents.SmallComponent</item>
+    </style>
+
+    <!-- Overlay para diálogos -->
+    <style name="ThemeOverlay.DulceGest.Dialog.Light" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/card_light</item>
+        <item name="colorOnSurface">@color/text_primary_light</item>
+        <item name="colorPrimary">@color/raspberry</item> <!-- botones resaltan -->
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+    <!-- BottomNavigation -->
+    <style name="Widget.DulceGest.BottomNav.Light" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="backgroundTint">@color/card_light</item>
+        <item name="itemIconTint">@color/chocolate_900</item>
+        <item name="itemTextColor">@color/chocolate_900</item>
+        <item name="itemRippleColor">@color/raspberry</item>
     </style>
 </resources>

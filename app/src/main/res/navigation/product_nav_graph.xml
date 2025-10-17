@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_products"
+    app:startDestination="@id/nav_productList">
+
+    <!-- LISTADO DE PRODUCTOS -->
+    <fragment
+        android:id="@+id/nav_productList"
+        android:name="com.rige.dulcegest.ui.products.ProductListFragment"
+        android:label="Productos">
+        <action
+            android:id="@+id/action_productListFragment_to_productFormFragment"
+            app:destination="@id/nav_productForm" />
+    </fragment>
+
+    <!-- FORMULARIO DE PRODUCTOS -->
+    <fragment
+        android:id="@+id/nav_productForm"
+        android:name="com.rige.dulcegest.ui.products.ProductFormFragment"
+        android:label="Producto">
+        <argument
+            android:name="productId"
+            app:argType="long"
+            android:defaultValue="0L" />
+        <action
+            android:id="@+id/action_productFormFragment_to_productRecipeFragment"
+            app:destination="@id/nav_productRecipe">
+            <argument
+                android:name="productId"
+                app:argType="long" />
+        </action>
+
+    </fragment>
+
+    <!-- RECETA DE PRODUCTOS -->
+    <fragment
+        android:id="@+id/nav_productRecipe"
+        android:name="com.rige.dulcegest.ui.products.ProductRecipeFragment"
+        android:label="Receta">
+        <argument
+            android:name="productId"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
+
+</navigation>

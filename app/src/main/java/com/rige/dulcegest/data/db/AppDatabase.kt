@@ -1,10 +1,16 @@
 package com.rige.dulcegest.data.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.rige.dulcegest.data.db.dao.ExpenseDao
 import com.rige.dulcegest.data.db.dao.IngredientDao
+import com.rige.dulcegest.data.db.dao.ProductDao
+import com.rige.dulcegest.data.db.dao.ProductRecipeDao
+import com.rige.dulcegest.data.db.dao.ProductionBatchDao
+import com.rige.dulcegest.data.db.dao.ProductionConsumptionDao
+import com.rige.dulcegest.data.db.dao.PurchaseDao
+import com.rige.dulcegest.data.db.dao.SaleDao
+import com.rige.dulcegest.data.db.dao.SaleItemDao
 import com.rige.dulcegest.data.db.entities.Expense
 import com.rige.dulcegest.data.db.entities.Ingredient
 import com.rige.dulcegest.data.db.entities.Product
@@ -31,21 +37,14 @@ import com.rige.dulcegest.data.db.entities.SaleItem
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun ingredientDao(): IngredientDao
 
-    companion object {
-        @Volatile private var INSTANCE: AppDatabase? = null
-        fun getInstance(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "dulcegest.db"
-                ).fallbackToDestructiveMigration(true)
-                    .build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
+    abstract fun ingredientDao(): IngredientDao
+    abstract fun productDao(): ProductDao
+    abstract fun productRecipeDao(): ProductRecipeDao
+    abstract fun purchaseDao(): PurchaseDao
+    abstract fun productionBatchDao(): ProductionBatchDao
+    abstract fun productionConsumptionDao(): ProductionConsumptionDao
+    abstract fun saleDao(): SaleDao
+    abstract fun saleItemDao(): SaleItemDao
+    abstract fun expenseDao(): ExpenseDao
 }

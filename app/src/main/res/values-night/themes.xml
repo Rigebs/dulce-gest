@@ -1,14 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.DulceGest" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Colores principales -->
-        <item name="colorPrimary">@color/chocolate_900</item>
+        <item name="colorPrimary">@color/raspberry</item> <!-- más contraste que chocolate -->
         <item name="colorPrimaryVariant">@color/chocolate_700</item>
-        <item name="colorOnPrimary">@color/cream</item>
+        <item name="colorOnPrimary">@color/white</item>
 
         <!-- Colores secundarios / acento -->
-        <item name="colorSecondary">@color/raspberry</item>
-        <item name="colorSecondaryVariant">@color/golden</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/golden</item>
+        <item name="colorOnSecondary">@color/black</item>
 
         <!-- Fondo y superficie -->
         <item name="android:colorBackground">@color/bg_dark</item>
@@ -23,8 +22,28 @@
         <item name="colorError">@color/error</item>
         <item name="colorOnError">@color/white</item>
 
-        <!-- Status bar y navegación -->
-        <item name="android:statusBarColor">@color/chocolate_900</item>
+        <!-- Diálogos -->
+        <item name="alertDialogTheme">@style/ThemeOverlay.DulceGest.Dialog.Dark</item>
+
+        <!-- BottomNavigation -->
+        <item name="android:statusBarColor">@color/bg_dark</item>
         <item name="android:navigationBarColor">@color/bg_dark</item>
+        <item name="bottomNavigationStyle">@style/Widget.DulceGest.BottomNav.Dark</item>
+    </style>
+
+    <!-- Overlay para diálogos -->
+    <style name="ThemeOverlay.DulceGest.Dialog.Dark" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/card_dark</item>
+        <item name="colorOnSurface">@color/text_primary_dark</item>
+        <item name="colorPrimary">@color/raspberry</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+    <!-- BottomNavigation -->
+    <style name="Widget.DulceGest.BottomNav.Dark" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="backgroundTint">@color/card_dark</item>
+        <item name="itemIconTint">@color/text_primary_dark</item>
+        <item name="itemTextColor">@color/text_primary_dark</item>
+        <item name="itemRippleColor">@color/raspberry</item>
     </style>
 </resources>
