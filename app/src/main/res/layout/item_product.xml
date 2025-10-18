@@ -1,33 +1,49 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp"
-    android:orientation="vertical"
-    android:background="?android:selectableItemBackground"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="12dp"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/chocolate_700"
+    app:strokeWidth="0.5dp">
 
-    <TextView
-        android:id="@+id/txtProductName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Torta de Chocolate"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:padding="12dp">
 
-    <TextView
-        android:id="@+id/txtProductInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Unidad: u  |  Precio: $12.5"
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/txtProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Torta de Chocolate"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
 
-    <TextView
-        android:id="@+id/txtStock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Stock: 10.0"
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray" />
+        <TextView
+            android:id="@+id/txtProductInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Unidad: u  |  Precio: $12.5"
+            android:textSize="14sp"
+            android:layout_marginBottom="2dp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/txtStock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stock: 10.0"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

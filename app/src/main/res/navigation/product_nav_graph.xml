@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_products"
     app:startDestination="@id/nav_productList">
 
@@ -12,6 +13,14 @@
         <action
             android:id="@+id/action_productListFragment_to_productFormFragment"
             app:destination="@id/nav_productForm" />
+
+        <action
+            android:id="@+id/action_productListFragment_to_productionFormFragment"
+            app:destination="@id/productionFormFragment" />
+
+        <action
+            android:id="@+id/action_productListFragment_to_productionListFragment"
+            app:destination="@id/productionListFragment" />
     </fragment>
 
     <!-- FORMULARIO DE PRODUCTOS -->
@@ -23,25 +32,18 @@
             android:name="productId"
             app:argType="long"
             android:defaultValue="0L" />
-        <action
-            android:id="@+id/action_productFormFragment_to_productRecipeFragment"
-            app:destination="@id/nav_productRecipe">
-            <argument
-                android:name="productId"
-                app:argType="long" />
-        </action>
-
     </fragment>
 
-    <!-- RECETA DE PRODUCTOS -->
     <fragment
-        android:id="@+id/nav_productRecipe"
-        android:name="com.rige.dulcegest.ui.products.ProductRecipeFragment"
-        android:label="Receta">
-        <argument
-            android:name="productId"
-            app:argType="long"
-            android:defaultValue="0L" />
-    </fragment>
+        android:id="@+id/productionFormFragment"
+        android:name="com.rige.dulcegest.ui.products.ProductionFormFragment"
+        android:label="Registrar Producción"
+        tools:layout="@layout/fragment_production_form" />
+
+    <fragment
+        android:id="@+id/productionListFragment"
+        android:name="com.rige.dulcegest.ui.products.ProductionListFragment"
+        android:label="Registrar Producción"
+        tools:layout="@layout/fragment_production_list" />
 
 </navigation>

@@ -1,16 +1,20 @@
 package com.rige.dulcegest.ui.ingredients
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.rige.dulcegest.R
 import com.rige.dulcegest.data.db.entities.Ingredient
 import com.rige.dulcegest.databinding.FragmentIngredientFormBinding
 import com.rige.dulcegest.ui.viewmodels.IngredientViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 
 @AndroidEntryPoint
@@ -22,14 +26,26 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
     private val viewModel: IngredientViewModel by viewModels()
     private var ingredientId: Long? = null
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentIngredientFormBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentIngredientFormBinding.bind(view)
 
-        // Recuperar argumento (si viene desde la lista)
+        val toolbar = binding.toolbarIngredientForm
+        toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+
         ingredientId = arguments?.getLong("ingredientId")
+        if (ingredientId == null) {
+            toolbar.title = "Crear ingrediente"
+        } else {
+            toolbar.title = "Editar ingrediente"
+        }
 
-        // Si hay un ID, cargar datos existentes (modo edición)
         ingredientId?.let { id ->
             viewModel.getIngredientById(id).observe(viewLifecycleOwner) { ingredient ->
                 ingredient?.let {
@@ -60,7 +76,7 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
         }
 
         val ingredient = Ingredient(
-            id = ingredientId ?: 0,
+            id = ingredientId ?: 0L,
             name = name,
             unit = unit,
             costPerUnit = cost,
@@ -69,15 +85,16 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
             notes = notes
         )
 
-        if (ingredientId == null) {
-            viewModel.insert(ingredient)
-            Toast.makeText(requireContext(), "Ingrediente agregado", Toast.LENGTH_SHORT).show()
-        } else {
-            viewModel.update(ingredient)
-            Toast.makeText(requireContext(), "Ingrediente actualizado", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            if (ingredientId == null || ingredientId == 0L) {
+                viewModel.insert(ingredient)
+                Toast.makeText(requireContext(), "Ingrediente agregado", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.update(ingredient)
+                Toast.makeText(requireContext(), "Ingrediente actualizado", Toast.LENGTH_SHORT).show()
+            }
+            findNavController().navigateUp()
         }
-
-        findNavController().navigateUp()
     }
 
     override fun onDestroyView() {

@@ -1,155 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="20dp"
-    android:background="?android:colorBackground">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <!-- Toolbar con flecha de retroceso -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarIngredientForm"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:paddingBottom="32dp">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="Crear ingrediente"
+        app:titleTextColor="?attr/colorOnPrimary"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationIconTint="?attr/colorOnPrimary"/>
 
-        <!-- Nombre -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutName"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+    <!-- Contenido del formulario dentro de un ScrollView -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre del ingrediente"
-            android:layout_marginBottom="16dp"
-            app:hintEnabled="true"
-            app:hintAnimationEnabled="true"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxStrokeColor="@color/chocolate_700"
-            app:boxStrokeWidth="2dp">
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <!-- Nombre del ingrediente -->
+            <EditText
                 android:id="@+id/inputName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Nombre del ingrediente"
                 android:inputType="textCapWords"
-                android:padding="12dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginBottom="12dp" />
 
-        <!-- Unidad -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutUnit"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Unidad de medida (kg, gr, litro...)"
-            android:layout_marginBottom="16dp"
-            app:hintEnabled="true"
-            app:hintAnimationEnabled="true"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxStrokeColor="@color/chocolate_700"
-            app:boxStrokeWidth="2dp">
-
-            <com.google.android.material.textfield.TextInputEditText
+            <!-- Unidad de medida -->
+            <EditText
                 android:id="@+id/inputUnit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Unidad de medida (kg, gr, litro...)"
                 android:inputType="text"
-                android:padding="12dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginBottom="12dp" />
 
-        <!-- Costo -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutCost"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Costo por unidad"
-            android:layout_marginBottom="16dp"
-            app:hintEnabled="true"
-            app:hintAnimationEnabled="true"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxStrokeColor="@color/chocolate_700"
-            app:boxStrokeWidth="2dp">
-
-            <com.google.android.material.textfield.TextInputEditText
+            <!-- Costo por unidad -->
+            <EditText
                 android:id="@+id/inputCost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Costo por unidad"
                 android:inputType="numberDecimal"
-                android:padding="12dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginBottom="12dp" />
 
-        <!-- Stock -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutStock"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Stock disponible"
-            android:layout_marginBottom="16dp"
-            app:hintEnabled="true"
-            app:hintAnimationEnabled="true"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxStrokeColor="@color/chocolate_700"
-            app:boxStrokeWidth="2dp">
-
-            <com.google.android.material.textfield.TextInputEditText
+            <!-- Stock disponible -->
+            <EditText
                 android:id="@+id/inputStock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Stock disponible"
                 android:inputType="numberDecimal"
-                android:padding="12dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginBottom="12dp" />
 
-        <!-- Notas -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutNotes"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Notas (opcional)"
-            android:layout_marginBottom="24dp"
-            app:hintEnabled="true"
-            app:hintAnimationEnabled="true"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxStrokeColor="@color/chocolate_700"
-            app:boxStrokeWidth="2dp">
-
-            <com.google.android.material.textfield.TextInputEditText
+            <!-- Notas (opcional) -->
+            <EditText
                 android:id="@+id/inputNotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Notas (opcional)"
                 android:inputType="textMultiLine"
                 android:minLines="2"
-                android:padding="12dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginBottom="16dp" />
 
-        <!-- Botón Guardar -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Guardar ingrediente"
-            android:textAllCaps="false"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="@color/chocolate_700"
-            android:textColor="@color/cream"
-            app:cornerRadius="18dp" />
+            <!-- Botón Guardar -->
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Guardar ingrediente" />
 
-    </LinearLayout>
-</ScrollView>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

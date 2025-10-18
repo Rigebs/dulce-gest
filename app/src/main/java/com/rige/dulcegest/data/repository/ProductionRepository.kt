@@ -5,13 +5,14 @@ import com.rige.dulcegest.data.db.dao.ProductionBatchDao
 import com.rige.dulcegest.data.db.dao.ProductionConsumptionDao
 import com.rige.dulcegest.data.db.entities.ProductionBatch
 import com.rige.dulcegest.data.db.entities.ProductionConsumption
+import com.rige.dulcegest.data.db.relations.ProductionBatchWithProduct
 import jakarta.inject.Inject
 
 class ProductionRepository @Inject constructor(
     private val batchDao: ProductionBatchDao,
     private val consumptionDao: ProductionConsumptionDao
 ) {
-    val allBatches: LiveData<List<ProductionBatch>> = batchDao.getAll()
+    val allBatches: LiveData<List<ProductionBatchWithProduct>> = batchDao.getBatchesWithProduct()
 
     suspend fun getBatch(id: Long) = batchDao.getById(id)
 

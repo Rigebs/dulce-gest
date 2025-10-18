@@ -20,9 +20,7 @@ class ExpenseListFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.textTitle.text = "Pantalla de Gastos 💡"
-    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

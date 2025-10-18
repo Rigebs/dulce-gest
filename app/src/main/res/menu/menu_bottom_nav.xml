@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_ingredients"
+        android:id="@+id/ingredientListFragment"
         android:icon="@drawable/ic_ingredients"
         android:title="Ingredientes" />
     <item
-        android:id="@+id/nav_graph_products"
+        android:id="@+id/nav_productList"
         android:icon="@drawable/ic_cookie"
         android:title="Productos" />
     <item

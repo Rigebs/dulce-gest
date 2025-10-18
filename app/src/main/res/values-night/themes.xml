@@ -6,7 +6,8 @@
         <item name="colorOnPrimary">@color/white</item>
 
         <!-- Colores secundarios / acento -->
-        <item name="colorSecondary">@color/golden</item>
+        <item name="colorSecondary">@color/raspberry</item>
+        <item name="colorSecondaryVariant">@color/golden</item>
         <item name="colorOnSecondary">@color/black</item>
 
         <!-- Fondo y superficie -->

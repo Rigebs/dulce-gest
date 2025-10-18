@@ -1,14 +1,18 @@
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="6dp"
-    app:cardCornerRadius="16dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="8dp"
     app:cardElevation="2dp"
     app:strokeColor="@color/chocolate_700"
-    app:strokeWidth="0.5dp"
-    android:clickable="true"
-    android:foreground="?attr/selectableItemBackground">
+    app:strokeWidth="0.5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,19 +22,21 @@
 
         <TextView
             android:id="@+id/tvName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
             android:text="Harina"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:textColor="?colorOnSurface" />
+            android:textColor="?colorOnSurface"
+            android:layout_marginBottom="4dp" />
 
         <TextView
             android:id="@+id/tvInfo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
             android:text="Kg • $2.50 • Stock: 3.5"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="?colorOnSurface"
             android:alpha="0.8" />
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

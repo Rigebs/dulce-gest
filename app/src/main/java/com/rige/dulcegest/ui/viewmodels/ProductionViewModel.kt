@@ -27,4 +27,18 @@ class ProductionViewModel @Inject constructor(
     fun deleteBatch(batch: ProductionBatch) = viewModelScope.launch {
         repo.deleteBatch(batch)
     }
+
+    fun saveBatch(batch: ProductionBatch): LiveData<Boolean> {
+        val result = MutableLiveData<Boolean>()
+        viewModelScope.launch {
+            try {
+                repo.insertBatch(batch, emptyList())
+                result.postValue(true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                result.postValue(false)
+            }
+        }
+        return result
+    }
 }
