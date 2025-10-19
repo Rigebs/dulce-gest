@@ -40,6 +40,13 @@ class ProductionFormFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = binding.toolbarProductionForm
+        toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+
         setupProductSpinner()
         binding.btnSave.setOnClickListener { saveProduction() }
     }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/ingredientListFragment">
+    app:startDestination="@id/nav_productList">
 
     <!-- =================== INGREDIENTES =================== -->
     <fragment
@@ -67,7 +67,17 @@
     <fragment
         android:id="@+id/nav_sales"
         android:name="com.rige.dulcegest.ui.sales.SaleListFragment"
-        android:label="Ventas" />
+        android:label="Ventas" >
+        <action
+            android:id="@+id/action_saleListFragment_to_saleFormFragment"
+            app:destination="@id/saleFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/saleFormFragment"
+        android:name="com.rige.dulcegest.ui.sales.SaleFormFragment"
+        android:label="Registrar venta"
+        tools:layout="@layout/fragment_sale_form" />
 
     <!-- =================== GASTOS =================== -->
     <fragment

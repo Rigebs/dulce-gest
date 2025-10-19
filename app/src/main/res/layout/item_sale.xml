@@ -18,30 +18,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="16dp">
 
-        <TextView
-            android:id="@+id/txtProductName"
+        <!-- Fila superior: Fecha a la izquierda, Total a la derecha -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Torta de Chocolate"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="4dp" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
 
+            <TextView
+                android:id="@+id/tvSaleDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="2025-10-18"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total: $0.00"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Cliente -->
         <TextView
-            android:id="@+id/txtProductInfo"
+            android:id="@+id/tvCustomer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Unidad: u  |  Precio: $12.5"
-            android:textSize="14sp"
-            android:layout_marginBottom="2dp" />
-
-        <TextView
-            android:id="@+id/txtStock"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Stock: 10.0"
+            android:text="Cliente"
             android:textSize="14sp" />
 
     </LinearLayout>

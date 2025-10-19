@@ -79,7 +79,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:src="@drawable/ic_menu"
-
             android:contentDescription="Menú principal" />
     </FrameLayout>
 

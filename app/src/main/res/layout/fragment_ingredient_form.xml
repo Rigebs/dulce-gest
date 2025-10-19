@@ -37,13 +37,14 @@
                 android:layout_marginBottom="12dp" />
 
             <!-- Unidad de medida -->
-            <EditText
-                android:id="@+id/inputUnit"
+            <Spinner
+                android:id="@+id/spinnerUnit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Unidad de medida (kg, gr, litro...)"
-                android:inputType="text"
-                android:layout_marginBottom="12dp" />
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/spinner_background"
+                android:spinnerMode="dropdown" />
 
             <!-- Costo por unidad -->
             <EditText

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rige.dulcegest.R
 import com.rige.dulcegest.databinding.FragmentProductListBinding
 import com.rige.dulcegest.ui.viewmodels.ProductViewModel
+import com.rige.dulcegest.utils.toPx
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -80,17 +81,17 @@ class ProductListFragment : Fragment() {
 
         binding.fabAddProduct.apply {
             visibility = View.VISIBLE
-            animate().translationY(-180f).alpha(1f).setDuration(200).start()
+            animate().translationY((-90f).toPx(requireContext())).alpha(1f).setDuration(200).start()
         }
 
         binding.fabAddProduction.apply {
             visibility = View.VISIBLE
-            animate().translationY(-320f).alpha(1f).setDuration(200).start()
+            animate().translationY((-160f).toPx(requireContext())).alpha(1f).setDuration(200).start()
         }
 
         binding.fabViewProduction.apply {
             visibility = View.VISIBLE
-            animate().translationY(-460f).alpha(1f).setDuration(200).start()
+            animate().translationY((-230f).toPx(requireContext())).alpha(1f).setDuration(200).start()
         }
 
         binding.fabMain.animate().rotation(90f).setDuration(200).start()

@@ -1,39 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="12dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginTop="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/chocolate_700"
+    app:strokeWidth="0.5dp">
 
-    <TextView
-        android:id="@+id/tvProductName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Producto"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvQuantity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cantidad: 0"
-        android:textSize="14sp" />
+        <!-- Fila superior: Producto a la izquierda, Cantidad a la derecha -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
 
-    <TextView
-        android:id="@+id/tvTotalCost"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Costo: $0"
-        android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tvProductName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Producto"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:ellipsize="end"
+                android:singleLine="true" />
 
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Fecha: --/--/----"
-        android:textSize="12sp"
-        android:textColor="#888" />
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cantidad: 0"
+                android:textSize="14sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
 
-</LinearLayout>
+        <!-- Fila costo total -->
+        <TextView
+            android:id="@+id/tvTotalCost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Costo: $0.00"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Fila inferior: Fecha -->
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha: --/--/----"
+            android:textSize="12sp"
+            android:textColor="#888" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

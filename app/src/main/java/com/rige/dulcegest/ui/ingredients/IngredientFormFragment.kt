@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -35,12 +36,20 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
         super.onViewCreated(view, savedInstanceState)
 
         val toolbar = binding.toolbarIngredientForm
-        toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
+        toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+
+        // Configurar Spinner
+        val unitsAdapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.units_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_list_item_1)
         }
+        binding.spinnerUnit.adapter = unitsAdapter
 
         ingredientId = arguments?.getLong("ingredientId")
-        if (ingredientId == null) {
+        if (ingredientId == null || ingredientId == 0L) {
             toolbar.title = "Crear ingrediente"
         } else {
             toolbar.title = "Editar ingrediente"
@@ -50,7 +59,9 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
             viewModel.getIngredientById(id).observe(viewLifecycleOwner) { ingredient ->
                 ingredient?.let {
                     binding.inputName.setText(it.name)
-                    binding.inputUnit.setText(it.unit)
+                    // Seleccionar unidad en el spinner
+                    val unitPosition = unitsAdapter.getPosition(it.unit)
+                    if (unitPosition >= 0) binding.spinnerUnit.setSelection(unitPosition)
                     binding.inputCost.setText(it.costPerUnit.toString())
                     binding.inputStock.setText(it.stockQty.toString())
                     binding.inputNotes.setText(it.notes ?: "")
@@ -58,14 +69,12 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
             }
         }
 
-        binding.btnSave.setOnClickListener {
-            saveIngredient()
-        }
+        binding.btnSave.setOnClickListener { saveIngredient() }
     }
 
     private fun saveIngredient() {
         val name = binding.inputName.text.toString().trim()
-        val unit = binding.inputUnit.text.toString().trim()
+        val unit = binding.spinnerUnit.selectedItem.toString()
         val cost = binding.inputCost.text.toString().toDoubleOrNull() ?: 0.0
         val stock = binding.inputStock.text.toString().toDoubleOrNull() ?: 0.0
         val notes = binding.inputNotes.text.toString().trim().ifEmpty { null }

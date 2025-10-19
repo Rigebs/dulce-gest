@@ -3,11 +3,13 @@ package com.rige.dulcegest.ui.products
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.rige.dulcegest.R
 import com.rige.dulcegest.data.db.entities.Ingredient
 import com.rige.dulcegest.data.db.entities.Product
 import com.rige.dulcegest.data.db.entities.ProductRecipe
@@ -42,24 +44,42 @@ class ProductFormFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = binding.toolbarProductForm
+        toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+
+        // Configurar Spinner de unidad
+        val unitsAdapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.units_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_list_item_1)
+        }
+        binding.spinnerUnit.adapter = unitsAdapter
+
         productId = arguments?.getLong("productId")
+        toolbar.title = if (productId == null || productId == 0L) "Registrar producto" else "Editar producto"
 
-        adapter = RecipeIngredientAdapter(onRemove = { adapter.removeIngredient(it) })
-
+        adapter = RecipeIngredientAdapter(onRemove = {
+            adapter.removeIngredient(it)
+            updateIngredientEmptyState()
+        })
         binding.recyclerIngredients.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerIngredients.adapter = adapter
 
-        // Observa todos los ingredientes disponibles
         ingredientViewModel.ingredients.observe(viewLifecycleOwner) {
             ingredientList = it
         }
 
-        // Si es edición, carga producto y su receta
         productId?.let { id ->
             productViewModel.getProductById(id).observe(viewLifecycleOwner) { product ->
                 product?.let {
                     binding.inputName.setText(it.name)
-                    binding.inputUnit.setText(it.unit)
+                    // Seleccionar unidad en el spinner
+                    val unitPosition = unitsAdapter.getPosition(it.unit)
+                    if (unitPosition >= 0) binding.spinnerUnit.setSelection(unitPosition)
                     binding.inputPrice.setText(it.price.toString())
                     binding.inputNotes.setText(it.notes ?: "")
                 }
@@ -67,6 +87,7 @@ class ProductFormFragment : Fragment() {
 
             productViewModel.getRecipeWithIngredients(id).observe(viewLifecycleOwner) { recipeWithIngredients ->
                 adapter.setItems(recipeWithIngredients)
+                updateIngredientEmptyState()
             }
         }
 
@@ -74,9 +95,6 @@ class ProductFormFragment : Fragment() {
         binding.btnSave.setOnClickListener { saveProduct() }
     }
 
-    /**
-     * Muestra un diálogo para seleccionar un ingrediente de la lista
-     */
     private fun showIngredientSelector() {
         if (ingredientList.isEmpty()) {
             Toast.makeText(requireContext(), "No hay ingredientes disponibles", Toast.LENGTH_SHORT).show()
@@ -102,17 +120,15 @@ class ProductFormFragment : Fragment() {
                 )
 
                 adapter.addIngredient(recipeItem)
+                updateIngredientEmptyState()
             }
             .setNegativeButton("Cancelar", null)
             .show()
     }
 
-    /**
-     * Guarda el producto con su receta
-     */
     private fun saveProduct() {
         val name = binding.inputName.text.toString().trim()
-        val unit = binding.inputUnit.text.toString().trim()
+        val unit = binding.spinnerUnit.selectedItem.toString() // Obtenemos unidad desde Spinner
         val price = binding.inputPrice.text.toString().toDoubleOrNull() ?: 0.0
         val notes = binding.inputNotes.text.toString().trim().ifEmpty { null }
 
@@ -131,11 +147,7 @@ class ProductFormFragment : Fragment() {
             notes = notes
         )
 
-        val recipeList = adapter.getItems().map {
-            it.recipe.copy(productId = productId ?: 0)
-        }
-
-        println(recipeList)
+        val recipeList = adapter.getItems().map { it.recipe.copy(productId = productId ?: 0) }
 
         productViewModel.saveProduct(product, recipeList).observe(viewLifecycleOwner) { success ->
             if (success) {
@@ -144,6 +156,16 @@ class ProductFormFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "Error al guardar", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun updateIngredientEmptyState() {
+        if (adapter.itemCount == 0) {
+            binding.recyclerIngredients.visibility = View.GONE
+            binding.emptyStateLayout.visibility = View.VISIBLE
+        } else {
+            binding.recyclerIngredients.visibility = View.VISIBLE
+            binding.emptyStateLayout.visibility = View.GONE
         }
     }
 

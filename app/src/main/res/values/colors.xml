@@ -20,7 +20,7 @@
     <color name="error">#D32F2F</color>
 
     <!-- surfaces/cards -->
-    <color name="card_light">#FFFFFF</color>
+    <color name="card_light">#EEDFC2</color>
     <color name="card_dark">#2A2724</color>
 
     <!-- text -->
@@ -29,3 +29,4 @@
     <color name="text_primary_dark">#F5EDE8</color>
     <color name="text_secondary_dark">#D7C6BD</color>
 </resources>
+

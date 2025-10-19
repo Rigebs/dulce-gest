@@ -46,7 +46,6 @@
             android:layout_gravity="bottom|end"
             android:src="@drawable/ic_add"
             app:borderWidth="0dp"
-            android:backgroundTint="@color/raspberry"
             android:contentDescription="Agregar ingrediente"
             android:visibility="visible" />
 

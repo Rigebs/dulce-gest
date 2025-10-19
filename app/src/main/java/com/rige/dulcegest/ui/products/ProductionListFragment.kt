@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rige.dulcegest.databinding.FragmentProductionListBinding
 import com.rige.dulcegest.ui.viewmodels.ProductionViewModel
@@ -30,6 +31,13 @@ class ProductionListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = binding.toolbarProductionList
+        toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+
         adapter = ProductionAdapter { batch ->
             // Aquí podrías abrir detalle del lote
         }

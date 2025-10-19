@@ -1,91 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".ui.products.ProductionFormFragment">
 
-    <LinearLayout
+    <!-- Toolbar con flecha de retroceso -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarProductionForm"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="Registrar producción"
+        app:titleTextColor="?attr/colorOnPrimary"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationIconTint="?attr/colorOnPrimary" />
 
-        <!-- Título -->
-        <TextView
+    <!-- Contenido principal desplazable -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Registrar producción"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:paddingBottom="8dp" />
+            android:orientation="vertical">
 
-        <!-- Selector de producto -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Producto"
-            android:textStyle="bold"
-            android:paddingTop="8dp" />
+            <!-- Selector de producto -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Producto"
+                android:textStyle="bold" />
 
-        <Spinner
-            android:id="@+id/spinnerProduct"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:spinnerMode="dropdown" />
+            <Spinner
+                android:id="@+id/spinnerProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/spinner_background"
+                android:spinnerMode="dropdown" />
 
-        <!-- Cantidad producida -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cantidad producida"
-            android:textStyle="bold"
-            android:paddingTop="16dp" />
+            <!-- Cantidad producida -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cantidad producida"
+                android:textStyle="bold"
+                android:paddingTop="16dp" />
 
-        <EditText
-            android:id="@+id/inputQuantity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ejemplo: 10"
-            android:inputType="numberDecimal" />
+            <EditText
+                android:id="@+id/inputQuantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ejemplo: 10"
+                android:inputType="numberDecimal" />
 
-        <!-- Costo total -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Costo total (opcional)"
-            android:textStyle="bold"
-            android:paddingTop="16dp" />
+            <!-- Costo total -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Costo total (opcional)"
+                android:textStyle="bold"
+                android:paddingTop="16dp" />
 
-        <EditText
-            android:id="@+id/inputTotalCost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ejemplo: 25.50"
-            android:inputType="numberDecimal" />
+            <EditText
+                android:id="@+id/inputTotalCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ejemplo: 25.50"
+                android:inputType="numberDecimal" />
 
-        <!-- Notas -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Notas"
-            android:textStyle="bold"
-            android:paddingTop="16dp" />
+            <!-- Notas -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notas"
+                android:textStyle="bold"
+                android:paddingTop="16dp" />
 
-        <EditText
-            android:id="@+id/inputNotes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Comentarios u observaciones"
-            android:inputType="textMultiLine"
-            android:minLines="2" />
+            <EditText
+                android:id="@+id/inputNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Comentarios u observaciones"
+                android:inputType="textMultiLine"
+                android:minLines="2" />
 
-        <!-- Botón guardar -->
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Guardar producción"
-            android:layout_marginTop="24dp" />
-    </LinearLayout>
-</ScrollView>
+            <!-- Botón guardar -->
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Guardar producción"
+                android:layout_marginTop="24dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
