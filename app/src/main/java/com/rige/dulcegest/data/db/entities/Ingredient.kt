@@ -13,9 +13,6 @@ data class Ingredient(
     val name: String,
     val unit: String,
 
-    @ColumnInfo(name = "cost_per_unit")
-    val costPerUnit: Double = 0.0,
-
     @ColumnInfo(name = "stock_qty")
     val stockQty: Double = 0.0,
 

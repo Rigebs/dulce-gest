@@ -3,6 +3,7 @@ package com.rige.dulcegest.data.db.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.rige.dulcegest.data.db.entities.Product
+import com.rige.dulcegest.data.db.relations.ProductWithPresentations
 
 @Dao
 interface ProductDao {
@@ -27,4 +28,8 @@ interface ProductDao {
 
     @Query("UPDATE products SET stock_qty = stock_qty - :qty WHERE id = :id")
     suspend fun reduceStock(id: Long, qty: Double)
+
+    @Transaction
+    @Query("SELECT * FROM products")
+    fun getProductsWithPresentations(): LiveData<List<ProductWithPresentations>>
 }

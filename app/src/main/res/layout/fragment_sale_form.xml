@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.sales.SaleFormFragment">
 
-    <!-- Toolbar con flecha de retroceso -->
+    <!-- 🔹 Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarSaleForm"
         android:layout_width="match_parent"
@@ -18,14 +18,13 @@
         app:navigationIcon="@drawable/ic_arrow_back"
         app:navigationIconTint="?attr/colorOnPrimary" />
 
-    <!-- Contenido principal -->
+    <!-- 🔹 Contenido principal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <!-- Contenido desplazable -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -37,38 +36,55 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- Campo Cliente -->
+                <!-- 🧍 Cliente -->
                 <EditText
                     android:id="@+id/etCustomer"
                     android:hint="Cliente"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_height="wrap_content" />
 
-                <!-- Selector de Producto -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilProduct"
+                <!-- 🧾 Selector de producto -->
+                <TextView
+                    android:text="Producto:"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Seleccionar producto"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    app:endIconMode="dropdown_menu"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginTop="8dp" />
 
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/autoProduct"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <Spinner
+                    android:id="@+id/spinnerProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="@drawable/spinner_background"
+                    android:spinnerMode="dropdown" />
 
-                <!-- Cantidad + Botón Agregar -->
+                <!-- 🧾 Selector de presentación -->
+                <TextView
+                    android:text="Presentación:"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinnerPresentation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="@drawable/spinner_background"
+                    android:spinnerMode="dropdown"
+                    android:visibility="gone" />
+
+                <!-- 🔢 Cantidad + Botón Agregar -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginVertical="8dp">
 
                     <EditText
                         android:id="@+id/etQuantity"
@@ -86,14 +102,15 @@
                         android:layout_marginStart="8dp" />
                 </LinearLayout>
 
-                <!-- Lista de productos -->
+                <!-- 🧺 Lista de productos -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerSaleItems"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="280dp"
                     tools:listitem="@layout/item_sale_item"
                     tools:itemCount="3" />
 
+                <!-- 😶 Estado vacío -->
                 <LinearLayout
                     android:id="@+id/emptyStateLayout"
                     android:layout_width="match_parent"
@@ -125,7 +142,7 @@
         </ScrollView>
     </LinearLayout>
 
-    <!-- Total y botón fijo al fondo -->
+    <!-- 🔹 Total + Guardar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -135,7 +152,7 @@
 
         <TextView
             android:id="@+id/tvTotal"
-            android:text="Total: $0.00"
+            android:text="Total: S/0.00"
             android:textStyle="bold"
             android:textSize="18sp"
             android:layout_width="match_parent"

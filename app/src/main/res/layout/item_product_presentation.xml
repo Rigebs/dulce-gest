@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="12dp"
+    android:background="?attr/selectableItemBackground"
+    android:layout_marginBottom="4dp">
+
+    <!-- Información principal -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Nombre de la presentación -->
+        <TextView
+            android:id="@+id/txtPresentationName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3 trufas"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <!-- Precio -->
+        <TextView
+            android:id="@+id/txtPresentationPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="S/ 5.00"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Botón eliminar -->
+    <ImageButton
+        android:id="@+id/btnRemove"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Eliminar"
+        android:src="@drawable/ic_delete"
+        app:tint="?attr/colorOnSurface" />
+
+</LinearLayout>

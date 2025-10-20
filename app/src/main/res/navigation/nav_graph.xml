@@ -13,7 +13,17 @@
         <action
             android:id="@+id/action_ingredientListFragment_to_ingredientFormFragment"
             app:destination="@id/ingredientFormFragment" />
+        <action
+            android:id="@+id/action_ingredientListFragment_to_purchaseFormFragment"
+            app:destination="@id/purchaseFormFragment" />
+
     </fragment>
+
+    <fragment
+        android:id="@+id/purchaseFormFragment"
+        android:name="com.rige.dulcegest.ui.purchases.PurchaseFormFragment"
+        android:label="Registrar compra"
+        tools:layout="@layout/fragment_purchase_form" />
 
     <fragment
         android:id="@+id/ingredientFormFragment"

@@ -1,6 +1,5 @@
 package com.rige.dulcegest.ui.products
 
-import android.R
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.rige.dulcegest.R
 import com.rige.dulcegest.data.db.entities.Product
 import com.rige.dulcegest.data.db.entities.ProductionBatch
 import com.rige.dulcegest.databinding.FragmentProductionFormBinding
@@ -56,7 +56,7 @@ class ProductionFormFragment : Fragment() {
             productList = products
 
             val productNames = products.map { it.name }
-            val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, productNames)
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, productNames)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerProduct.adapter = adapter
         }
@@ -90,13 +90,19 @@ class ProductionFormFragment : Fragment() {
 
         productionViewModel.saveBatch(productionBatch).observe(viewLifecycleOwner) { success ->
             if (success) {
-                Toast.makeText(requireContext(), "Producción registrada", Toast.LENGTH_SHORT).show()
+                // ✅ Aumentar el stock del producto
+                val newStock = selectedProduct.stockQty + quantityProduced
+                val updatedProduct = selectedProduct.copy(stockQty = newStock)
+                productViewModel.update(updatedProduct)
+
+                Toast.makeText(requireContext(), "Producción registrada y stock actualizado", Toast.LENGTH_SHORT).show()
                 findNavController().navigateUp()
             } else {
                 Toast.makeText(requireContext(), "Error al guardar", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

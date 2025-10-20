@@ -17,6 +17,7 @@ object DaoModule {
     @Provides fun providePurchaseDao(db: AppDatabase) = db.purchaseDao()
     @Provides fun provideProductionBatchDao(db: AppDatabase) = db.productionBatchDao()
     @Provides fun provideProductionConsumptionDao(db: AppDatabase) = db.productionConsumptionDao()
+    @Provides fun provideProductPresentation(db: AppDatabase) = db.productPresentation()
     @Provides fun provideSaleDao(db: AppDatabase) = db.saleDao()
     @Provides fun provideSaleItemDao(db: AppDatabase) = db.saleItemDao()
     @Provides fun provideExpenseDao(db: AppDatabase) = db.expenseDao()

@@ -27,7 +27,9 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
     private val viewModel: IngredientViewModel by viewModels()
     private var ingredientId: Long? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentIngredientFormBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -38,7 +40,7 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
         val toolbar = binding.toolbarIngredientForm
         toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
 
-        // Configurar Spinner
+        // Configurar Spinner de unidades
         val unitsAdapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.units_array,
@@ -49,20 +51,16 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
         binding.spinnerUnit.adapter = unitsAdapter
 
         ingredientId = arguments?.getLong("ingredientId")
-        if (ingredientId == null || ingredientId == 0L) {
-            toolbar.title = "Crear ingrediente"
-        } else {
-            toolbar.title = "Editar ingrediente"
-        }
+
+        toolbar.title = if (ingredientId == null || ingredientId == 0L)
+            "Crear ingrediente" else "Editar ingrediente"
 
         ingredientId?.let { id ->
             viewModel.getIngredientById(id).observe(viewLifecycleOwner) { ingredient ->
                 ingredient?.let {
                     binding.inputName.setText(it.name)
-                    // Seleccionar unidad en el spinner
                     val unitPosition = unitsAdapter.getPosition(it.unit)
                     if (unitPosition >= 0) binding.spinnerUnit.setSelection(unitPosition)
-                    binding.inputCost.setText(it.costPerUnit.toString())
                     binding.inputStock.setText(it.stockQty.toString())
                     binding.inputNotes.setText(it.notes ?: "")
                 }
@@ -75,7 +73,6 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
     private fun saveIngredient() {
         val name = binding.inputName.text.toString().trim()
         val unit = binding.spinnerUnit.selectedItem.toString()
-        val cost = binding.inputCost.text.toString().toDoubleOrNull() ?: 0.0
         val stock = binding.inputStock.text.toString().toDoubleOrNull() ?: 0.0
         val notes = binding.inputNotes.text.toString().trim().ifEmpty { null }
 
@@ -88,7 +85,6 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
             id = ingredientId ?: 0L,
             name = name,
             unit = unit,
-            costPerUnit = cost,
             stockQty = stock,
             updatedAt = LocalDateTime.now().toString(),
             notes = notes

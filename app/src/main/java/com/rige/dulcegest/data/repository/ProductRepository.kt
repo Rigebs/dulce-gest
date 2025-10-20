@@ -1,19 +1,20 @@
 package com.rige.dulcegest.data.repository
 
 import androidx.lifecycle.LiveData
-import com.rige.dulcegest.data.db.dao.IngredientDao
 import com.rige.dulcegest.data.db.dao.ProductDao
+import com.rige.dulcegest.data.db.dao.ProductPresentationDao
 import com.rige.dulcegest.data.db.dao.ProductRecipeDao
-import com.rige.dulcegest.data.db.entities.Ingredient
 import com.rige.dulcegest.data.db.entities.Product
+import com.rige.dulcegest.data.db.entities.ProductPresentation
 import com.rige.dulcegest.data.db.entities.ProductRecipe
 import com.rige.dulcegest.data.db.relations.ProductRecipeWithIngredient
+import com.rige.dulcegest.data.db.relations.ProductWithPresentations
 import jakarta.inject.Inject
 
 class ProductRepository @Inject constructor(
     private val productDao: ProductDao,
     private val recipeDao: ProductRecipeDao,
-    private val productRecipeDao: ProductRecipeDao
+    private val presentationDao: ProductPresentationDao
 ) {
     val allProducts: LiveData<List<Product>> = productDao.getAll()
 
@@ -28,7 +29,7 @@ class ProductRepository @Inject constructor(
     suspend fun getRecipe(productId: Long): List<ProductRecipe> = recipeDao.getByProduct(productId)
 
     fun getRecipeWithIngredients(productId: Long): LiveData<List<ProductRecipeWithIngredient>> {
-        return productRecipeDao.getRecipeWithIngredients(productId)
+        return recipeDao.getRecipeWithIngredients(productId)
     }
 
     suspend fun setRecipe(productId: Long, ingredients: List<ProductRecipe>) {
@@ -41,23 +42,18 @@ class ProductRepository @Inject constructor(
         else productDao.reduceStock(id, -qtyDelta)
     }
 
-    suspend fun calculateProductCost(productId: Long, ingredients: List<Ingredient>): Double {
-        val recipe = recipeDao.getByProduct(productId)
-        var totalCost = 0.0
-        recipe.forEach { item ->
-            val ingredient = ingredients.find { it.id == item.ingredientId }
-            if (ingredient != null) {
-                totalCost += item.qtyPerUnit * ingredient.costPerUnit
-            }
-        }
-        return totalCost
+    fun getProductsWithPresentations(): LiveData<List<ProductWithPresentations>> {
+        return productDao.getProductsWithPresentations()
     }
 
-    suspend fun consumeIngredientsForProduct(productId: Long, qty: Double, ingredientDao: IngredientDao) {
-        val recipe = recipeDao.getByProduct(productId)
-        recipe.forEach { item ->
-            val totalQty = item.qtyPerUnit * qty
-            ingredientDao.consumeStock(item.ingredientId, totalQty)
+    fun getPresentationsByProduct(productId: Long): LiveData<List<ProductPresentation>> {
+        return presentationDao.getByProductId(productId)
+    }
+
+    suspend fun setPresentations(productId: Long, presentations: List<ProductPresentation>) {
+        presentationDao.deleteByProductId(productId)
+        if (presentations.isNotEmpty()) {
+            presentationDao.insertAll(presentations.map { it.copy(productId = productId) })
         }
     }
 }

@@ -20,7 +20,7 @@ class IngredientAdapter(
 
         fun bind(item: Ingredient) {
             name.text = item.name
-            info.text = "${item.unit} • $${item.costPerUnit} • Stock: ${item.stockQty}"
+            info.text = "${item.unit} • Stock: ${item.stockQty}"
             view.setOnClickListener { onClick(item) }
         }
     }

@@ -92,12 +92,15 @@
                         android:textStyle="bold"
                         android:textSize="16sp" />
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btnAddIngredient"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Agregar"
-                        android:textAllCaps="false" />
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_add"
+                        android:contentDescription="Agregar ingrediente"
+                        app:tint="?attr/colorPrimary" />
+
                 </LinearLayout>
 
                 <!-- Lista de ingredientes -->
@@ -136,6 +139,68 @@
                         android:layout_marginTop="8dp" />
                 </LinearLayout>
             </LinearLayout>
+
+            <!-- Sección de presentaciones -->
+            <LinearLayout
+                android:id="@+id/sectionPresentations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:padding="12dp"
+                android:background="@drawable/border_section">
+
+                <!-- Encabezado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Presentaciones"
+                        android:textStyle="bold"
+                        android:textSize="16sp" />
+
+                    <ImageButton
+                        android:id="@+id/btnAddPresentation"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_add"
+                        android:contentDescription="Agregar ingrediente"
+                        app:tint="?attr/colorPrimary" />
+                </LinearLayout>
+
+                <!-- Lista -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerPresentations"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:scrollbars="vertical"
+                    tools:listitem="@layout/item_product_presentation" />
+
+                <!-- Estado vacío -->
+                <LinearLayout
+                    android:id="@+id/emptyPresentationState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:padding="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No hay presentaciones agregadas"
+                        android:textColor="#9E9E9E"/>
+                </LinearLayout>
+            </LinearLayout>
+
 
             <!-- Botón guardar -->
             <Button

@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rige.dulcegest.R
 import com.rige.dulcegest.data.db.entities.Ingredient
 import com.rige.dulcegest.data.db.entities.Product
+import com.rige.dulcegest.data.db.entities.ProductPresentation
 import com.rige.dulcegest.data.db.entities.ProductRecipe
 import com.rige.dulcegest.data.db.relations.ProductRecipeWithIngredient
 import com.rige.dulcegest.databinding.FragmentProductFormBinding
@@ -32,6 +34,8 @@ class ProductFormFragment : Fragment() {
 
     private var productId: Long? = null
     private lateinit var adapter: RecipeIngredientAdapter
+    private lateinit var presentationAdapter: ProductPresentationAdapter
+
     private var ingredientList: List<Ingredient> = emptyList()
 
     override fun onCreateView(
@@ -77,7 +81,6 @@ class ProductFormFragment : Fragment() {
             productViewModel.getProductById(id).observe(viewLifecycleOwner) { product ->
                 product?.let {
                     binding.inputName.setText(it.name)
-                    // Seleccionar unidad en el spinner
                     val unitPosition = unitsAdapter.getPosition(it.unit)
                     if (unitPosition >= 0) binding.spinnerUnit.setSelection(unitPosition)
                     binding.inputPrice.setText(it.price.toString())
@@ -89,10 +92,27 @@ class ProductFormFragment : Fragment() {
                 adapter.setItems(recipeWithIngredients)
                 updateIngredientEmptyState()
             }
+
+            productViewModel.getPresentationsByProduct(id).observe(viewLifecycleOwner) { presentations ->
+                presentationAdapter.setItems(presentations)
+                updatePresentationEmptyState()
+            }
         }
 
         binding.btnAddIngredient.setOnClickListener { showIngredientSelector() }
         binding.btnSave.setOnClickListener { saveProduct() }
+
+        presentationAdapter = ProductPresentationAdapter(onRemove = {
+            presentationAdapter.removePresentation(it)
+            updatePresentationEmptyState()
+        })
+
+        updatePresentationEmptyState()
+
+        binding.recyclerPresentations.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerPresentations.adapter = presentationAdapter
+
+        binding.btnAddPresentation.setOnClickListener { showAddPresentationDialog() }
     }
 
     private fun showIngredientSelector() {
@@ -149,7 +169,10 @@ class ProductFormFragment : Fragment() {
 
         val recipeList = adapter.getItems().map { it.recipe.copy(productId = productId ?: 0) }
 
-        productViewModel.saveProduct(product, recipeList).observe(viewLifecycleOwner) { success ->
+        val presentations = presentationAdapter.getItems()
+
+        productViewModel.saveProduct(product, recipeList, presentations)
+            .observe(viewLifecycleOwner) { success ->
             if (success) {
                 Toast.makeText(requireContext(), "Producto guardado", Toast.LENGTH_SHORT).show()
                 findNavController().navigateUp()
@@ -167,6 +190,46 @@ class ProductFormFragment : Fragment() {
             binding.recyclerIngredients.visibility = View.VISIBLE
             binding.emptyStateLayout.visibility = View.GONE
         }
+    }
+
+    private fun updatePresentationEmptyState() {
+        if (presentationAdapter.itemCount == 0) {
+            binding.recyclerPresentations.visibility = View.GONE
+            binding.emptyPresentationState.visibility = View.VISIBLE
+        } else {
+            binding.recyclerPresentations.visibility = View.VISIBLE
+            binding.emptyPresentationState.visibility = View.GONE
+        }
+    }
+
+    private fun showAddPresentationDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_add_presentation, null)
+        val nameInput = dialogView.findViewById<EditText>(R.id.inputPresentationName)
+        val priceInput = dialogView.findViewById<EditText>(R.id.inputPresentationPrice)
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Agregar presentación")
+            .setView(dialogView)
+            .setPositiveButton("Guardar") { _, _ ->
+                val name = nameInput.text.toString().trim()
+                val price = priceInput.text.toString().toDoubleOrNull() ?: 0.0
+
+                if (name.isNotEmpty() && price > 0) {
+                    val presentation = ProductPresentation(
+                        id = 0,
+                        productId = productId ?: 0,
+                        name = name,
+                        quantity = 1.0,
+                        price = price
+                    )
+                    presentationAdapter.addPresentation(presentation)
+                    updatePresentationEmptyState()
+                } else {
+                    Toast.makeText(requireContext(), "Completa todos los campos", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 
     override fun onDestroyView() {

@@ -23,15 +23,10 @@ data class Purchase(
 
     val quantity: Double,
 
-    @ColumnInfo(name = "unit_price")
-    val unitPrice: Double,
-
     @ColumnInfo(name = "total_price")
-    val totalPrice: Double = quantity * unitPrice,
+    val totalPrice: Double,
 
     val supplier: String? = null,
-
     val date: String? = null,
-
     val notes: String? = null
 )

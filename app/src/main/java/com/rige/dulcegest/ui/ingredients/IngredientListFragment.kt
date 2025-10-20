@@ -52,6 +52,10 @@ class IngredientListFragment : Fragment() {
         binding.fabAddIngredient.setOnClickListener {
             findNavController().navigate(R.id.action_ingredientListFragment_to_ingredientFormFragment)
         }
+
+        binding.fabAddPurchase.setOnClickListener {
+            findNavController().navigate(R.id.action_ingredientListFragment_to_purchaseFormFragment)
+        }
     }
 
     override fun onDestroyView() {

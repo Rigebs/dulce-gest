@@ -6,14 +6,14 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbarIngredientForm"
+        android:id="@+id/toolbarPurchaseForm"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:title="Crear ingrediente"
+        app:title="Registrar compra"
         app:titleTextColor="?attr/colorOnPrimary"
         app:navigationIcon="@drawable/ic_arrow_back"
-        app:navigationIconTint="?attr/colorOnPrimary"/>
+        app:navigationIconTint="?attr/colorOnPrimary" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,32 +25,41 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Nombre -->
-            <EditText
-                android:id="@+id/inputName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nombre del ingrediente"
-                android:inputType="textCapWords"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Unidad -->
+            <!-- Ingrediente -->
             <Spinner
-                android:id="@+id/spinnerUnit"
+                android:id="@+id/spinnerIngredient"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
                 android:layout_marginBottom="12dp"
+                android:padding="12dp"
                 android:background="@drawable/spinner_background"
                 android:spinnerMode="dropdown" />
 
-            <!-- Stock -->
+            <!-- Cantidad -->
             <EditText
-                android:id="@+id/inputStock"
+                android:id="@+id/inputQuantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Stock disponible"
+                android:hint="Cantidad comprada"
                 android:inputType="numberDecimal"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Precio total -->
+            <EditText
+                android:id="@+id/inputTotalPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Precio total (S/)"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Proveedor -->
+            <EditText
+                android:id="@+id/inputSupplier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Proveedor (opcional)"
+                android:inputType="textCapWords"
                 android:layout_marginBottom="12dp" />
 
             <!-- Notas -->
@@ -65,11 +74,10 @@
 
             <!-- Botón -->
             <Button
-                android:id="@+id/btnSave"
+                android:id="@+id/btnSavePurchase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Guardar ingrediente" />
-
+                android:text="Guardar compra" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

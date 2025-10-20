@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Nombre de la presentación -->
+    <EditText
+        android:id="@+id/inputPresentationName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de la presentación (ej. 3 trufas)"
+        android:inputType="textCapWords"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Precio de venta -->
+    <EditText
+        android:id="@+id/inputPresentationPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Precio de venta (S/)"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="12dp" />
+</LinearLayout>

@@ -33,7 +33,7 @@
             android:id="@+id/tvInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Kg • $2.50 • Stock: 3.5"
+            android:text="Kg • Stock: 3.5"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="?colorOnSurface"
             android:alpha="0.8" />

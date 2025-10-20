@@ -29,8 +29,8 @@ object RepositoryModule {
     fun provideProductRepository(
         productDao: ProductDao,
         recipeDao: ProductRecipeDao,
-        productRecipeDao: ProductRecipeDao
-    ): ProductRepository = ProductRepository(productDao, recipeDao, productRecipeDao)
+        productPresentationDao: ProductPresentationDao
+    ): ProductRepository = ProductRepository(productDao, recipeDao, productPresentationDao)
 
     @Provides
     @Singleton

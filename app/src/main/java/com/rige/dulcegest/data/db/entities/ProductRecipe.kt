@@ -35,5 +35,5 @@ data class ProductRecipe(
     val ingredientId: Long,
 
     @ColumnInfo(name = "qty_per_unit")
-    val qtyPerUnit: Double
+    val qtyPerUnit: Double? = null
 )
