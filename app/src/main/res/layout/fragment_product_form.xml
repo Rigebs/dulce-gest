@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.products.ProductFormFragment">
 
-    <!-- Toolbar con flecha de retroceso -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarProductForm"
         android:layout_width="match_parent"
@@ -18,7 +17,6 @@
         app:navigationIcon="@drawable/ic_arrow_back"
         app:navigationIconTint="?attr/colorOnPrimary" />
 
-    <!-- Contenido principal desplazable -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -26,56 +24,64 @@
         android:padding="16dp"
         android:clipToPadding="false">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <!-- Nombre -->
             <EditText
                 android:id="@+id/inputName"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Nombre del producto"
-                android:inputType="textCapWords" />
+                android:inputType="textCapWords"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Unidad -->
             <Spinner
                 android:id="@+id/spinnerUnit"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:layout_marginVertical="12dp"
                 android:background="@drawable/spinner_background"
-                android:spinnerMode="dropdown" />
+                android:spinnerMode="dropdown"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/inputName" />
 
-            <!-- Precio de venta -->
             <EditText
                 android:id="@+id/inputPrice"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Precio de venta"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerUnit" />
 
-            <!-- Notas -->
             <EditText
                 android:id="@+id/inputNotes"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Notas (opcional)"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/inputPrice" />
 
-            <!-- Sección de ingredientes -->
             <LinearLayout
                 android:id="@+id/sectionIngredients"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="16dp"
                 android:padding="12dp"
-                android:background="@drawable/border_section">
+                android:background="@drawable/border_section"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/inputNotes">
 
-                <!-- Encabezado: Título + Botón -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -103,54 +109,105 @@
 
                 </LinearLayout>
 
-                <!-- Lista de ingredientes -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerIngredients"
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="180dp"
                     android:scrollbars="vertical"
-                    tools:listitem="@layout/item_recipe_ingredient" />
+                    tools:listitem="@layout/item_recipe_ingredient"
+                    tools:itemCount="3"/>
 
-                <!-- Empty state -->
                 <LinearLayout
                     android:id="@+id/emptyStateLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:visibility="gone"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:id="@+id/emptyImage"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:src="@drawable/ic_ingredients"
-                        app:tint="#9E9E9E"
-                        android:contentDescription="Sin ingredientes" />
-
+                    android:padding="8dp">
                     <TextView
-                        android:id="@+id/emptyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="No hay ingredientes agregados"
-                        android:textSize="16sp"
-                        android:textColor="#9E9E9E"
-                        android:layout_marginTop="8dp" />
+                        android:textColor="#9E9E9E"/>
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Sección de presentaciones -->
             <LinearLayout
-                android:id="@+id/sectionPresentations"
-                android:layout_width="match_parent"
+                android:id="@+id/sectionVariants"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="16dp"
                 android:padding="12dp"
-                android:background="@drawable/border_section">
+                android:background="@drawable/border_section"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sectionIngredients">
 
-                <!-- Encabezado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Variantes (sabores, tipos)"
+                        android:textStyle="bold"
+                        android:textSize="16sp" />
+
+                    <ImageButton
+                        android:id="@+id/btnAddVariant"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_add"
+                        android:contentDescription="Agregar variante"
+                        app:tint="?attr/colorPrimary" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerVariants"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="180dp"
+                    android:scrollbars="vertical"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_product_variant" />
+
+                <LinearLayout
+                    android:id="@+id/emptyVariantState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:padding="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No hay variantes agregadas"
+                        android:textColor="#9E9E9E"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sectionPresentations"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:padding="12dp"
+                android:background="@drawable/border_section"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sectionVariants">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -176,15 +233,15 @@
                         app:tint="?attr/colorPrimary" />
                 </LinearLayout>
 
-                <!-- Lista -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerPresentations"
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="180dp"
                     android:scrollbars="vertical"
-                    tools:listitem="@layout/item_product_presentation" />
+                    tools:listitem="@layout/item_product_presentation"
+                    tools:itemCount="3"/>
 
-                <!-- Estado vacío -->
                 <LinearLayout
                     android:id="@+id/emptyPresentationState"
                     android:layout_width="match_parent"
@@ -201,15 +258,57 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardImageSection"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sectionPresentations"
+                android:padding="16dp">
 
-            <!-- Botón guardar -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:paddingVertical="12dp">
+
+                    <ImageView
+                        android:id="@+id/imageProduct"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_placeholder_image"
+                        android:contentDescription="Imagen del producto"
+                        android:layout_marginBottom="12dp" />
+
+                    <Button
+                        android:id="@+id/btnSelectImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Seleccionar imagen"
+                        app:icon="@drawable/ic_add"
+                        app:iconPadding="8dp"
+                        android:paddingHorizontal="16dp"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:textColor="@android:color/white"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
             <Button
                 android:id="@+id/btnSave"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Guardar producto"
-                android:layout_marginTop="16dp" />
-        </LinearLayout>
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardImageSection"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 </LinearLayout>

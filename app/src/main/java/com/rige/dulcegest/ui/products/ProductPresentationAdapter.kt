@@ -17,7 +17,8 @@ class ProductPresentationAdapter(
 
         fun bind(item: ProductPresentation) {
             binding.txtPresentationName.text = item.name
-            binding.txtPresentationPrice.text = "S/ ${item.price}"
+            binding.txtPresentationQuantity.text = "${item.quantity} ${item.unit}"
+            binding.txtPresentationPrice.text = "S/. ${item.price}"
             binding.btnRemove.setOnClickListener { onRemove(item) }
         }
     }
@@ -37,7 +38,9 @@ class ProductPresentationAdapter(
         override fun areItemsTheSame(
             oldItem: ProductPresentation,
             newItem: ProductPresentation
-        ): Boolean = oldItem.id == newItem.id
+        ): Boolean {
+            return oldItem.id == newItem.id && oldItem.name == newItem.name
+        }
 
         override fun areContentsTheSame(
             oldItem: ProductPresentation,
@@ -45,14 +48,20 @@ class ProductPresentationAdapter(
         ): Boolean = oldItem == newItem
     }
 
-    fun addPresentation(presentation: ProductPresentation) {
-        val updatedList = currentList.toMutableList().apply { add(presentation) }
-        submitList(updatedList)
+    fun addPresentation(presentation: ProductPresentation, onListUpdated: () -> Unit) {
+        val updatedList = currentList.toMutableList().apply { add(presentation.copy()) }
+
+        submitList(updatedList.toList()) {
+            onListUpdated()
+        }
     }
 
-    fun removePresentation(presentation: ProductPresentation) {
+    fun removePresentation(presentation: ProductPresentation, onListUpdated: () -> Unit) {
         val updatedList = currentList.toMutableList().apply { remove(presentation) }
-        submitList(updatedList)
+
+        submitList(updatedList) {
+            onListUpdated()
+        }
     }
 
     fun setItems(newItems: List<ProductPresentation>) {

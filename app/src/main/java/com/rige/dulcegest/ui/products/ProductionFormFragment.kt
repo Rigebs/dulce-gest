@@ -7,9 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.rige.dulcegest.R
 import com.rige.dulcegest.data.db.entities.Product
 import com.rige.dulcegest.data.db.entities.ProductionBatch
 import com.rige.dulcegest.databinding.FragmentProductionFormBinding
@@ -25,8 +24,8 @@ class ProductionFormFragment : Fragment() {
     private var _binding: FragmentProductionFormBinding? = null
     private val binding get() = _binding!!
 
-    private val productViewModel: ProductViewModel by viewModels()
-    private val productionViewModel: ProductionViewModel by viewModels()
+    private val productViewModel: ProductViewModel by activityViewModels()
+    private val productionViewModel: ProductionViewModel by activityViewModels()
 
     private var productList: List<Product> = emptyList()
 
@@ -90,7 +89,6 @@ class ProductionFormFragment : Fragment() {
 
         productionViewModel.saveBatch(productionBatch).observe(viewLifecycleOwner) { success ->
             if (success) {
-                // ✅ Aumentar el stock del producto
                 val newStock = selectedProduct.stockQty + quantityProduced
                 val updatedProduct = selectedProduct.copy(stockQty = newStock)
                 productViewModel.update(updatedProduct)

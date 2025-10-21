@@ -15,7 +15,7 @@ class SaleViewModel @Inject constructor(
 
     val sales = repo.allSales
 
-    fun insertSale(sale: Sale, items: List<SaleItem>) = viewModelScope.launch {
+    suspend fun insertSale(sale: Sale, items: List<SaleItem>) {
         repo.insertSale(sale, items)
     }
 

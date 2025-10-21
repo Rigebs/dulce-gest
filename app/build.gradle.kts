@@ -63,4 +63,8 @@ dependencies {
     implementation(libs.hilt.android.v2572)
     ksp(libs.hilt.compiler.v2572)
     implementation(libs.threetenabp)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.coil)
+    implementation(libs.coil.base)
+    implementation(libs.coil.gif)
 }

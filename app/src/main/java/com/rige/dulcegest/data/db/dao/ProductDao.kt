@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.rige.dulcegest.data.db.entities.Product
 import com.rige.dulcegest.data.db.relations.ProductWithPresentations
+import com.rige.dulcegest.data.db.relations.ProductWithPresentationsAndVariants
+import com.rige.dulcegest.data.db.relations.ProductWithVariants
 
 @Dao
 interface ProductDao {
@@ -32,4 +34,12 @@ interface ProductDao {
     @Transaction
     @Query("SELECT * FROM products")
     fun getProductsWithPresentations(): LiveData<List<ProductWithPresentations>>
+
+    @Transaction
+    @Query("SELECT * FROM products")
+    fun getProductsWithVariants(): LiveData<List<ProductWithVariants>>
+
+    @Transaction
+    @Query("SELECT * FROM products ORDER BY name ASC")
+    fun getProductsWithPresentationsAndVariants(): LiveData<List<ProductWithPresentationsAndVariants>>
 }

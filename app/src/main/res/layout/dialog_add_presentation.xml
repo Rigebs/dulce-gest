@@ -14,6 +14,14 @@
         android:inputType="textCapWords"
         android:layout_marginBottom="12dp" />
 
+    <EditText
+        android:id="@+id/inputPresentationQuantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Cantidad"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="12dp" />
+
     <!-- Precio de venta -->
     <EditText
         android:id="@+id/inputPresentationPrice"

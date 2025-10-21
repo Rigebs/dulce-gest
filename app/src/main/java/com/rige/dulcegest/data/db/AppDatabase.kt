@@ -7,6 +7,7 @@ import com.rige.dulcegest.data.db.dao.IngredientDao
 import com.rige.dulcegest.data.db.dao.ProductDao
 import com.rige.dulcegest.data.db.dao.ProductPresentationDao
 import com.rige.dulcegest.data.db.dao.ProductRecipeDao
+import com.rige.dulcegest.data.db.dao.ProductVariantDao
 import com.rige.dulcegest.data.db.dao.ProductionBatchDao
 import com.rige.dulcegest.data.db.dao.ProductionConsumptionDao
 import com.rige.dulcegest.data.db.dao.PurchaseDao
@@ -17,6 +18,7 @@ import com.rige.dulcegest.data.db.entities.Ingredient
 import com.rige.dulcegest.data.db.entities.Product
 import com.rige.dulcegest.data.db.entities.ProductPresentation
 import com.rige.dulcegest.data.db.entities.ProductRecipe
+import com.rige.dulcegest.data.db.entities.ProductVariant
 import com.rige.dulcegest.data.db.entities.ProductionBatch
 import com.rige.dulcegest.data.db.entities.ProductionConsumption
 import com.rige.dulcegest.data.db.entities.Purchase
@@ -32,11 +34,12 @@ import com.rige.dulcegest.data.db.entities.SaleItem
         ProductionBatch::class,
         ProductionConsumption::class,
         ProductPresentation::class,
+        ProductVariant::class,
         Sale::class,
         SaleItem::class,
         Expense::class
     ],
-    version = 4,
+    version = 8,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -47,8 +50,9 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun purchaseDao(): PurchaseDao
     abstract fun productionBatchDao(): ProductionBatchDao
     abstract fun productionConsumptionDao(): ProductionConsumptionDao
-    abstract fun productPresentation(): ProductPresentationDao
+    abstract fun productPresentationDao(): ProductPresentationDao
     abstract fun saleDao(): SaleDao
     abstract fun saleItemDao(): SaleItemDao
     abstract fun expenseDao(): ExpenseDao
+    abstract fun productVariantDao(): ProductVariantDao
 }

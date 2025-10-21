@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rige.dulcegest.data.db.entities.Product
@@ -20,6 +21,7 @@ import com.rige.dulcegest.databinding.FragmentSaleFormBinding
 import com.rige.dulcegest.ui.viewmodels.ProductViewModel
 import com.rige.dulcegest.ui.viewmodels.SaleViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -89,7 +91,6 @@ class SaleFormFragment : Fragment() {
             val productNames = mutableListOf("Seleccione un producto")
             productNames.addAll(baseProducts.map { it.name })
 
-            // 🔹 Adapter con dos layouts (uno para vista cerrada y otro para desplegable)
             val productAdapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
@@ -101,7 +102,9 @@ class SaleFormFragment : Fragment() {
             binding.spinnerProduct.adapter = productAdapter
 
             binding.spinnerProduct.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                ) {
                     if (position == 0) {
                         selectedProduct = null
                         binding.spinnerPresentation.visibility = View.GONE
@@ -132,7 +135,6 @@ class SaleFormFragment : Fragment() {
         val presentationNames = mutableListOf("Unidad — S/${product.price}")
         presentationNames.addAll(presentations.map { "${it.name} — S/${it.price}" })
 
-        // 🔹 Igual configuración que en el spinner de productos
         val presentationAdapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
@@ -145,7 +147,9 @@ class SaleFormFragment : Fragment() {
             adapter = presentationAdapter
             visibility = View.VISIBLE
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                ) {
                     selectedPresentation = if (position == 0) null else presentations[position - 1]
                 }
 
@@ -171,15 +175,22 @@ class SaleFormFragment : Fragment() {
             }
 
             val price = selectedPresentation?.price ?: base.price
+            val displayName = if (selectedPresentation != null)
+                "${base.name} (${selectedPresentation!!.name})"
+            else base.name
+
             val item = SaleItem(
                 saleId = 0L,
                 productId = base.id,
+                presentationId = selectedPresentation?.id,
                 qty = qty,
                 unitPrice = price,
-                lineTotal = qty * price
+                lineTotal = qty * price,
+                presentationQuantity = selectedPresentation?.quantity ?: 1.0
             )
 
-            val itemWithProduct = SaleItemWithProduct(item, base)
+            val displayProduct = base.copy(name = displayName)
+            val itemWithProduct = SaleItemWithProduct(item, displayProduct)
             selectedItems.add(itemWithProduct)
 
             adapter.submitList(selectedItems.toList())
@@ -195,6 +206,8 @@ class SaleFormFragment : Fragment() {
     }
 
     private fun setupSaveButton() {
+        println("Configurando botón guardar")
+
         binding.btnSave.setOnClickListener {
             if (selectedItems.isEmpty()) {
                 Toast.makeText(requireContext(), "Agrega al menos un producto", Toast.LENGTH_SHORT).show()
@@ -207,9 +220,15 @@ class SaleFormFragment : Fragment() {
                 customer = binding.etCustomer.text.toString()
             )
 
-            saleViewModel.insertSale(sale, selectedItems.map { it.item })
-            Toast.makeText(requireContext(), "Venta registrada correctamente", Toast.LENGTH_SHORT).show()
-            findNavController().popBackStack()
+            println(sale)
+
+            binding.btnSave.isEnabled = false
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                saleViewModel.insertSale(sale, selectedItems.map { it.item })
+                Toast.makeText(requireContext(), "Venta registrada correctamente", Toast.LENGTH_SHORT).show()
+                findNavController().popBackStack()
+            }
         }
     }
 

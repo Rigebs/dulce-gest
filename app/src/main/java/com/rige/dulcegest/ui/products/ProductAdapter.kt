@@ -5,8 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.rige.dulcegest.R
 import com.rige.dulcegest.data.db.entities.Product
 import com.rige.dulcegest.databinding.ItemProductBinding
+import androidx.core.net.toUri
+import coil.transform.RoundedCornersTransformation
 
 class ProductAdapter(
     private val onClick: (Product) -> Unit
@@ -17,8 +21,18 @@ class ProductAdapter(
 
         fun bind(product: Product) {
             binding.txtProductName.text = product.name
-            binding.txtProductInfo.text = "Unidad: ${product.unit}  |  Precio: $${product.price}"
+            binding.txtProductInfo.text = "U.M.: ${product.unit}  |  Precio: $${product.price}"
             binding.txtStock.text = "Stock: ${product.stockQty}"
+
+            if (!product.imagePath.isNullOrEmpty()) {
+                binding.imgProduct.load(product.imagePath.toUri()) {
+                    placeholder(R.drawable.ic_placeholder_image)
+                    error(R.drawable.ic_placeholder_image)
+                    transformations(RoundedCornersTransformation(12f))
+                }
+            } else {
+                binding.imgProduct.setImageResource(R.drawable.ic_placeholder_image)
+            }
 
             binding.root.setOnClickListener {
                 onClick(product)
