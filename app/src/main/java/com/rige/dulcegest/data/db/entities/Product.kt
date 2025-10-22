@@ -20,6 +20,9 @@ data class Product(
     @ColumnInfo(name = "created_at")
     val createdAt: String? = null,
 
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: String? = null,
+
     @ColumnInfo(name = "image_path")
     val imagePath: String? = null,
 

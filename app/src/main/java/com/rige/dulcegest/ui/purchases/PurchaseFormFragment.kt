@@ -5,12 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.rige.dulcegest.R
+import com.rige.dulcegest.data.db.entities.Ingredient
 import com.rige.dulcegest.data.db.entities.Purchase
 import com.rige.dulcegest.databinding.FragmentPurchaseFormBinding
 import com.rige.dulcegest.ui.viewmodels.IngredientViewModel
@@ -48,34 +48,28 @@ class PurchaseFormFragment : Fragment(R.layout.fragment_purchase_form) {
 
     private fun setupIngredientSpinner() {
         ingredientViewModel.ingredients.observe(viewLifecycleOwner) { ingredients ->
-            val adapter = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                ingredients.map { it.name }
-            ).also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
-
+            val adapter = IngredientSpinnerAdapter(requireContext(), ingredients)
             binding.spinnerIngredient.adapter = adapter
         }
     }
 
     private fun setupSaveButton() {
         binding.btnSavePurchase.setOnClickListener {
-            val ingredientName = binding.spinnerIngredient.selectedItem?.toString() ?: ""
+            val selectedIngredient = binding.spinnerIngredient.selectedItem as? Ingredient
             val quantity = binding.inputQuantity.text.toString().toDoubleOrNull() ?: 0.0
             val totalPrice = binding.inputTotalPrice.text.toString().toDoubleOrNull() ?: 0.0
             val supplier = binding.inputSupplier.text.toString().trim().ifEmpty { null }
             val notes = binding.inputNotes.text.toString().trim().ifEmpty { null }
             val date = LocalDate.now().toString()
 
-            if (ingredientName.isEmpty() || quantity <= 0.0 || totalPrice <= 0.0) {
+            if (selectedIngredient == null || quantity <= 0.0 || totalPrice <= 0.0) {
                 Toast.makeText(requireContext(), "Completa los campos obligatorios", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Buscar el ingrediente seleccionado
-            ingredientViewModel.ingredients.value?.firstOrNull { it.name == ingredientName }?.let { ingredient ->
+            lifecycleScope.launch {
                 val purchase = Purchase(
-                    ingredientId = ingredient.id,
+                    ingredientId = selectedIngredient.id,
                     quantity = quantity,
                     totalPrice = totalPrice,
                     supplier = supplier,
@@ -83,20 +77,24 @@ class PurchaseFormFragment : Fragment(R.layout.fragment_purchase_form) {
                     notes = notes
                 )
 
-                lifecycleScope.launch {
-                    viewModel.insert(purchase)
+                viewModel.insert(purchase)
 
-                    // Actualizar stock del ingrediente
-                    val newStock = ingredient.stockQty + quantity
-                    val updatedIngredient = ingredient.copy(
-                        stockQty = newStock,
-                        updatedAt = LocalDateTime.now().toString()
-                    )
-                    ingredientViewModel.update(updatedIngredient)
+                val factor = selectedIngredient.conversionFactor ?: 1.0
+                val addedQty = quantity * factor
+                val newStock = selectedIngredient.stockQty + addedQty
 
-                    Toast.makeText(requireContext(), "Compra registrada y stock actualizado", Toast.LENGTH_SHORT).show()
-                    findNavController().navigateUp()
-                }
+                val updatedIngredient = selectedIngredient.copy(
+                    stockQty = newStock,
+                    updatedAt = LocalDateTime.now().toString()
+                )
+                ingredientViewModel.update(updatedIngredient)
+
+                Toast.makeText(
+                    requireContext(),
+                    "Compra registrada: +${addedQty} ${selectedIngredient.unit} añadidas al stock",
+                    Toast.LENGTH_LONG
+                ).show()
+                findNavController().navigateUp()
             }
         }
     }

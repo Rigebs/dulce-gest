@@ -5,18 +5,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.rige.dulcegest.data.db.entities.Product
 import com.rige.dulcegest.data.db.entities.ProductionBatch
+import com.rige.dulcegest.data.db.entities.ProductionConsumption
+import com.rige.dulcegest.data.db.relations.ProductRecipeWithIngredient
 import com.rige.dulcegest.databinding.FragmentProductionFormBinding
+import com.rige.dulcegest.ui.viewmodels.IngredientViewModel
 import com.rige.dulcegest.ui.viewmodels.ProductViewModel
 import com.rige.dulcegest.ui.viewmodels.ProductionViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
-
 
 @AndroidEntryPoint
 class ProductionFormFragment : Fragment() {
@@ -26,14 +33,13 @@ class ProductionFormFragment : Fragment() {
 
     private val productViewModel: ProductViewModel by activityViewModels()
     private val productionViewModel: ProductionViewModel by activityViewModels()
+    private val ingredientViewModel: IngredientViewModel by viewModels()
 
-    private var productList: List<Product> = emptyList()
+    private var productList = emptyList<Product>()
+    private var ingredientList = emptyList<ProductRecipeWithIngredient>()
+    private var adapter: IngredientUsageAdapter? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentProductionFormBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -42,9 +48,7 @@ class ProductionFormFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val toolbar = binding.toolbarProductionForm
-        toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
+        toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
 
         setupProductSpinner()
         binding.btnSave.setOnClickListener { saveProduction() }
@@ -53,54 +57,85 @@ class ProductionFormFragment : Fragment() {
     private fun setupProductSpinner() {
         productViewModel.products.observe(viewLifecycleOwner) { products ->
             productList = products
-
-            val productNames = products.map { it.name }
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, productNames)
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, products.map { it.name })
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerProduct.adapter = adapter
+        }
+
+        binding.spinnerProduct.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val product = productList[position]
+                loadIngredientsForProduct(product.id)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    private fun loadIngredientsForProduct(productId: Long) {
+        productViewModel.getRecipeWithIngredients(productId).observe(viewLifecycleOwner) { list ->
+            ingredientList = list
+            if (list.isNotEmpty()) {
+                binding.sectionIngredients.visibility = View.VISIBLE
+                adapter = IngredientUsageAdapter(list)
+                binding.rvIngredients.layoutManager = LinearLayoutManager(requireContext())
+                binding.rvIngredients.adapter = adapter
+            } else {
+                binding.sectionIngredients.visibility = View.GONE
+            }
         }
     }
 
     private fun saveProduction() {
-        if (productList.isEmpty()) {
-            Toast.makeText(requireContext(), "No hay productos disponibles", Toast.LENGTH_SHORT).show()
-            return
-        }
+        if (productList.isEmpty()) return
 
-        val selectedIndex = binding.spinnerProduct.selectedItemPosition
-        val selectedProduct = productList[selectedIndex]
-
-        val quantityProduced = binding.inputQuantity.text.toString().toDoubleOrNull()
-        val totalCost = binding.inputTotalCost.text.toString().toDoubleOrNull() ?: 0.0
-        val notes = binding.inputNotes.text.toString().trim().ifEmpty { null }
-
-        if (quantityProduced == null || quantityProduced <= 0) {
+        val selectedProduct = productList[binding.spinnerProduct.selectedItemPosition]
+        val qtyProduced = binding.inputQuantity.text.toString().toDoubleOrNull()
+        if (qtyProduced == null || qtyProduced <= 0) {
             Toast.makeText(requireContext(), "Ingrese una cantidad válida", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val productionBatch = ProductionBatch(
+        val batch = ProductionBatch(
             productId = selectedProduct.id,
-            quantityProduced = quantityProduced,
-            totalCost = totalCost,
+            quantityProduced = qtyProduced,
+            totalCost = binding.inputTotalCost.text.toString().toDoubleOrNull() ?: 0.0,
             date = LocalDateTime.now().toString(),
-            notes = notes
+            notes = binding.inputNotes.text.toString().ifEmpty { null }
         )
 
-        productionViewModel.saveBatch(productionBatch).observe(viewLifecycleOwner) { success ->
+        productionViewModel.saveBatch(batch).observe(viewLifecycleOwner) { success ->
             if (success) {
-                val newStock = selectedProduct.stockQty + quantityProduced
-                val updatedProduct = selectedProduct.copy(stockQty = newStock)
-                productViewModel.update(updatedProduct)
+                val newStock = selectedProduct.stockQty + qtyProduced
+                productViewModel.update(selectedProduct.copy(stockQty = newStock))
 
-                Toast.makeText(requireContext(), "Producción registrada y stock actualizado", Toast.LENGTH_SHORT).show()
+                val consumptions = adapter?.getQuantities()
+                    ?.filter { it.value > 0 }
+                    ?.map { (ingredientId, usedQty) ->
+                        ProductionConsumption(
+                            batchId = 0L,
+                            ingredientId = ingredientId,
+                            qtyUsed = usedQty,
+                            cost = 0.0
+                        )
+
+
+                    } ?: emptyList()
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    productionViewModel.insertBatch(batch, consumptions)
+
+                    consumptions.forEach { consumption ->
+                        ingredientViewModel.consumeStock(consumption.ingredientId, consumption.qtyUsed)
+                    }
+                }
+
+                Toast.makeText(requireContext(), "Producción guardada y consumos registrados", Toast.LENGTH_SHORT).show()
                 findNavController().navigateUp()
             } else {
                 Toast.makeText(requireContext(), "Error al guardar", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

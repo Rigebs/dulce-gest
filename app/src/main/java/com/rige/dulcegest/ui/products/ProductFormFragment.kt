@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -26,6 +27,7 @@ import com.rige.dulcegest.databinding.FragmentProductFormBinding
 import com.rige.dulcegest.ui.viewmodels.IngredientViewModel
 import com.rige.dulcegest.ui.viewmodels.ProductViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.io.File
@@ -59,6 +61,8 @@ class ProductFormFragment : Fragment() {
     private var availableIngredients: List<Ingredient> = emptyList()
 
     private lateinit var unitsAdapter: ArrayAdapter<CharSequence>
+
+    private var currentProduct: Product? = null
 
     private var selectedImagePath: String? = null
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -153,7 +157,10 @@ class ProductFormFragment : Fragment() {
 
         if (productId != 0L) {
             productViewModel.getProductById(productId).observe(viewLifecycleOwner) { product ->
-                product?.let { bindProductDetails(it) }
+                product?.let {
+                    currentProduct = it
+                    bindProductDetails(it)
+                }
             }
 
             productViewModel.getRecipeWithIngredients(productId).observe(viewLifecycleOwner) { items ->
@@ -328,30 +335,40 @@ class ProductFormFragment : Fragment() {
             return
         }
 
-        val product = Product(
-            id = productId,
-            name = name,
-            unit = unit,
-            price = price,
-            stockQty = 0.0,
-            createdAt = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-            notes = notes,
-            imagePath = selectedImagePath
-        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            val now = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
 
-        val recipeList = ingredientAdapter.getItems().map { it.recipe.copy(productId = productId) }
-        val presentations = presentationAdapter.getItems()
-        val variants = variantAdapter.getItems()
+            val product = currentProduct?.copy(
+                name = name,
+                unit = unit,
+                price = price,
+                notes = notes,
+                imagePath = selectedImagePath ?: currentProduct?.imagePath,
+                updatedAt = now
+            ) ?: Product(
+                name = name,
+                unit = unit,
+                price = price,
+                stockQty = 0.0,
+                createdAt = now,
+                notes = notes,
+                imagePath = selectedImagePath
+            )
 
-        productViewModel.saveProduct(product, recipeList, presentations, variants)
-            .observe(viewLifecycleOwner) { success ->
-                if (success) {
-                    Toast.makeText(requireContext(), "Producto guardado", Toast.LENGTH_SHORT).show()
-                    findNavController().navigateUp()
-                } else {
-                    Toast.makeText(requireContext(), "Error al guardar", Toast.LENGTH_SHORT).show()
+            val recipeList = ingredientAdapter.getItems().map { it.recipe.copy(productId = product.id) }
+            val presentations = presentationAdapter.getItems()
+            val variants = variantAdapter.getItems()
+
+            productViewModel.saveProduct(product, recipeList, presentations, variants)
+                .observe(viewLifecycleOwner) { success ->
+                    if (success) {
+                        Toast.makeText(requireContext(), "Producto guardado", Toast.LENGTH_SHORT).show()
+                        findNavController().navigateUp()
+                    } else {
+                        Toast.makeText(requireContext(), "Error al guardar", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+        }
     }
 
     private fun setupImageSelector() {

@@ -62,6 +62,8 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
                     val unitPosition = unitsAdapter.getPosition(it.unit)
                     if (unitPosition >= 0) binding.spinnerUnit.setSelection(unitPosition)
                     binding.inputStock.setText(it.stockQty.toString())
+                    binding.inputPurchaseUnit.setText(it.purchaseUnit ?: "")
+                    binding.inputConversionFactor.setText(it.conversionFactor?.toString() ?: "")
                     binding.inputNotes.setText(it.notes ?: "")
                 }
             }
@@ -75,6 +77,8 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
         val unit = binding.spinnerUnit.selectedItem.toString()
         val stock = binding.inputStock.text.toString().toDoubleOrNull() ?: 0.0
         val notes = binding.inputNotes.text.toString().trim().ifEmpty { null }
+        val purchaseUnit = binding.inputPurchaseUnit.text.toString().trim().ifEmpty { null }
+        val conversionFactor = binding.inputConversionFactor.text.toString().toDoubleOrNull()
 
         if (name.isEmpty() || unit.isEmpty()) {
             Toast.makeText(requireContext(), "Completa los campos obligatorios", Toast.LENGTH_SHORT).show()
@@ -86,6 +90,8 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
             name = name,
             unit = unit,
             stockQty = stock,
+            purchaseUnit = purchaseUnit,
+            conversionFactor = conversionFactor,
             updatedAt = LocalDateTime.now().toString(),
             notes = notes
         )

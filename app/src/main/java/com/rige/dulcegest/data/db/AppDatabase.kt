@@ -2,6 +2,8 @@ package com.rige.dulcegest.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.rige.dulcegest.data.db.dao.ExpenseDao
 import com.rige.dulcegest.data.db.dao.IngredientDao
 import com.rige.dulcegest.data.db.dao.ProductDao
@@ -39,7 +41,7 @@ import com.rige.dulcegest.data.db.entities.SaleItem
         SaleItem::class,
         Expense::class
     ],
-    version = 8,
+    version = 10,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -55,4 +57,19 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun saleItemDao(): SaleItemDao
     abstract fun expenseDao(): ExpenseDao
     abstract fun productVariantDao(): ProductVariantDao
+
+    companion object {
+        val MIGRATION_8_9 = object : Migration(8, 9) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE ingredients ADD COLUMN purchase_unit TEXT")
+                db.execSQL("ALTER TABLE ingredients ADD COLUMN conversion_factor REAL")
+            }
+        }
+
+        val MIGRATION_9_10 = object : Migration(9, 10) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE products ADD COLUMN updated_at TEXT DEFAULT ''")
+            }
+        }
+    }
 }

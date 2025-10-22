@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:background="?android:attr/selectableItemBackground">
+
+    <!-- Nombre del ingrediente -->
+    <TextView
+        android:id="@+id/tvIngredientName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="Ingrediente"
+        android:textStyle="bold"
+        android:paddingEnd="8dp" />
+
+    <!-- Campo de cantidad usada -->
+    <EditText
+        android:id="@+id/inputQtyUsed"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:inputType="numberDecimal"
+        android:gravity="center"
+        android:hint="Cant."
+        android:padding="4dp" />
+
+    <!-- Unidad -->
+    <TextView
+        android:id="@+id/tvUnit"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="kg"
+        android:textStyle="bold"
+        android:layout_marginLeft="8dp" />
+
+</LinearLayout>

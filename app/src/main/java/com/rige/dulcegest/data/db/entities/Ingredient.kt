@@ -16,6 +16,12 @@ data class Ingredient(
     @ColumnInfo(name = "stock_qty")
     val stockQty: Double = 0.0,
 
+    @ColumnInfo(name = "purchase_unit")
+    val purchaseUnit: String? = null,
+
+    @ColumnInfo(name = "conversion_factor")
+    val conversionFactor: Double? = null,
+
     @ColumnInfo(name = "updated_at")
     val updatedAt: String? = null,
 

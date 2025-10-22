@@ -22,6 +22,6 @@ object DatabaseModule {
             AppDatabase::class.java,
             "dulcegest.db"
         )
-            .fallbackToDestructiveMigration(true)
+            .addMigrations(AppDatabase.MIGRATION_9_10)
             .build()
 }
