@@ -13,5 +13,8 @@ class ExpenseRepository @Inject constructor(
     suspend fun insert(expense: Expense): Long = dao.insert(expense)
     suspend fun delete(expense: Expense) = dao.delete(expense)
     suspend fun getByCategory(category: String) = dao.getByCategory(category)
-    suspend fun getTotalExpenses(): Double = dao.getTotalExpenses()
+
+    fun getTotalExpenses() = dao.getTotalExpenses()
+    fun getTotalExpensesToday() = dao.getTotalExpensesToday()
+    fun getTotalExpensesThisWeek() = dao.getTotalExpensesThisWeek()
 }

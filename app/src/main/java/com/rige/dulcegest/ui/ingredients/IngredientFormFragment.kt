@@ -40,7 +40,6 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
         val toolbar = binding.toolbarIngredientForm
         toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
 
-        // Configurar Spinner de unidades
         val unitsAdapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.units_array,

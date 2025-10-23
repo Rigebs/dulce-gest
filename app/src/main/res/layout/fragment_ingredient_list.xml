@@ -1,66 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.ingredients.IngredientListFragment">
 
+    <!-- Toolbar superior -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarIngredientList"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="Ingredientes"
+        app:titleTextColor="?attr/colorOnPrimary"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationIconTint="?attr/colorOnPrimary" />
+
     <!-- Contenido principal -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ingredientes"
-            android:padding="16dp"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerIngredients"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            tools:listitem="@layout/item_ingredient" />
-
-    </LinearLayout>
-
-    <!-- === FABs flotantes === -->
     <FrameLayout
-        android:id="@+id/fabContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        android:clipChildren="false"
-        android:clipToPadding="false">
+        android:layout_height="match_parent">
 
-        <!-- FAB: Agregar compra -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabAddPurchase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="80dp"
-            android:src="@drawable/ic_ingredients"
-            app:borderWidth="0dp"
-            android:contentDescription="Agregar compra"
-            android:visibility="visible" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <!-- FAB: Agregar ingrediente -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabAddIngredient"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_add"
-            app:borderWidth="0dp"
-            android:contentDescription="Agregar ingrediente"
-            android:visibility="visible" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerIngredients"
+                android:layout_width="match_parent"
+                android:paddingVertical="12dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:listitem="@layout/item_ingredient" />
+        </LinearLayout>
 
+        <!-- === FABs flotantes === -->
+        <FrameLayout
+            android:id="@+id/fabContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <!-- FAB: Agregar compra -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabAddPurchase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="80dp"
+                android:src="@drawable/ic_ingredients"
+                app:borderWidth="0dp"
+                android:contentDescription="Agregar compra"
+                android:visibility="visible" />
+
+            <!-- FAB: Agregar ingrediente -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabAddIngredient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_add"
+                app:borderWidth="0dp"
+                android:contentDescription="Agregar ingrediente"
+                android:visibility="visible" />
+        </FrameLayout>
     </FrameLayout>
-
-</FrameLayout>
+</LinearLayout>

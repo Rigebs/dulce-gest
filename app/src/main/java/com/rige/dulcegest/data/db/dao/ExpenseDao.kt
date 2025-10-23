@@ -19,6 +19,12 @@ interface ExpenseDao {
     @Delete
     suspend fun delete(expense: Expense)
 
-    @Query("SELECT SUM(amount) FROM expenses")
-    suspend fun getTotalExpenses(): Double
+    @Query("SELECT IFNULL(SUM(amount), 0) FROM expenses")
+    fun getTotalExpenses(): LiveData<Double>
+
+    @Query("SELECT IFNULL(SUM(amount), 0) FROM expenses WHERE DATE(date) = DATE('now', 'localtime')")
+    fun getTotalExpensesToday(): LiveData<Double>
+
+    @Query("SELECT IFNULL(SUM(amount), 0) FROM expenses WHERE DATE(date) >= DATE('now', '-6 days', 'localtime')")
+    fun getTotalExpensesThisWeek(): LiveData<Double>
 }

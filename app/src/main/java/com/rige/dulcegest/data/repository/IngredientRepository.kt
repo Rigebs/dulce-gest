@@ -21,4 +21,7 @@ class IngredientRepository @Inject constructor(
     suspend fun addStock(id: Long, qty: Double) = dao.addStock(id, qty)
 
     suspend fun consumeStock(id: Long, qty: Double) = dao.consumeStock(id, qty)
+
+    fun getLowStock(threshold: Double = 5.0): LiveData<List<Ingredient>> =
+        dao.getLowStock(threshold)
 }

@@ -26,4 +26,8 @@ class SaleViewModel @Inject constructor(
     fun deleteSale(sale: Sale) = viewModelScope.launch {
         repo.deleteSale(sale)
     }
+
+    fun getTotalSalesToday() = repo.getTotalSalesToday()
+    fun getTotalSalesThisWeek() = repo.getTotalSalesThisWeek()
+    fun getDailySalesLast7Days() = repo.getDailySalesLast7Days()
 }

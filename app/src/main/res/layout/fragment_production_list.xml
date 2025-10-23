@@ -18,7 +18,7 @@
         app:navigationIcon="@drawable/ic_arrow_back"
         app:navigationIconTint="?attr/colorOnPrimary" />
 
-    <!-- RecyclerView y empty state dentro de un FrameLayout -->
+    <!-- Contenedor principal -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -28,6 +28,7 @@
             android:id="@+id/recyclerProductions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingVertical="12dp"
             tools:listitem="@layout/item_production" />
 
         <!-- Empty state -->
@@ -55,5 +56,17 @@
                 android:textColor="#9E9E9E"
                 android:layout_marginTop="8dp" />
         </LinearLayout>
+
+        <!-- Botón flotante para agregar producción -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAddProduction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            app:srcCompat="@drawable/ic_add"
+            app:tint="@android:color/white"
+            app:backgroundTint="?attr/colorPrimary"
+            android:contentDescription="Agregar producción" />
     </FrameLayout>
 </LinearLayout>

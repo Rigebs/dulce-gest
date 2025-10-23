@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_mas"
+    app:startDestination="@id/reportListFragment">
+
+    <!-- =================== REPORTES =================== -->
+    <fragment
+        android:id="@+id/reportListFragment"
+        android:name="com.rige.dulcegest.ui.reports.ReportListFragment"
+        android:label="Reportes"
+        tools:layout="@layout/fragment_report_list" />
+
+    <!-- =================== CONFIGURACIÓN =================== -->
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.rige.dulcegest.ui.settings.SettingsFragment"
+        android:label="Configuración"
+        tools:layout="@layout/fragment_settings" />
+
+    <!-- =================== PROVEEDORES =================== -->
+    <fragment
+        android:id="@+id/supplierListFragment"
+        android:name="com.rige.dulcegest.ui.suppliers.SupplierListFragment"
+        android:label="Proveedores"
+        tools:layout="@layout/fragment_supplier_list" />
+
+</navigation>

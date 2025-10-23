@@ -1,18 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
-        android:id="@+id/nav_productList"
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_home"
+        android:title="Inicio" />
+    <item
+        android:id="@+id/productMenuFragment"
         android:icon="@drawable/ic_cookie"
         android:title="Productos" />
     <item
-        android:id="@+id/ingredientListFragment"
-        android:icon="@drawable/ic_ingredients"
-        android:title="Ingredientes" />
-    <item
-        android:id="@+id/nav_sales"
-        android:icon="@drawable/ic_sales"
-        android:title="Ventas" />
-    <item
-        android:id="@+id/nav_expenses"
+        android:id="@+id/financeMenuFragment"
         android:icon="@drawable/ic_calculator"
-        android:title="Gastos" />
+        android:title="Finanzas" />
+    <item
+        android:id="@+id/reportListFragment"
+        android:icon="@drawable/ic_more"
+        android:title="Más" />
 </menu>

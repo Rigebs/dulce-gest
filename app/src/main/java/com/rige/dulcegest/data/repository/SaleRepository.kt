@@ -1,6 +1,7 @@
 package com.rige.dulcegest.data.repository
 
 import androidx.lifecycle.LiveData
+import com.rige.dulcegest.data.db.dao.DailySales
 import com.rige.dulcegest.data.db.dao.ProductDao
 import com.rige.dulcegest.data.db.dao.SaleDao
 import com.rige.dulcegest.data.db.dao.SaleItemDao
@@ -14,6 +15,8 @@ class SaleRepository @Inject constructor(
     private val productDao: ProductDao
 ) {
     val allSales: LiveData<List<Sale>> = saleDao.getAll()
+
+    val lastFiveSales: LiveData<List<Sale>> = saleDao.getLastFiveSales()
 
     suspend fun insertSale(sale: Sale, items: List<SaleItem>) {
         val saleId = saleDao.insert(sale)
@@ -29,4 +32,8 @@ class SaleRepository @Inject constructor(
     suspend fun getSaleWithItems(id: Long) = saleDao.getSaleWithItems(id)
 
     suspend fun deleteSale(sale: Sale) = saleDao.delete(sale)
+
+    fun getTotalSalesToday() = saleDao.getTotalSalesToday()
+    fun getTotalSalesThisWeek() = saleDao.getTotalSalesThisWeek()
+    fun getDailySalesLast7Days() = saleDao.getDailySalesLast7Days()
 }

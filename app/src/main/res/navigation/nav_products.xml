@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_productos"
+    app:startDestination="@id/productMenuFragment">
+
+    <!-- =================== MENÚ PRINCIPAL =================== -->
+    <fragment
+        android:id="@+id/productMenuFragment"
+        android:name="com.rige.dulcegest.ui.products.ProductMenuFragment"
+        android:label="Menú de Productos"
+        tools:layout="@layout/fragment_product_menu">
+
+        <action
+            android:id="@+id/action_productMenu_to_productListFragment"
+            app:destination="@id/productListFragment" />
+        <action
+            android:id="@+id/action_productMenu_to_ingredientListFragment"
+            app:destination="@id/ingredientListFragment" />
+        <action
+            android:id="@+id/action_productMenu_to_productionListFragment"
+            app:destination="@id/productionListFragment" />
+    </fragment>
+
+    <!-- =================== INGREDIENTES =================== -->
+    <fragment
+        android:id="@+id/ingredientListFragment"
+        android:name="com.rige.dulcegest.ui.ingredients.IngredientListFragment"
+        android:label="Ingredientes">
+        <action
+            android:id="@+id/action_ingredientListFragment_to_ingredientFormFragment"
+            app:destination="@id/ingredientFormFragment" />
+        <action
+            android:id="@+id/action_ingredientListFragment_to_purchaseFormFragment"
+            app:destination="@id/purchaseFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ingredientFormFragment"
+        android:name="com.rige.dulcegest.ui.ingredients.IngredientFormFragment"
+        android:label="Formulario Ingrediente">
+        <argument
+            android:name="ingredientId"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
+
+    <!-- =================== PRODUCTOS =================== -->
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="com.rige.dulcegest.ui.products.ProductListFragment"
+        android:label="Productos">
+        <action
+            android:id="@+id/action_productListFragment_to_productFormFragment"
+            app:destination="@id/productFormFragment" />
+        <action
+            android:id="@+id/action_productListFragment_to_productionFormFragment"
+            app:destination="@id/productionFormFragment" />
+        <action
+            android:id="@+id/action_productListFragment_to_productionListFragment"
+            app:destination="@id/productionListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/productFormFragment"
+        android:name="com.rige.dulcegest.ui.products.ProductFormFragment"
+        android:label="Formulario Producto">
+        <argument
+            android:name="productId"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
+
+    <!-- =================== PRODUCCIÓN =================== -->
+    <fragment
+        android:id="@+id/productionListFragment"
+        android:name="com.rige.dulcegest.ui.products.ProductionListFragment"
+        android:label="Producción"
+        tools:layout="@layout/fragment_production_list">
+
+        <action
+            android:id="@+id/action_productionListFragment_to_productionFormFragment"
+            app:destination="@id/productionFormFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/productionFormFragment"
+        android:name="com.rige.dulcegest.ui.products.ProductionFormFragment"
+        android:label="Registrar Producción"
+        tools:layout="@layout/fragment_production_form"/>
+
+</navigation>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_finanzas"
+    app:startDestination="@id/financeMenuFragment">
+
+    <fragment
+        android:id="@+id/financeMenuFragment"
+        android:name="com.rige.dulcegest.ui.finances.FinanceMenuFragment"
+        android:label="Menu"
+        tools:layout="@layout/fragment_finance_menu">
+
+        <action
+            android:id="@+id/action_financeMenu_to_saleListFragment"
+            app:destination="@id/saleListFragment" />
+
+        <action
+            android:id="@+id/action_financeMenu_to_purchaseFormFragment"
+            app:destination="@id/purchaseFormFragment" />
+
+        <action
+            android:id="@+id/action_financeMenu_to_expenseListFragment"
+            app:destination="@id/expenseListFragment" />
+
+        <action
+            android:id="@+id/action_financeMenu_to_saleFormFragment"
+            app:destination="@id/saleFormFragment" />
+    </fragment>
+
+    <!-- =================== VENTAS =================== -->
+    <fragment
+        android:id="@+id/saleListFragment"
+        android:name="com.rige.dulcegest.ui.sales.SaleListFragment"
+        android:label="Ventas"
+        tools:layout="@layout/fragment_sale_list">
+        <action
+            android:id="@+id/action_saleListFragment_to_saleFormFragment"
+            app:destination="@id/saleFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/saleFormFragment"
+        android:name="com.rige.dulcegest.ui.sales.SaleFormFragment"
+        android:label="Registrar venta"
+        tools:layout="@layout/fragment_sale_form" />
+
+    <!-- =================== COMPRAS =================== -->
+    <fragment
+        android:id="@+id/purchaseFormFragment"
+        android:name="com.rige.dulcegest.ui.purchases.PurchaseFormFragment"
+        android:label="Registrar compra"
+        tools:layout="@layout/fragment_purchase_form" />
+
+    <!-- =================== GASTOS =================== -->
+    <fragment
+        android:id="@+id/expenseListFragment"
+        android:name="com.rige.dulcegest.ui.expenses.ExpenseListFragment"
+        android:label="Gastos"
+        tools:layout="@layout/fragment_expense_list" />
+
+</navigation>

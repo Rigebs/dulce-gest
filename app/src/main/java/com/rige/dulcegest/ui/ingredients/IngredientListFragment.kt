@@ -35,6 +35,9 @@ class IngredientListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val toolbar = binding.toolbarIngredientList
+        toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+
         adapter = IngredientAdapter { ingredient ->
             findNavController().navigate(
                 R.id.action_ingredientListFragment_to_ingredientFormFragment,

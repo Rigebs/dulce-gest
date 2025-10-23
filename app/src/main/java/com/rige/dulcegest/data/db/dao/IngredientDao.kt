@@ -32,4 +32,7 @@ interface IngredientDao {
 
     @Query("UPDATE ingredients SET stock_qty = stock_qty - :qty WHERE id = :id")
     suspend fun consumeStock(id: Long, qty: Double)
+
+    @Query("SELECT * FROM ingredients WHERE stock_qty <= :threshold ORDER BY stock_qty ASC")
+    fun getLowStock(threshold: Double = 5.0): LiveData<List<Ingredient>>
 }

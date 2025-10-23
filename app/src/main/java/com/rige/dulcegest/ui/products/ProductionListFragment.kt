@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.rige.dulcegest.R
 import com.rige.dulcegest.databinding.FragmentProductionListBinding
 import com.rige.dulcegest.ui.viewmodels.ProductionViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,6 +48,10 @@ class ProductionListFragment : Fragment() {
 
         productionViewModel.batches.observe(viewLifecycleOwner) { batches ->
             adapter.submitList(batches)
+        }
+
+        binding.fabAddProduction.setOnClickListener {
+            findNavController().navigate(R.id.action_productionListFragment_to_productionFormFragment)
         }
     }
 

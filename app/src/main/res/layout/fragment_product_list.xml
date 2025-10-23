@@ -1,85 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.products.ProductListFragment">
 
-    <!-- Contenido principal -->
-    <LinearLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarProductList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="Productos"
+        app:titleTextColor="?attr/colorOnPrimary"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationIconTint="?attr/colorOnPrimary" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Productos"
-            android:padding="16dp"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerProducts"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            tools:listitem="@layout/item_product" />
-    </LinearLayout>
-
-    <!-- === FABs flotantes === -->
     <FrameLayout
-        android:id="@+id/fabContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        android:clipChildren="false"
-        android:clipToPadding="false">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabViewProduction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_view"
-            android:backgroundTint="@color/golden"
-            app:borderWidth="0dp"
-            android:contentDescription="Ver producción"
-            android:visibility="gone" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <!-- FAB: Registrar producción -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabAddProduction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_production"
-            android:backgroundTint="@color/golden"
-            app:borderWidth="0dp"
-            android:contentDescription="Registrar producción"
-            android:visibility="gone" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:paddingVertical="12dp"
+                android:id="@+id/recyclerProducts"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:listitem="@layout/item_product" />
+        </LinearLayout>
 
-        <!-- FAB: Agregar producto -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabAddProduct"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_add"
-            app:borderWidth="0dp"
-            android:backgroundTint="@color/golden"
-            android:contentDescription="Agregar producto"
-            android:visibility="gone" />
+        <!-- === FABs flotantes === -->
+        <FrameLayout
+            android:id="@+id/fabContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
-        <!-- FAB principal (controla el menú) -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabMain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_menu"
-            android:contentDescription="Menú principal" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabViewProduction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_view"
+                android:backgroundTint="@color/golden"
+                app:borderWidth="0dp"
+                android:contentDescription="Ver producción"
+                android:visibility="gone" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabAddProduction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_production"
+                android:backgroundTint="@color/golden"
+                app:borderWidth="0dp"
+                android:contentDescription="Registrar producción"
+                android:visibility="gone" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabAddProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_add"
+                app:borderWidth="0dp"
+                android:backgroundTint="@color/golden"
+                android:contentDescription="Agregar producto"
+                android:visibility="gone" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_menu"
+                android:contentDescription="Menú principal" />
+        </FrameLayout>
     </FrameLayout>
-
-</FrameLayout>
+</LinearLayout>

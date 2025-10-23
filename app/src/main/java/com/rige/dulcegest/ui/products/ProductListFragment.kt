@@ -30,6 +30,11 @@ class ProductListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = binding.toolbarProductList
+        toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+
         adapter = ProductAdapter(
             onClick = { product ->
                 val bundle = Bundle().apply { putLong("productId", product.id) }

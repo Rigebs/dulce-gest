@@ -29,4 +29,7 @@ class ExpenseViewModel @Inject constructor(
     fun getTotalExpenses() = liveData {
         emit(repo.getTotalExpenses())
     }
+
+    fun getTotalExpensesToday() = repo.getTotalExpensesToday()
+    fun getTotalExpensesThisWeek() = repo.getTotalExpensesThisWeek()
 }
