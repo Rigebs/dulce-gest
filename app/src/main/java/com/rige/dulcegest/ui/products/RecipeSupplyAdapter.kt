@@ -7,20 +7,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.rige.dulcegest.data.db.relations.ProductRecipeWithIngredient
-import com.rige.dulcegest.databinding.ItemRecipeIngredientBinding
+import com.rige.dulcegest.data.db.relations.ProductRecipeWithSupply
+import com.rige.dulcegest.databinding.ItemRecipeSupplyBinding
 
-class RecipeIngredientAdapter(
-    private val onRemove: (ProductRecipeWithIngredient) -> Unit
-) : ListAdapter<ProductRecipeWithIngredient, RecipeIngredientAdapter.ViewHolder>(DiffCallback()) {
+class RecipeSupplyAdapter(
+    private val onRemove: (ProductRecipeWithSupply) -> Unit
+) : ListAdapter<ProductRecipeWithSupply, RecipeSupplyAdapter.ViewHolder>(DiffCallback()) {
 
-    inner class ViewHolder(private val binding: ItemRecipeIngredientBinding) :
+    inner class ViewHolder(private val binding: ItemRecipeSupplyBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         private var watcher: TextWatcher? = null
 
-        fun bind(item: ProductRecipeWithIngredient) {
-            binding.txtIngredientName.text = item.ingredient.name
+        fun bind(item: ProductRecipeWithSupply) {
+            binding.txtSupplyName.text = item.supply.name
 
             watcher?.let { binding.inputQty.removeTextChangedListener(it) }
 
@@ -55,7 +55,7 @@ class RecipeIngredientAdapter(
                         val updatedList = currentList.toMutableList()
 
                         val index = updatedList.indexOfFirst {
-                            it.recipe.ingredientId == currentItem.recipe.ingredientId
+                            it.recipe.supplyId == currentItem.recipe.supplyId
                         }
 
                         if (index != -1) {
@@ -79,7 +79,7 @@ class RecipeIngredientAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemRecipeIngredientBinding.inflate(
+        val binding = ItemRecipeSupplyBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
         return ViewHolder(binding)
@@ -89,33 +89,33 @@ class RecipeIngredientAdapter(
         holder.bind(getItem(position))
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<ProductRecipeWithIngredient>() {
+    class DiffCallback : DiffUtil.ItemCallback<ProductRecipeWithSupply>() {
         override fun areItemsTheSame(
-            oldItem: ProductRecipeWithIngredient,
-            newItem: ProductRecipeWithIngredient
+            oldItem: ProductRecipeWithSupply,
+            newItem: ProductRecipeWithSupply
         ): Boolean {
-            return oldItem.recipe.ingredientId == newItem.recipe.ingredientId
+            return oldItem.recipe.supplyId == newItem.recipe.supplyId
         }
 
         override fun areContentsTheSame(
-            oldItem: ProductRecipeWithIngredient,
-            newItem: ProductRecipeWithIngredient
+            oldItem: ProductRecipeWithSupply,
+            newItem: ProductRecipeWithSupply
         ): Boolean = oldItem == newItem
     }
 
-    fun addIngredient(recipe: ProductRecipeWithIngredient, onListUpdated: () -> Unit) {
+    fun addSupply(recipe: ProductRecipeWithSupply, onListUpdated: () -> Unit) {
         val updatedList = currentList.toMutableList().apply { add(0, recipe.copy()) }
         submitList(updatedList.toList(), onListUpdated)
     }
 
-    fun removeIngredient(recipe: ProductRecipeWithIngredient, onListUpdated: () -> Unit) {
+    fun removeSupply(recipe: ProductRecipeWithSupply, onListUpdated: () -> Unit) {
         val updatedList = currentList.toMutableList().apply { remove(recipe) }
         submitList(updatedList.toList(), onListUpdated)
     }
 
-    fun setItems(newItems: List<ProductRecipeWithIngredient>) {
+    fun setItems(newItems: List<ProductRecipeWithSupply>) {
         submitList(newItems)
     }
 
-    fun getItems(): List<ProductRecipeWithIngredient> = currentList
+    fun getItems(): List<ProductRecipeWithSupply> = currentList
 }

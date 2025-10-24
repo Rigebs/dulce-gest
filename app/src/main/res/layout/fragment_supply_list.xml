@@ -5,15 +5,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ingredients.IngredientListFragment">
+    tools:context=".ui.supplies.SupplyListFragment">
 
     <!-- Toolbar superior -->
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbarIngredientList"
+        android:id="@+id/toolbar_supply_list"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:title="Ingredientes"
+        app:title="Insumos"
         app:titleTextColor="?attr/colorOnPrimary"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:navigationIconTint="?attr/colorOnPrimary" />
@@ -29,12 +29,12 @@
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerIngredients"
+                android:id="@+id/recyclerSupplies"
                 android:layout_width="match_parent"
                 android:paddingVertical="12dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                tools:listitem="@layout/item_ingredient" />
+                tools:listitem="@layout/item_supply" />
         </LinearLayout>
 
         <!-- === FABs flotantes === -->
@@ -53,20 +53,20 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_marginBottom="80dp"
-                android:src="@drawable/ic_ingredients"
+                android:src="@drawable/ic_supplies"
                 app:borderWidth="0dp"
                 android:contentDescription="Agregar compra"
                 android:visibility="visible" />
 
-            <!-- FAB: Agregar ingrediente -->
+            <!-- FAB: Agregar insumo -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabAddIngredient"
+                android:id="@+id/fab_add_supply"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:src="@drawable/ic_add"
                 app:borderWidth="0dp"
-                android:contentDescription="Agregar ingrediente"
+                android:contentDescription="Agregar insumo"
                 android:visibility="visible" />
         </FrameLayout>
     </FrameLayout>

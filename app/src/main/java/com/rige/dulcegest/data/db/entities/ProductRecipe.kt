@@ -12,16 +12,16 @@ import androidx.room.*
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = Ingredient::class,
+            entity = Supply::class,
             parentColumns = ["id"],
-            childColumns = ["ingredient_id"],
+            childColumns = ["supply_id"],
             onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [
         Index(value = ["product_id"]),
-        Index(value = ["ingredient_id"]),
-        Index(value = ["product_id", "ingredient_id"], unique = true)
+        Index(value = ["supply_id"]),
+        Index(value = ["product_id", "supply_id"], unique = true)
     ]
 )
 data class ProductRecipe(
@@ -31,8 +31,8 @@ data class ProductRecipe(
     @ColumnInfo(name = "product_id")
     val productId: Long,
 
-    @ColumnInfo(name = "ingredient_id")
-    val ingredientId: Long,
+    @ColumnInfo(name = "supply_id")
+    val supplyId: Long,
 
     @ColumnInfo(name = "qty_per_unit")
     val qtyPerUnit: Double? = null

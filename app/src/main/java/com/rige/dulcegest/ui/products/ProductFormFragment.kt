@@ -10,21 +10,20 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.rige.dulcegest.R
-import com.rige.dulcegest.data.db.entities.Ingredient
+import com.rige.dulcegest.data.db.entities.Supply
 import com.rige.dulcegest.data.db.entities.Product
 import com.rige.dulcegest.data.db.entities.ProductPresentation
 import com.rige.dulcegest.data.db.entities.ProductRecipe
 import com.rige.dulcegest.data.db.entities.ProductVariant
-import com.rige.dulcegest.data.db.relations.ProductRecipeWithIngredient
+import com.rige.dulcegest.data.db.relations.ProductRecipeWithSupply
 import com.rige.dulcegest.databinding.FragmentProductFormBinding
-import com.rige.dulcegest.ui.viewmodels.IngredientViewModel
+import com.rige.dulcegest.ui.viewmodels.SupplyViewModel
 import com.rige.dulcegest.ui.viewmodels.ProductViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -39,11 +38,11 @@ class ProductFormFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val productViewModel: ProductViewModel by activityViewModels()
-    private val ingredientViewModel: IngredientViewModel by activityViewModels()
+    private val supplyViewModel: SupplyViewModel by activityViewModels()
 
-    private val ingredientAdapter: RecipeIngredientAdapter by lazy {
-        RecipeIngredientAdapter { recipeItem ->
-            removeIngredient(recipeItem)
+    private val supplyAdapter: RecipeSupplyAdapter by lazy {
+        RecipeSupplyAdapter { recipeItem ->
+            removeSupply(recipeItem)
         }
     }
     private val presentationAdapter: ProductPresentationAdapter by lazy {
@@ -58,7 +57,7 @@ class ProductFormFragment : Fragment() {
     }
 
     private var productId: Long = 0L
-    private var availableIngredients: List<Ingredient> = emptyList()
+    private var availableSupplies: List<Supply> = emptyList()
 
     private lateinit var unitsAdapter: ArrayAdapter<CharSequence>
 
@@ -103,7 +102,7 @@ class ProductFormFragment : Fragment() {
         if (productId == 0L) {
             updatePresentationEmptyState()
             updateVariantEmptyState()
-            updateIngredientEmptyState()
+            updateSupplyEmptyState()
         }
     }
 
@@ -129,9 +128,9 @@ class ProductFormFragment : Fragment() {
     }
 
     private fun setupRecyclerViews() {
-        binding.recyclerIngredients.apply {
+        binding.recyclerSupplies.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = ingredientAdapter
+            adapter = supplyAdapter
         }
         binding.recyclerPresentations.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -144,15 +143,15 @@ class ProductFormFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.btnAddIngredient.setOnClickListener { showIngredientSelector() }
+        binding.btnAddSupply.setOnClickListener { showSupplySelector() }
         binding.btnAddPresentation.setOnClickListener { showAddPresentationDialog() }
         binding.btnAddVariant.setOnClickListener { showAddVariantDialog() }
         binding.btnSave.setOnClickListener { saveProduct() }
     }
 
     private fun observeData() {
-        ingredientViewModel.ingredients.observe(viewLifecycleOwner) {
-            availableIngredients = it
+        supplyViewModel.supplies.observe(viewLifecycleOwner) {
+            availableSupplies = it
         }
 
         if (productId != 0L) {
@@ -163,9 +162,9 @@ class ProductFormFragment : Fragment() {
                 }
             }
 
-            productViewModel.getRecipeWithIngredients(productId).observe(viewLifecycleOwner) { items ->
-                ingredientAdapter.setItems(items)
-                updateIngredientEmptyState()
+            productViewModel.getRecipeWithSupplies(productId).observe(viewLifecycleOwner) { items ->
+                supplyAdapter.setItems(items)
+                updateSupplyEmptyState()
             }
 
             productViewModel.getPresentationsByProduct(productId).observe(viewLifecycleOwner) { presentations ->
@@ -199,9 +198,9 @@ class ProductFormFragment : Fragment() {
         }
     }
 
-    private fun removeIngredient(recipeItem: ProductRecipeWithIngredient) {
-        ingredientAdapter.removeIngredient(recipeItem) {
-            updateIngredientEmptyState()
+    private fun removeSupply(recipeItem: ProductRecipeWithSupply) {
+        supplyAdapter.removeSupply(recipeItem) {
+            updateSupplyEmptyState()
         }
     }
 
@@ -217,9 +216,9 @@ class ProductFormFragment : Fragment() {
         }
     }
 
-    private fun updateIngredientEmptyState() {
-        binding.recyclerIngredients.visibility = if (ingredientAdapter.itemCount == 0) View.GONE else View.VISIBLE
-        binding.emptyStateLayout.visibility = if (ingredientAdapter.itemCount == 0) View.VISIBLE else View.GONE
+    private fun updateSupplyEmptyState() {
+        binding.recyclerSupplies.visibility = if (supplyAdapter.itemCount == 0) View.GONE else View.VISIBLE
+        binding.emptyStateLayout.visibility = if (supplyAdapter.itemCount == 0) View.VISIBLE else View.GONE
     }
 
     private fun updatePresentationEmptyState() {
@@ -232,29 +231,29 @@ class ProductFormFragment : Fragment() {
         binding.emptyVariantState.visibility = if (variantAdapter.itemCount == 0) View.VISIBLE else View.GONE
     }
 
-    private fun showIngredientSelector() {
-        if (availableIngredients.isEmpty()) {
-            Toast.makeText(requireContext(), "No hay ingredientes disponibles", Toast.LENGTH_SHORT).show()
+    private fun showSupplySelector() {
+        if (availableSupplies.isEmpty()) {
+            Toast.makeText(requireContext(), "No hay insumos disponibles", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val ingredientNames = availableIngredients.map { it.name }.toTypedArray()
+        val supplyNames = availableSupplies.map { it.name }.toTypedArray()
 
         AlertDialog.Builder(requireContext())
-            .setTitle("Selecciona un ingrediente")
-            .setItems(ingredientNames) { _, which ->
-                val selectedIngredient = availableIngredients[which]
-                val recipeItem = ProductRecipeWithIngredient(
+            .setTitle("Selecciona un insmo")
+            .setItems(supplyNames) { _, which ->
+                val selectedSupply = availableSupplies[which]
+                val recipeItem = ProductRecipeWithSupply(
                     recipe = ProductRecipe(
                         id = 0,
                         productId = productId,
-                        ingredientId = selectedIngredient.id,
+                        supplyId = selectedSupply.id,
                         qtyPerUnit = 0.0
                     ),
-                    ingredient = selectedIngredient
+                    supply = selectedSupply
                 )
-                ingredientAdapter.addIngredient(recipeItem) {
-                    updateIngredientEmptyState()
+                supplyAdapter.addSupply(recipeItem) {
+                    updateSupplyEmptyState()
                 }
             }
             .setNegativeButton("Cancelar", null)
@@ -355,7 +354,7 @@ class ProductFormFragment : Fragment() {
                 imagePath = selectedImagePath
             )
 
-            val recipeList = ingredientAdapter.getItems().map { it.recipe.copy(productId = product.id) }
+            val recipeList = supplyAdapter.getItems().map { it.recipe.copy(productId = product.id) }
             val presentations = presentationAdapter.getItems()
             val variants = variantAdapter.getItems()
 

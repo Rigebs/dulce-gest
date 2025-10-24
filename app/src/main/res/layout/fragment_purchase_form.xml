@@ -25,9 +25,9 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Ingrediente -->
+            <!-- Insumo -->
             <Spinner
-                android:id="@+id/spinnerIngredient"
+                android:id="@+id/spinner_supply"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"

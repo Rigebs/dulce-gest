@@ -9,6 +9,7 @@ import com.rige.dulcegest.R
 import com.rige.dulcegest.databinding.FragmentHomeBinding
 import com.rige.dulcegest.ui.MainActivity
 import com.rige.dulcegest.ui.viewmodels.ExpenseViewModel
+import com.rige.dulcegest.ui.viewmodels.PurchaseViewModel
 import com.rige.dulcegest.ui.viewmodels.SaleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,6 +22,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val saleViewModel: SaleViewModel by viewModels()
     private val expenseViewModel: ExpenseViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
+    private val purchaseViewModel: PurchaseViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,23 +55,29 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
-        // Ingredientes críticos
-        homeViewModel.lowStockIngredients.observe(viewLifecycleOwner) { lowStock ->
+        homeViewModel.lowStockSupplies.observe(viewLifecycleOwner) { lowStock ->
             if (lowStock.isEmpty()) {
                 binding.cardLowStock.visibility = View.GONE
             } else {
                 binding.cardLowStock.visibility = View.VISIBLE
-                binding.txtLowStock.text = "Ingredientes críticos: " +
+                binding.txtLowStock.text = "Insumos críticos: " +
                         lowStock.joinToString(", ") { it.name }
             }
+        }
+
+        purchaseViewModel.getTotalPurchasesThisWeek().observe(viewLifecycleOwner) { weeklyPurchases ->
+            binding.txtWeeklyPurchases.text = "S/ %.2f".format(weeklyPurchases ?: 0.0)
+            updateWeeklyProfit()
         }
     }
 
     // Ganancia semanal
     private fun updateWeeklyProfit() {
         val weeklySales = binding.txtWeeklySales.text.toString().replace("S/", "").trim().toDoubleOrNull() ?: 0.0
+        val weeklyPurchases = binding.txtWeeklyPurchases.text.toString().replace("S/", "").trim().toDoubleOrNull() ?: 0.0
         val weeklyExpenses = binding.txtWeeklyExpenses.text.toString().replace("S/", "").trim().toDoubleOrNull() ?: 0.0
-        val weeklyProfit = weeklySales - weeklyExpenses
+
+        val weeklyProfit = weeklySales - (weeklyPurchases + weeklyExpenses)
         binding.txtWeeklyProfit.text = "S/ %.2f".format(weeklyProfit)
     }
 
@@ -93,8 +101,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.btnNewProduction.setOnClickListener {
             mainActivity.navigateToInProductsGraph(R.id.productionFormFragment)
         }
-        binding.btnNewIngredient.setOnClickListener {
-            mainActivity.navigateToInProductsGraph(R.id.ingredientFormFragment)
+        binding.btnNewSupply.setOnClickListener {
+            mainActivity.navigateToInProductsGraph(R.id.supplyFormFragment)
         }
     }
 

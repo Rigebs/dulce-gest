@@ -6,20 +6,20 @@ import androidx.room.*
     tableName = "purchases",
     foreignKeys = [
         ForeignKey(
-            entity = Ingredient::class,
+            entity = Supply::class,
             parentColumns = ["id"],
-            childColumns = ["ingredient_id"],
+            childColumns = ["supply_id"],
             onDelete = ForeignKey.NO_ACTION
         )
     ],
-    indices = [Index(value = ["ingredient_id"])]
+    indices = [Index(value = ["supply_id"])]
 )
 data class Purchase(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
 
-    @ColumnInfo(name = "ingredient_id")
-    val ingredientId: Long,
+    @ColumnInfo(name = "supply_id")
+    val supplyId: Long,
 
     val quantity: Double,
 

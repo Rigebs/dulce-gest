@@ -18,11 +18,5 @@ class PurchaseViewModel @Inject constructor(
         repo.insert(purchase)
     }
 
-    fun deleteById(id: Long) = viewModelScope.launch {
-        repo.deleteById(id)
-    }
-
-    fun getByIngredient(ingredientId: Long) = liveData {
-        emit(repo.getByIngredient(ingredientId))
-    }
+    fun getTotalPurchasesThisWeek(): LiveData<Double> = repo.getTotalPurchasesThisWeek()
 }

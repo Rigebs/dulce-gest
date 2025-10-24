@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rige.dulcegest.data.db.entities.Product
 import com.rige.dulcegest.data.db.entities.ProductionBatch
 import com.rige.dulcegest.data.db.entities.ProductionConsumption
-import com.rige.dulcegest.data.db.relations.ProductRecipeWithIngredient
+import com.rige.dulcegest.data.db.relations.ProductRecipeWithSupply
 import com.rige.dulcegest.databinding.FragmentProductionFormBinding
-import com.rige.dulcegest.ui.viewmodels.IngredientViewModel
+import com.rige.dulcegest.ui.viewmodels.SupplyViewModel
 import com.rige.dulcegest.ui.viewmodels.ProductViewModel
 import com.rige.dulcegest.ui.viewmodels.ProductionViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,11 +33,11 @@ class ProductionFormFragment : Fragment() {
 
     private val productViewModel: ProductViewModel by activityViewModels()
     private val productionViewModel: ProductionViewModel by activityViewModels()
-    private val ingredientViewModel: IngredientViewModel by viewModels()
+    private val supplyViewModel: SupplyViewModel by viewModels()
 
     private var productList = emptyList<Product>()
-    private var ingredientList = emptyList<ProductRecipeWithIngredient>()
-    private var adapter: IngredientUsageAdapter? = null
+    private var supplyList = emptyList<ProductRecipeWithSupply>()
+    private var adapter: SupplyUsageAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentProductionFormBinding.inflate(inflater, container, false)
@@ -65,22 +65,22 @@ class ProductionFormFragment : Fragment() {
         binding.spinnerProduct.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val product = productList[position]
-                loadIngredientsForProduct(product.id)
+                loadSuppliesForProduct(product.id)
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
-    private fun loadIngredientsForProduct(productId: Long) {
-        productViewModel.getRecipeWithIngredients(productId).observe(viewLifecycleOwner) { list ->
-            ingredientList = list
+    private fun loadSuppliesForProduct(productId: Long) {
+        productViewModel.getRecipeWithSupplies(productId).observe(viewLifecycleOwner) { list ->
+            supplyList = list
             if (list.isNotEmpty()) {
-                binding.sectionIngredients.visibility = View.VISIBLE
-                adapter = IngredientUsageAdapter(list)
-                binding.rvIngredients.layoutManager = LinearLayoutManager(requireContext())
-                binding.rvIngredients.adapter = adapter
+                binding.sectionSupplies.visibility = View.VISIBLE
+                adapter = SupplyUsageAdapter(list)
+                binding.rvSupplies.layoutManager = LinearLayoutManager(requireContext())
+                binding.rvSupplies.adapter = adapter
             } else {
-                binding.sectionIngredients.visibility = View.GONE
+                binding.sectionSupplies.visibility = View.GONE
             }
         }
     }
@@ -95,31 +95,29 @@ class ProductionFormFragment : Fragment() {
             return
         }
 
-        // 1️⃣ Obtener lista de ingredientes usados
-        val ingredientUsages = adapter?.getQuantities()
+        val supplyUsages = adapter?.getQuantities()
             ?.filter { it.value > 0 } ?: emptyMap()
 
-        if (ingredientUsages.isEmpty()) {
-            Toast.makeText(requireContext(), "No hay ingredientes usados", Toast.LENGTH_SHORT).show()
+        if (supplyUsages.isEmpty()) {
+            Toast.makeText(requireContext(), "No hay insumos usados", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // 2️⃣ Calcular costos de ingredientes y total
         lifecycleScope.launch {
-            val allIngredients = ingredientViewModel.getAllIngredientsOnce()
+            val allSupplies = supplyViewModel.getAllSuppliesOnce()
             var totalCost = 0.0
             val consumptions = mutableListOf<ProductionConsumption>()
 
-            for ((ingredientId, usedQty) in ingredientUsages) {
-                val ingredient = allIngredients.find { it.id == ingredientId }
-                if (ingredient != null) {
-                    val cost = usedQty * ingredient.avgCost
+            for ((supplyId, usedQty) in supplyUsages) {
+                val supply = allSupplies.find { it.id == supplyId }
+                if (supply != null) {
+                    val cost = usedQty * supply.avgCost
                     totalCost += cost
 
                     consumptions.add(
                         ProductionConsumption(
                             batchId = 0L,
-                            ingredientId = ingredientId,
+                            supplyId = supplyId,
                             qtyUsed = usedQty,
                             cost = cost
                         )
@@ -136,19 +134,15 @@ class ProductionFormFragment : Fragment() {
                 notes = binding.inputNotes.text.toString().ifEmpty { null }
             )
 
-            // 4️⃣ Guardar en BD
             productionViewModel.insertBatch(batch, consumptions)
 
-            // 5️⃣ Actualizar stock del producto terminado
             val newProductStock = selectedProduct.stockQty + qtyProduced
             productViewModel.update(selectedProduct.copy(stockQty = newProductStock))
 
-            // 6️⃣ Descontar ingredientes del inventario
             consumptions.forEach { consumption ->
-                ingredientViewModel.consumeStock(consumption.ingredientId, consumption.qtyUsed)
+                supplyViewModel.consumeStock(consumption.supplyId, consumption.qtyUsed)
             }
 
-            // 7️⃣ Mostrar resultado
             Toast.makeText(
                 requireContext(),
                 "Lote producido correctamente.\nCosto total: ${"%.2f".format(totalCost)}",

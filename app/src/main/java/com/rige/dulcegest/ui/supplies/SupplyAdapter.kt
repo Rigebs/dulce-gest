@@ -1,4 +1,4 @@
-package com.rige.dulcegest.ui.ingredients
+package com.rige.dulcegest.ui.supplies
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,30 +8,30 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rige.dulcegest.R
-import com.rige.dulcegest.data.db.entities.Ingredient
+import com.rige.dulcegest.data.db.entities.Supply
 
-class IngredientAdapter(
-    private val onClick: (Ingredient) -> Unit
-) : ListAdapter<Ingredient, IngredientAdapter.ViewHolder>(DiffCallback()) {
+class SupplyAdapter(
+    private val onClick: (Supply) -> Unit
+) : ListAdapter<Supply, SupplyAdapter.ViewHolder>(DiffCallback()) {
 
     inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         private val name = view.findViewById<TextView>(R.id.tvName)
         private val info = view.findViewById<TextView>(R.id.tvInfo)
 
-        fun bind(item: Ingredient) {
+        fun bind(item: Supply) {
             name.text = item.name
             info.text = "${item.unit} • Stock: ${item.stockQty}"
             view.setOnClickListener { onClick(item) }
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<Ingredient>() {
-        override fun areItemsTheSame(old: Ingredient, new: Ingredient) = old.id == new.id
-        override fun areContentsTheSame(old: Ingredient, new: Ingredient) = old == new
+    class DiffCallback : DiffUtil.ItemCallback<Supply>() {
+        override fun areItemsTheSame(old: Supply, new: Supply) = old.id == new.id
+        override fun areContentsTheSame(old: Supply, new: Supply) = old == new
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_ingredient, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_supply, parent, false)
         return ViewHolder(v)
     }
 

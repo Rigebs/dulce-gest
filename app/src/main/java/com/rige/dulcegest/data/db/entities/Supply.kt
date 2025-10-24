@@ -3,10 +3,10 @@ package com.rige.dulcegest.data.db.entities
 import androidx.room.*
 
 @Entity(
-    tableName = "ingredients",
+    tableName = "supplies",
     indices = [Index(value = ["name"], unique = true)]
 )
-data class Ingredient(
+data class Supply(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
 

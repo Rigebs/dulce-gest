@@ -16,32 +16,32 @@
             android:id="@+id/action_productMenu_to_productListFragment"
             app:destination="@id/productListFragment" />
         <action
-            android:id="@+id/action_productMenu_to_ingredientListFragment"
-            app:destination="@id/ingredientListFragment" />
+            android:id="@+id/action_productMenu_to_supplyListFragment"
+            app:destination="@id/supplyListFragment" />
         <action
             android:id="@+id/action_productMenu_to_productionListFragment"
             app:destination="@id/productionListFragment" />
     </fragment>
 
-    <!-- =================== INGREDIENTES =================== -->
+    <!-- =================== INSUMOS =================== -->
     <fragment
-        android:id="@+id/ingredientListFragment"
-        android:name="com.rige.dulcegest.ui.ingredients.IngredientListFragment"
-        android:label="Ingredientes">
+        android:id="@+id/supplyListFragment"
+        android:name="com.rige.dulcegest.ui.supplies.SupplyListFragment"
+        android:label="Insumos">
         <action
-            android:id="@+id/action_ingredientListFragment_to_ingredientFormFragment"
-            app:destination="@id/ingredientFormFragment" />
+            android:id="@+id/action_supplyListFragment_to_supplyFormFragment"
+            app:destination="@id/supplyFormFragment" />
         <action
-            android:id="@+id/action_ingredientListFragment_to_purchaseFormFragment"
+            android:id="@+id/action_supplyListFragment_to_purchaseFormFragment"
             app:destination="@id/purchaseFormFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/ingredientFormFragment"
-        android:name="com.rige.dulcegest.ui.ingredients.IngredientFormFragment"
-        android:label="Formulario Ingrediente">
+        android:id="@+id/supplyFormFragment"
+        android:name="com.rige.dulcegest.ui.supplies.SupplyFormFragment"
+        android:label="Formulario Insumo">
         <argument
-            android:name="ingredientId"
+            android:name="supplyId"
             app:argType="long"
             android:defaultValue="0L" />
     </fragment>

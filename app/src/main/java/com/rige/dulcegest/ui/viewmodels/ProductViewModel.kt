@@ -5,7 +5,7 @@ import com.rige.dulcegest.data.db.entities.Product
 import com.rige.dulcegest.data.db.entities.ProductPresentation
 import com.rige.dulcegest.data.db.entities.ProductRecipe
 import com.rige.dulcegest.data.db.entities.ProductVariant
-import com.rige.dulcegest.data.db.relations.ProductRecipeWithIngredient
+import com.rige.dulcegest.data.db.relations.ProductRecipeWithSupply
 import com.rige.dulcegest.data.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -21,8 +21,8 @@ class ProductViewModel @Inject constructor(
 
     fun getProductById(id: Long): LiveData<Product?> = repo.getById(id)
 
-    fun getRecipeWithIngredients(productId: Long): LiveData<List<ProductRecipeWithIngredient>> {
-        return repo.getRecipeWithIngredients(productId)
+    fun getRecipeWithSupplies(productId: Long): LiveData<List<ProductRecipeWithSupply>> {
+        return repo.getRecipeWithSupplies(productId)
     }
 
     fun getPresentationsByProduct(productId: Long): LiveData<List<ProductPresentation>> {

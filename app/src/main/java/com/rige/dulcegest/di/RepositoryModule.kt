@@ -20,9 +20,9 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideIngredientRepository(
-        dao: IngredientDao
-    ): IngredientRepository = IngredientRepository(dao)
+    fun provideSupplyRepository(
+        dao: SupplyDao
+    ): SupplyRepository = SupplyRepository(dao)
 
     @Provides
     @Singleton

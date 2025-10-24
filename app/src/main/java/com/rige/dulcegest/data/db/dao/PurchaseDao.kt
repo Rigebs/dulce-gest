@@ -18,11 +18,18 @@ interface PurchaseDao {
 
     @Query("""
         SELECT * FROM purchases 
-        WHERE ingredient_id = :ingredientId 
+        WHERE supply_id = :supplyId 
         ORDER BY date DESC
     """)
-    suspend fun getByIngredient(ingredientId: Long): List<Purchase>
+    suspend fun getBySupply(supplyId: Long): List<Purchase>
 
     @Query("DELETE FROM purchases WHERE id = :id")
     suspend fun deleteById(id: Long)
+
+    @Query("""
+    SELECT IFNULL(SUM(total_price), 0) 
+    FROM purchases
+    WHERE date >= date('now', '-7 day')
+""")
+    fun getTotalThisWeek(): LiveData<Double>
 }

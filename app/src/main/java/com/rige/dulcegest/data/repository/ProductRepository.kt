@@ -9,7 +9,7 @@ import com.rige.dulcegest.data.db.entities.Product
 import com.rige.dulcegest.data.db.entities.ProductPresentation
 import com.rige.dulcegest.data.db.entities.ProductRecipe
 import com.rige.dulcegest.data.db.entities.ProductVariant
-import com.rige.dulcegest.data.db.relations.ProductRecipeWithIngredient
+import com.rige.dulcegest.data.db.relations.ProductRecipeWithSupply
 import com.rige.dulcegest.data.db.relations.ProductWithPresentations
 import com.rige.dulcegest.data.db.relations.ProductWithPresentationsAndVariants
 import com.rige.dulcegest.data.db.relations.ProductWithVariants
@@ -35,12 +35,12 @@ class ProductRepository @Inject constructor(
     suspend fun getRecipe(productId: Long): List<ProductRecipe> =
         recipeDao.getByProduct(productId)
 
-    fun getRecipeWithIngredients(productId: Long): LiveData<List<ProductRecipeWithIngredient>> =
-        recipeDao.getRecipeWithIngredients(productId)
+    fun getRecipeWithSupplies(productId: Long): LiveData<List<ProductRecipeWithSupply>> =
+        recipeDao.getRecipeWithSupplies(productId)
 
-    suspend fun setRecipe(productId: Long, ingredients: List<ProductRecipe>) {
+    suspend fun setRecipe(productId: Long, supplies: List<ProductRecipe>) {
         recipeDao.deleteByProduct(productId)
-        recipeDao.insertAll(ingredients)
+        recipeDao.insertAll(supplies)
     }
 
     suspend fun adjustStock(id: Long, qtyDelta: Double) {

@@ -1,4 +1,4 @@
-package com.rige.dulcegest.ui.ingredients
+package com.rige.dulcegest.ui.supplies
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,33 +11,33 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.rige.dulcegest.R
-import com.rige.dulcegest.data.db.entities.Ingredient
-import com.rige.dulcegest.databinding.FragmentIngredientFormBinding
-import com.rige.dulcegest.ui.viewmodels.IngredientViewModel
+import com.rige.dulcegest.data.db.entities.Supply
+import com.rige.dulcegest.databinding.FragmentSupplyFormBinding
+import com.rige.dulcegest.ui.viewmodels.SupplyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 
 @AndroidEntryPoint
-class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
+class SupplyFormFragment : Fragment(R.layout.fragment_supply_form) {
 
-    private var _binding: FragmentIngredientFormBinding? = null
+    private var _binding: FragmentSupplyFormBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: IngredientViewModel by viewModels()
-    private var ingredientId: Long? = null
+    private val viewModel: SupplyViewModel by viewModels()
+    private var supplyId: Long? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentIngredientFormBinding.inflate(inflater, container, false)
+        _binding = FragmentSupplyFormBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = binding.toolbarIngredientForm
+        val toolbar = binding.toolbarSupplyForm
         toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
 
         val unitsAdapter = ArrayAdapter.createFromResource(
@@ -49,14 +49,14 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
         }
         binding.spinnerUnit.adapter = unitsAdapter
 
-        ingredientId = arguments?.getLong("ingredientId")
+        supplyId = arguments?.getLong("supplyId")
 
-        toolbar.title = if (ingredientId == null || ingredientId == 0L)
-            "Crear ingrediente" else "Editar ingrediente"
+        toolbar.title = if (supplyId == null || supplyId == 0L)
+            "Crear insumo" else "Editar insumo"
 
-        ingredientId?.let { id ->
-            viewModel.getIngredientById(id).observe(viewLifecycleOwner) { ingredient ->
-                ingredient?.let {
+        supplyId?.let { id ->
+            viewModel.getSupplyById(id).observe(viewLifecycleOwner) { supply ->
+                supply?.let {
                     binding.inputName.setText(it.name)
                     val unitPosition = unitsAdapter.getPosition(it.unit)
                     if (unitPosition >= 0) binding.spinnerUnit.setSelection(unitPosition)
@@ -68,10 +68,10 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
             }
         }
 
-        binding.btnSave.setOnClickListener { saveIngredient() }
+        binding.btnSave.setOnClickListener { saveSupply() }
     }
 
-    private fun saveIngredient() {
+    private fun saveSupply() {
         val name = binding.inputName.text.toString().trim()
         val unit = binding.spinnerUnit.selectedItem.toString()
         val stock = binding.inputStock.text.toString().toDoubleOrNull() ?: 0.0
@@ -84,8 +84,8 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
             return
         }
 
-        val ingredient = Ingredient(
-            id = ingredientId ?: 0L,
+        val supply = Supply(
+            id = supplyId ?: 0L,
             name = name,
             unit = unit,
             stockQty = stock,
@@ -96,12 +96,12 @@ class IngredientFormFragment : Fragment(R.layout.fragment_ingredient_form) {
         )
 
         lifecycleScope.launch {
-            if (ingredientId == null || ingredientId == 0L) {
-                viewModel.insert(ingredient)
-                Toast.makeText(requireContext(), "Ingrediente agregado", Toast.LENGTH_SHORT).show()
+            if (supplyId == null || supplyId == 0L) {
+                viewModel.insert(supply)
+                Toast.makeText(requireContext(), "Insumo agregado", Toast.LENGTH_SHORT).show()
             } else {
-                viewModel.update(ingredient)
-                Toast.makeText(requireContext(), "Ingrediente actualizado", Toast.LENGTH_SHORT).show()
+                viewModel.update(supply)
+                Toast.makeText(requireContext(), "Insumo actualizado", Toast.LENGTH_SHORT).show()
             }
             findNavController().navigateUp()
         }

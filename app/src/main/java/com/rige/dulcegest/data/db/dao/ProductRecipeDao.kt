@@ -3,7 +3,7 @@ package com.rige.dulcegest.data.db.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.rige.dulcegest.data.db.entities.ProductRecipe
-import com.rige.dulcegest.data.db.relations.ProductRecipeWithIngredient
+import com.rige.dulcegest.data.db.relations.ProductRecipeWithSupply
 
 @Dao
 interface ProductRecipeDao {
@@ -25,5 +25,5 @@ interface ProductRecipeDao {
 
     @Transaction
     @Query("SELECT * FROM product_recipes WHERE product_id = :productId")
-    fun getRecipeWithIngredients(productId: Long): LiveData<List<ProductRecipeWithIngredient>>
+    fun getRecipeWithSupplies(productId: Long): LiveData<List<ProductRecipeWithSupply>>
 }

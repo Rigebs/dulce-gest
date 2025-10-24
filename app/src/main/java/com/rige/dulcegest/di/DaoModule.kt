@@ -10,7 +10,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object DaoModule {
 
-    @Provides fun provideIngredientDao(db: AppDatabase) = db.ingredientDao()
+    @Provides fun provideSupplyDao(db: AppDatabase) = db.supplyDao()
     @Provides fun provideProductDao(db: AppDatabase) = db.productDao()
     @Provides fun provideProductRecipeDao(db: AppDatabase) = db.productRecipeDao()
     @Provides fun providePurchaseDao(db: AppDatabase) = db.purchaseDao()

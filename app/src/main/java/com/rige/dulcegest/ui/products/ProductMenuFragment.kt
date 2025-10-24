@@ -22,8 +22,8 @@ class ProductMenuFragment : Fragment(R.layout.fragment_product_menu) {
             findNavController().navigate(R.id.action_productMenu_to_productListFragment)
         }
 
-        binding.cardIngredients.setOnClickListener {
-            findNavController().navigate(R.id.action_productMenu_to_ingredientListFragment)
+        binding.cardSupplies.setOnClickListener {
+            findNavController().navigate(R.id.action_productMenu_to_supplyListFragment)
         }
 
         binding.cardProduction.setOnClickListener {

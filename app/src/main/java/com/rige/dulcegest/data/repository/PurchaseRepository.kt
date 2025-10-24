@@ -14,7 +14,9 @@ class PurchaseRepository @Inject constructor(
 
     suspend fun insert(purchase: Purchase): Long = dao.insert(purchase)
 
-    suspend fun getByIngredient(ingredientId: Long) = dao.getByIngredient(ingredientId)
+    suspend fun getBySupply(supplyId: Long) = dao.getBySupply(supplyId)
 
     suspend fun deleteById(id: Long) = dao.deleteById(id)
+
+    fun getTotalPurchasesThisWeek(): LiveData<Double> = dao.getTotalThisWeek()
 }

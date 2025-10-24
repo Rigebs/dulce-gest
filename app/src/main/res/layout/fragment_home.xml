@@ -15,7 +15,7 @@
         android:clipChildren="false"
         android:clipToPadding="false">
 
-        <!-- ======= CARDS SEMANALES (SCROLL HORIZONTAL) ======= -->
+        <!-- ======= CARDS PRINCIPALES (SCROLL HORIZONTAL) ======= -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,7 +32,8 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="6dp"
-                    app:cardUseCompatPadding="true">
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginEnd="12dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -45,9 +46,9 @@
                             android:layout_width="36dp"
                             android:layout_height="36dp"
                             android:src="@drawable/ic_sales"
-                            android:contentDescription="Icono ventas"
+                            app:tint="#4CAF50"
                             android:layout_marginBottom="8dp"
-                            app:tint="#4CAF50"/>
+                            android:contentDescription="Icono ventas" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -55,25 +56,26 @@
                             android:text="Ventas Semanales"
                             android:textStyle="bold"
                             android:textSize="16sp"
-                            android:layout_marginBottom="6dp"/>
+                            android:layout_marginBottom="6dp" />
 
                         <TextView
                             android:id="@+id/txtWeeklySales"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="S/ 0.00"
-                            android:textSize="18sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Gastos Semanales -->
+                <!-- Compras Semanales -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="6dp"
-                    app:cardUseCompatPadding="true">
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginEnd="12dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -86,29 +88,71 @@
                             android:layout_width="36dp"
                             android:layout_height="36dp"
                             android:src="@drawable/ic_cart"
-                            android:contentDescription="Icono gastos"
+                            app:tint="#03A9F4"
                             android:layout_marginBottom="8dp"
-                            app:tint="#F44336"/>
+                            android:contentDescription="Icono compras" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gastos Semanales"
+                            android:text="Compras Insumos"
                             android:textStyle="bold"
                             android:textSize="16sp"
-                            android:layout_marginBottom="6dp"/>
+                            android:layout_marginBottom="6dp" />
+
+                        <TextView
+                            android:id="@+id/txtWeeklyPurchases"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="S/ 0.00"
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Gastos Semanales -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="6dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginEnd="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_bill"
+                            app:tint="#F44336"
+                            android:layout_marginBottom="8dp"
+                            android:contentDescription="Icono gastos" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Gastos Generales"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:layout_marginBottom="6dp" />
 
                         <TextView
                             android:id="@+id/txtWeeklyExpenses"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="S/ 0.00"
-                            android:textSize="18sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Ganancias Semanales -->
+                <!-- Ganancia Semanal -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
@@ -127,25 +171,25 @@
                             android:layout_width="36dp"
                             android:layout_height="36dp"
                             android:src="@drawable/ic_profit"
-                            android:contentDescription="Icono ganancia"
+                            app:tint="#FF9800"
                             android:layout_marginBottom="8dp"
-                            app:tint="#FF9800"/>
+                            android:contentDescription="Icono ganancia" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ganancia Semanal"
+                            android:text="Ganancia Neta"
                             android:textStyle="bold"
                             android:textSize="16sp"
-                            android:layout_marginBottom="6dp"/>
+                            android:layout_marginBottom="6dp" />
 
                         <TextView
                             android:id="@+id/txtWeeklyProfit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="S/ 0.00"
-                            android:textSize="18sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -258,14 +302,14 @@
                 app:cornerRadius="8dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnNewIngredient"
+                android:id="@+id/btnNewSupply"
                 android:layout_width="71dp"
                 android:layout_height="85dp"
-                android:text="Nuevo ingre."
+                android:text="Nuevo insum."
                 android:textSize="10sp"
                 android:textAllCaps="false"
                 android:gravity="center"
-                app:icon="@drawable/ic_ingredients"
+                app:icon="@drawable/ic_supplies"
                 app:iconSize="30dp"
                 app:iconGravity="top"
                 app:iconPadding="6dp"
@@ -302,7 +346,7 @@
                     tools:listitem="@layout/item_recent_sale"/>
             </LinearLayout>
 
-        <!-- ======= INGREDIENTES CRÍTICOS ======= -->
+        <!-- ======= INSUMOS CRÍTICOS ======= -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -330,7 +374,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Ingredientes críticos: azúcar, harina"
+                    android:text="Insumos críticos: vasos, azúcar, harina"
                     android:textSize="14sp"
                     android:layout_marginStart="10dp"
                     android:lineSpacingExtra="2dp"/>
