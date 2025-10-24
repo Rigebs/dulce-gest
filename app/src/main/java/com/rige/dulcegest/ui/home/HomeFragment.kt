@@ -37,6 +37,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         saleViewModel.getTotalSalesThisWeek().observe(viewLifecycleOwner) { weeklySales ->
             binding.txtWeeklySales.text = "S/ %.2f".format(weeklySales ?: 0.0)
             updateWeeklyProfit()
+            updateWeeklyGoal(weeklySales ?: 0.0)
         }
 
         expenseViewModel.getTotalExpensesThisWeek().observe(viewLifecycleOwner) { weeklyExpenses ->
@@ -70,6 +71,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val weeklyExpenses = binding.txtWeeklyExpenses.text.toString().replace("S/", "").trim().toDoubleOrNull() ?: 0.0
         val weeklyProfit = weeklySales - weeklyExpenses
         binding.txtWeeklyProfit.text = "S/ %.2f".format(weeklyProfit)
+    }
+
+    private fun updateWeeklyGoal(weeklySales: Double) {
+        val goalAmount = 100.0
+        val progress = ((weeklySales / goalAmount) * 100).coerceAtMost(100.0)
+        binding.progressWeeklyGoal.progress = progress.toInt()
+        binding.txtGoalSummary.text = "Objetivo: S/ %.2f — Alcanzado: S/ %.2f".format(goalAmount, weeklySales)
+        binding.txtGoalProgress.text = "%.0f%%".format(progress)
     }
 
     private fun setupQuickActions() {

@@ -29,5 +29,4 @@ class SaleViewModel @Inject constructor(
 
     fun getTotalSalesToday() = repo.getTotalSalesToday()
     fun getTotalSalesThisWeek() = repo.getTotalSalesThisWeek()
-    fun getDailySalesLast7Days() = repo.getDailySalesLast7Days()
 }

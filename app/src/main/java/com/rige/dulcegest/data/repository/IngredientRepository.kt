@@ -24,4 +24,6 @@ class IngredientRepository @Inject constructor(
 
     fun getLowStock(threshold: Double = 5.0): LiveData<List<Ingredient>> =
         dao.getLowStock(threshold)
+
+    suspend fun getAllOnce(): List<Ingredient> = dao.getAllOnce()
 }

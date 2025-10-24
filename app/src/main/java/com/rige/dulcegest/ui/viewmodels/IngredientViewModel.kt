@@ -21,4 +21,8 @@ class IngredientViewModel @Inject constructor(
     fun delete(ingredient: Ingredient) = viewModelScope.launch { repo.delete(ingredient) }
     fun addStock(id: Long, qty: Double) = viewModelScope.launch { repo.addStock(id, qty) }
     fun consumeStock(id: Long, qty: Double) = viewModelScope.launch { repo.consumeStock(id, qty) }
+
+    suspend fun getAllIngredientsOnce(): List<Ingredient> {
+        return repo.getAllOnce()
+    }
 }

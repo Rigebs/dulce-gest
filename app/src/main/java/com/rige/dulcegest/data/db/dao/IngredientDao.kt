@@ -35,4 +35,7 @@ interface IngredientDao {
 
     @Query("SELECT * FROM ingredients WHERE stock_qty <= :threshold ORDER BY stock_qty ASC")
     fun getLowStock(threshold: Double = 5.0): LiveData<List<Ingredient>>
+
+    @Query("SELECT * FROM ingredients")
+    suspend fun getAllOnce(): List<Ingredient>
 }

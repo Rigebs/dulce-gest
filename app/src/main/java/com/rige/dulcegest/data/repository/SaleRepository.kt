@@ -1,7 +1,6 @@
 package com.rige.dulcegest.data.repository
 
 import androidx.lifecycle.LiveData
-import com.rige.dulcegest.data.db.dao.DailySales
 import com.rige.dulcegest.data.db.dao.ProductDao
 import com.rige.dulcegest.data.db.dao.SaleDao
 import com.rige.dulcegest.data.db.dao.SaleItemDao
@@ -35,5 +34,4 @@ class SaleRepository @Inject constructor(
 
     fun getTotalSalesToday() = saleDao.getTotalSalesToday()
     fun getTotalSalesThisWeek() = saleDao.getTotalSalesThisWeek()
-    fun getDailySalesLast7Days() = saleDao.getDailySalesLast7Days()
 }

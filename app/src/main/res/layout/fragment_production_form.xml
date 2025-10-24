@@ -87,21 +87,6 @@
                     android:nestedScrollingEnabled="false" />
             </LinearLayout>
 
-            <!-- Costo total -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Costo total (opcional)"
-                android:textStyle="bold"
-                android:paddingTop="16dp" />
-
-            <EditText
-                android:id="@+id/inputTotalCost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ejemplo: 25.50"
-                android:inputType="numberDecimal" />
-
             <!-- Notas -->
             <TextView
                 android:layout_width="match_parent"

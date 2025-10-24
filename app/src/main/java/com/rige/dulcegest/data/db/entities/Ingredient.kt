@@ -16,6 +16,9 @@ data class Ingredient(
     @ColumnInfo(name = "stock_qty")
     val stockQty: Double = 0.0,
 
+    @ColumnInfo(name = "avg_cost")
+    val avgCost: Double = 0.0,
+
     @ColumnInfo(name = "purchase_unit")
     val purchaseUnit: String? = null,
 

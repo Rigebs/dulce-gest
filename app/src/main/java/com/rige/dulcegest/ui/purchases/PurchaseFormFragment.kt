@@ -77,23 +77,39 @@ class PurchaseFormFragment : Fragment(R.layout.fragment_purchase_form) {
                     notes = notes
                 )
 
+                // 1️⃣ Guardar la compra
                 viewModel.insert(purchase)
 
+                // 2️⃣ Calcular nueva cantidad en stock
                 val factor = selectedIngredient.conversionFactor ?: 1.0
                 val addedQty = quantity * factor
                 val newStock = selectedIngredient.stockQty + addedQty
 
+                // 3️⃣ Calcular nuevo costo promedio
+                val newUnitCost = totalPrice / quantity
+                val oldStock = selectedIngredient.stockQty
+                val oldCost = selectedIngredient.avgCost
+
+                val newAvgCost = if (oldStock + addedQty > 0) {
+                    ((oldStock * oldCost) + (addedQty * newUnitCost)) / (oldStock + addedQty)
+                } else {
+                    newUnitCost
+                }
+
                 val updatedIngredient = selectedIngredient.copy(
                     stockQty = newStock,
+                    avgCost = newAvgCost,
                     updatedAt = LocalDateTime.now().toString()
                 )
+
                 ingredientViewModel.update(updatedIngredient)
 
                 Toast.makeText(
                     requireContext(),
-                    "Compra registrada: +${addedQty} ${selectedIngredient.unit} añadidas al stock",
+                    "Compra registrada: +${addedQty} ${selectedIngredient.unit} añadidas al stock\nNuevo costo promedio: ${"%.2f".format(newAvgCost)}",
                     Toast.LENGTH_LONG
                 ).show()
+
                 findNavController().navigateUp()
             }
         }

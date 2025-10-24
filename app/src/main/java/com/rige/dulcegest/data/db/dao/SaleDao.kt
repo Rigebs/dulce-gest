@@ -32,16 +32,6 @@ interface SaleDao {
     @Query("SELECT IFNULL(SUM(total_amount), 0) FROM sales WHERE DATE(sale_date) >= DATE('now', '-6 days', 'localtime')")
     fun getTotalSalesThisWeek(): LiveData<Double>
 
-    // Para el gráfico (últimos 7 días)
-    @Query("""
-                SELECT DATE(sale_date) AS date, SUM(total_amount) AS total
-                FROM sales
-                WHERE DATE(sale_date) >= DATE('now', '-6 days', 'localtime')
-                GROUP BY DATE(sale_date)
-                ORDER BY DATE(sale_date)
-            """)
-    fun getDailySalesLast7Days(): LiveData<List<DailySales>>
-
     @Query("SELECT * FROM sales ORDER BY sale_date DESC LIMIT 5")
     fun getLastFiveSales(): LiveData<List<Sale>>
 }

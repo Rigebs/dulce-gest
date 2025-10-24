@@ -22,6 +22,6 @@ object DatabaseModule {
             AppDatabase::class.java,
             "dulcegest.db"
         )
-            .addMigrations(AppDatabase.MIGRATION_9_10)
+            .addMigrations(AppDatabase.MIGRATION_10_11)
             .build()
 }

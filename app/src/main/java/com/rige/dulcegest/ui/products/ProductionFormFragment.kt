@@ -95,47 +95,70 @@ class ProductionFormFragment : Fragment() {
             return
         }
 
-        val batch = ProductionBatch(
-            productId = selectedProduct.id,
-            quantityProduced = qtyProduced,
-            totalCost = binding.inputTotalCost.text.toString().toDoubleOrNull() ?: 0.0,
-            date = LocalDateTime.now().toString(),
-            notes = binding.inputNotes.text.toString().ifEmpty { null }
-        )
+        // 1️⃣ Obtener lista de ingredientes usados
+        val ingredientUsages = adapter?.getQuantities()
+            ?.filter { it.value > 0 } ?: emptyMap()
 
-        productionViewModel.saveBatch(batch).observe(viewLifecycleOwner) { success ->
-            if (success) {
-                val newStock = selectedProduct.stockQty + qtyProduced
-                productViewModel.update(selectedProduct.copy(stockQty = newStock))
+        if (ingredientUsages.isEmpty()) {
+            Toast.makeText(requireContext(), "No hay ingredientes usados", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-                val consumptions = adapter?.getQuantities()
-                    ?.filter { it.value > 0 }
-                    ?.map { (ingredientId, usedQty) ->
+        // 2️⃣ Calcular costos de ingredientes y total
+        lifecycleScope.launch {
+            val allIngredients = ingredientViewModel.getAllIngredientsOnce()
+            var totalCost = 0.0
+            val consumptions = mutableListOf<ProductionConsumption>()
+
+            for ((ingredientId, usedQty) in ingredientUsages) {
+                val ingredient = allIngredients.find { it.id == ingredientId }
+                if (ingredient != null) {
+                    val cost = usedQty * ingredient.avgCost
+                    totalCost += cost
+
+                    consumptions.add(
                         ProductionConsumption(
                             batchId = 0L,
                             ingredientId = ingredientId,
                             qtyUsed = usedQty,
-                            cost = 0.0
+                            cost = cost
                         )
-
-
-                    } ?: emptyList()
-
-                viewLifecycleOwner.lifecycleScope.launch {
-                    productionViewModel.insertBatch(batch, consumptions)
-
-                    consumptions.forEach { consumption ->
-                        ingredientViewModel.consumeStock(consumption.ingredientId, consumption.qtyUsed)
-                    }
+                    )
                 }
-
-                Toast.makeText(requireContext(), "Producción guardada y consumos registrados", Toast.LENGTH_SHORT).show()
-                findNavController().navigateUp()
-            } else {
-                Toast.makeText(requireContext(), "Error al guardar", Toast.LENGTH_SHORT).show()
             }
+
+            // 3️⃣ Crear lote con costo total calculado
+            val batch = ProductionBatch(
+                productId = selectedProduct.id,
+                quantityProduced = qtyProduced,
+                totalCost = totalCost,
+                date = LocalDateTime.now().toString(),
+                notes = binding.inputNotes.text.toString().ifEmpty { null }
+            )
+
+            // 4️⃣ Guardar en BD
+            productionViewModel.insertBatch(batch, consumptions)
+
+            // 5️⃣ Actualizar stock del producto terminado
+            val newProductStock = selectedProduct.stockQty + qtyProduced
+            productViewModel.update(selectedProduct.copy(stockQty = newProductStock))
+
+            // 6️⃣ Descontar ingredientes del inventario
+            consumptions.forEach { consumption ->
+                ingredientViewModel.consumeStock(consumption.ingredientId, consumption.qtyUsed)
+            }
+
+            // 7️⃣ Mostrar resultado
+            Toast.makeText(
+                requireContext(),
+                "Lote producido correctamente.\nCosto total: ${"%.2f".format(totalCost)}",
+                Toast.LENGTH_LONG
+            ).show()
+
+            findNavController().navigateUp()
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
