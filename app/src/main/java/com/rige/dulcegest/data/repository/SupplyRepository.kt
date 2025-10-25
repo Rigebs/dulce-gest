@@ -1,8 +1,8 @@
 package com.rige.dulcegest.data.repository
 
 import androidx.lifecycle.LiveData
-import com.rige.dulcegest.data.db.dao.SupplyDao
-import com.rige.dulcegest.data.db.entities.Supply
+import com.rige.dulcegest.data.local.dao.SupplyDao
+import com.rige.dulcegest.data.local.entities.Supply
 import jakarta.inject.Inject
 
 class SupplyRepository @Inject constructor(

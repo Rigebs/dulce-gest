@@ -1,23 +1,23 @@
 package com.rige.dulcegest.ui.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rige.dulcegest.R
 import com.rige.dulcegest.databinding.FragmentHomeBinding
 import com.rige.dulcegest.ui.MainActivity
-import com.rige.dulcegest.ui.viewmodels.ExpenseViewModel
-import com.rige.dulcegest.ui.viewmodels.PurchaseViewModel
-import com.rige.dulcegest.ui.viewmodels.SaleViewModel
+import com.rige.dulcegest.ui.common.BaseFragment
+import com.rige.dulcegest.ui.finances.expenses.ExpenseViewModel
+import com.rige.dulcegest.ui.finances.purchases.PurchaseViewModel
+import com.rige.dulcegest.ui.finances.sales.SaleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment :
+    BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+    override val showToolbar: Boolean = false
 
     private val saleViewModel: SaleViewModel by viewModels()
     private val expenseViewModel: ExpenseViewModel by viewModels()
@@ -26,7 +26,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentHomeBinding.bind(view)
 
         setupObservers()
         setupQuickActions()
@@ -115,10 +114,5 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             "Actualiza los precios si tus costos cambiaron."
         )
         binding.txtDailyTip.text = "Tip del día: ${tips.random()}"
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

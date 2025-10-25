@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/supplyListFragment"
-        android:name="com.rige.dulcegest.ui.supplies.SupplyListFragment"
+        android:name="com.rige.dulcegest.ui.products.supplies.SupplyListFragment"
         android:label="Insumos">
         <action
             android:id="@+id/action_supplyListFragment_to_supplyFormFragment"
@@ -15,7 +15,7 @@
 
     <fragment
         android:id="@+id/supplyFormFragment"
-        android:name="com.rige.dulcegest.ui.supplies.SupplyFormFragment"
+        android:name="com.rige.dulcegest.ui.products.supplies.SupplyFormFragment"
         android:label="Formulario Insumo">
         <argument
             android:name="supplyId"

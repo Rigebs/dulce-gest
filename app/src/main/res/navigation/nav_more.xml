@@ -8,21 +8,21 @@
     <!-- =================== REPORTES =================== -->
     <fragment
         android:id="@+id/reportListFragment"
-        android:name="com.rige.dulcegest.ui.reports.ReportListFragment"
+        android:name="com.rige.dulcegest.ui.more.reports.ReportListFragment"
         android:label="Reportes"
         tools:layout="@layout/fragment_report_list" />
 
     <!-- =================== CONFIGURACIÓN =================== -->
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.rige.dulcegest.ui.settings.SettingsFragment"
+        android:name="com.rige.dulcegest.ui.more.settings.SettingsFragment"
         android:label="Configuración"
         tools:layout="@layout/fragment_settings" />
 
     <!-- =================== PROVEEDORES =================== -->
     <fragment
         android:id="@+id/supplierListFragment"
-        android:name="com.rige.dulcegest.ui.suppliers.SupplierListFragment"
+        android:name="com.rige.dulcegest.ui.more.suppliers.SupplierListFragment"
         android:label="Proveedores"
         tools:layout="@layout/fragment_supplier_list" />
 

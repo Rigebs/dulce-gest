@@ -5,18 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.products.ProductionListFragment">
-
-    <!-- Toolbar con título y flecha de retroceso -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbarProductionList"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:title="Producción de productos"
-        app:titleTextColor="?attr/colorOnPrimary"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        app:navigationIconTint="?attr/colorOnPrimary" />
+    tools:context=".ui.products.production.ProductionListFragment">
 
     <!-- Contenedor principal -->
     <FrameLayout

@@ -5,17 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.products.ProductListFragment">
-
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbarProductList"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:title="Productos"
-        app:titleTextColor="?attr/colorOnPrimary"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        app:navigationIconTint="?attr/colorOnPrimary" />
+    tools:context=".ui.products.list.ProductListFragment">
 
     <FrameLayout
         android:layout_width="match_parent"

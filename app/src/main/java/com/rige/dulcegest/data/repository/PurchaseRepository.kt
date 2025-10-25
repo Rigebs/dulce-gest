@@ -1,8 +1,8 @@
 package com.rige.dulcegest.data.repository
 
 import androidx.lifecycle.LiveData
-import com.rige.dulcegest.data.db.dao.PurchaseDao
-import com.rige.dulcegest.data.db.entities.Purchase
+import com.rige.dulcegest.data.local.dao.PurchaseDao
+import com.rige.dulcegest.data.local.entities.Purchase
 import jakarta.inject.Inject
 
 class PurchaseRepository @Inject constructor(

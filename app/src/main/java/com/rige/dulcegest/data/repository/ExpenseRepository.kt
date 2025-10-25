@@ -1,8 +1,8 @@
 package com.rige.dulcegest.data.repository
 
 import androidx.lifecycle.LiveData
-import com.rige.dulcegest.data.db.dao.ExpenseDao
-import com.rige.dulcegest.data.db.entities.Expense
+import com.rige.dulcegest.data.local.dao.ExpenseDao
+import com.rige.dulcegest.data.local.entities.Expense
 import jakarta.inject.Inject
 
 class ExpenseRepository @Inject constructor(

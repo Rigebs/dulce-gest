@@ -1,11 +1,10 @@
 package com.rige.dulcegest.data.repository
 
 import androidx.lifecycle.LiveData
-import com.rige.dulcegest.data.db.dao.ProductDao
-import com.rige.dulcegest.data.db.dao.SaleDao
-import com.rige.dulcegest.data.db.dao.SaleItemDao
-import com.rige.dulcegest.data.db.entities.Sale
-import com.rige.dulcegest.data.db.entities.SaleItem
+import com.rige.dulcegest.data.local.dao.ProductDao
+import com.rige.dulcegest.data.local.dao.SaleDao
+import com.rige.dulcegest.data.local.dao.SaleItemDao
+import com.rige.dulcegest.data.local.entities.Sale
 import jakarta.inject.Inject
 
 class SaleRepository @Inject constructor(
@@ -17,7 +16,7 @@ class SaleRepository @Inject constructor(
 
     val lastFiveSales: LiveData<List<Sale>> = saleDao.getLastFiveSales()
 
-    suspend fun insertSale(sale: Sale, items: List<SaleItem>) {
+    suspend fun insertSale(sale: Sale, items: List<com.rige.dulcegest.data.local.entities.SaleItem>) {
         val saleId = saleDao.insert(sale)
         val itemList = items.map { it.copy(saleId = saleId) }
         itemDao.insertAll(itemList)

@@ -31,7 +31,7 @@
     <!-- =================== VENTAS =================== -->
     <fragment
         android:id="@+id/saleListFragment"
-        android:name="com.rige.dulcegest.ui.sales.SaleListFragment"
+        android:name="com.rige.dulcegest.ui.finances.sales.SaleListFragment"
         android:label="Ventas"
         tools:layout="@layout/fragment_sale_list">
         <action
@@ -41,21 +41,21 @@
 
     <fragment
         android:id="@+id/saleFormFragment"
-        android:name="com.rige.dulcegest.ui.sales.SaleFormFragment"
+        android:name="com.rige.dulcegest.ui.finances.sales.SaleFormFragment"
         android:label="Registrar venta"
         tools:layout="@layout/fragment_sale_form" />
 
     <!-- =================== COMPRAS =================== -->
     <fragment
         android:id="@+id/purchaseFormFragment"
-        android:name="com.rige.dulcegest.ui.purchases.PurchaseFormFragment"
+        android:name="com.rige.dulcegest.ui.finances.purchases.PurchaseFormFragment"
         android:label="Registrar compra"
         tools:layout="@layout/fragment_purchase_form" />
 
     <!-- =================== GASTOS =================== -->
     <fragment
         android:id="@+id/expenseListFragment"
-        android:name="com.rige.dulcegest.ui.expenses.ExpenseListFragment"
+        android:name="com.rige.dulcegest.ui.finances.expenses.ExpenseListFragment"
         android:label="Gastos"
         tools:layout="@layout/fragment_expense_list" />
 

@@ -1,18 +1,18 @@
 package com.rige.dulcegest.data.repository
 
 import androidx.lifecycle.LiveData
-import com.rige.dulcegest.data.db.dao.ProductDao
-import com.rige.dulcegest.data.db.dao.ProductPresentationDao
-import com.rige.dulcegest.data.db.dao.ProductRecipeDao
-import com.rige.dulcegest.data.db.dao.ProductVariantDao
-import com.rige.dulcegest.data.db.entities.Product
-import com.rige.dulcegest.data.db.entities.ProductPresentation
-import com.rige.dulcegest.data.db.entities.ProductRecipe
-import com.rige.dulcegest.data.db.entities.ProductVariant
-import com.rige.dulcegest.data.db.relations.ProductRecipeWithSupply
-import com.rige.dulcegest.data.db.relations.ProductWithPresentations
-import com.rige.dulcegest.data.db.relations.ProductWithPresentationsAndVariants
-import com.rige.dulcegest.data.db.relations.ProductWithVariants
+import com.rige.dulcegest.data.local.entities.relations.ProductRecipeWithSupply
+import com.rige.dulcegest.data.local.entities.relations.ProductWithPresentationsAndVariants
+import com.rige.dulcegest.data.local.dao.ProductDao
+import com.rige.dulcegest.data.local.dao.ProductPresentationDao
+import com.rige.dulcegest.data.local.dao.ProductRecipeDao
+import com.rige.dulcegest.data.local.dao.ProductVariantDao
+import com.rige.dulcegest.data.local.entities.Product
+import com.rige.dulcegest.data.local.entities.ProductPresentation
+import com.rige.dulcegest.data.local.entities.ProductRecipe
+import com.rige.dulcegest.data.local.entities.ProductVariant
+import com.rige.dulcegest.data.local.entities.relations.ProductWithPresentations
+import com.rige.dulcegest.data.local.entities.relations.ProductWithVariants
 import jakarta.inject.Inject
 
 class ProductRepository @Inject constructor(

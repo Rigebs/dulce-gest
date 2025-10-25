@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.rige.dulcegest.R
-import com.rige.dulcegest.data.db.entities.Sale
+import com.rige.dulcegest.data.local.entities.Sale
 
 class RecentSalesAdapter(
     private val sales: List<Sale>

@@ -8,7 +8,7 @@
     <!-- =================== INSUMOS =================== -->
     <fragment
         android:id="@+id/supplyListFragment"
-        android:name="com.rige.dulcegest.ui.supplies.SupplyListFragment"
+        android:name="com.rige.dulcegest.ui.products.supplies.SupplyListFragment"
         android:label="Insumos">
         <action
             android:id="@+id/action_supplyListFragment_to_supplyFormFragment"
@@ -21,13 +21,13 @@
 
     <fragment
         android:id="@+id/purchaseFormFragment"
-        android:name="com.rige.dulcegest.ui.purchases.PurchaseFormFragment"
+        android:name="com.rige.dulcegest.ui.finances.purchases.PurchaseFormFragment"
         android:label="Registrar compra"
         tools:layout="@layout/fragment_purchase_form" />
 
     <fragment
         android:id="@+id/supplyFormFragment"
-        android:name="com.rige.dulcegest.ui.supplies.SupplyFormFragment"
+        android:name="com.rige.dulcegest.ui.products.supplies.SupplyFormFragment"
         android:label="Formulario Insumo">
         <argument
             android:name="supplyId"
@@ -38,7 +38,7 @@
     <!-- =================== PRODUCTOS =================== -->
     <fragment
         android:id="@+id/nav_productList"
-        android:name="com.rige.dulcegest.ui.products.ProductListFragment"
+        android:name="com.rige.dulcegest.ui.products.list.ProductListFragment"
         android:label="Productos">
         <action
             android:id="@+id/action_productListFragment_to_productFormFragment"
@@ -53,7 +53,7 @@
 
     <fragment
         android:id="@+id/nav_productForm"
-        android:name="com.rige.dulcegest.ui.products.ProductFormFragment"
+        android:name="com.rige.dulcegest.ui.products.form.ProductFormFragment"
         android:label="Producto">
         <argument
             android:name="productId"
@@ -63,20 +63,20 @@
 
     <fragment
         android:id="@+id/productionFormFragment"
-        android:name="com.rige.dulcegest.ui.products.ProductionFormFragment"
+        android:name="com.rige.dulcegest.ui.products.production.ProductionFormFragment"
         android:label="Registrar Producción"
         tools:layout="@layout/fragment_production_form" />
 
     <fragment
         android:id="@+id/productionListFragment"
-        android:name="com.rige.dulcegest.ui.products.ProductionListFragment"
+        android:name="com.rige.dulcegest.ui.products.production.ProductionListFragment"
         android:label="Producción"
         tools:layout="@layout/fragment_production_list" />
 
     <!-- =================== VENTAS =================== -->
     <fragment
         android:id="@+id/nav_sales"
-        android:name="com.rige.dulcegest.ui.sales.SaleListFragment"
+        android:name="com.rige.dulcegest.ui.finances.sales.SaleListFragment"
         android:label="Ventas" >
         <action
             android:id="@+id/action_saleListFragment_to_saleFormFragment"
@@ -85,14 +85,14 @@
 
     <fragment
         android:id="@+id/saleFormFragment"
-        android:name="com.rige.dulcegest.ui.sales.SaleFormFragment"
+        android:name="com.rige.dulcegest.ui.finances.sales.SaleFormFragment"
         android:label="Registrar venta"
         tools:layout="@layout/fragment_sale_form" />
 
     <!-- =================== GASTOS =================== -->
     <fragment
         android:id="@+id/nav_expenses"
-        android:name="com.rige.dulcegest.ui.expenses.ExpenseListFragment"
+        android:name="com.rige.dulcegest.ui.finances.expenses.ExpenseListFragment"
         android:label="Gastos" />
 
 </navigation>

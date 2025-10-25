@@ -8,7 +8,7 @@
     <!-- LISTADO DE PRODUCTOS -->
     <fragment
         android:id="@+id/nav_productList"
-        android:name="com.rige.dulcegest.ui.products.ProductListFragment"
+        android:name="com.rige.dulcegest.ui.products.list.ProductListFragment"
         android:label="Productos">
         <action
             android:id="@+id/action_productListFragment_to_productFormFragment"
@@ -26,7 +26,7 @@
     <!-- FORMULARIO DE PRODUCTOS -->
     <fragment
         android:id="@+id/nav_productForm"
-        android:name="com.rige.dulcegest.ui.products.ProductFormFragment"
+        android:name="com.rige.dulcegest.ui.products.form.ProductFormFragment"
         android:label="Producto">
         <argument
             android:name="productId"
@@ -36,13 +36,13 @@
 
     <fragment
         android:id="@+id/productionFormFragment"
-        android:name="com.rige.dulcegest.ui.products.ProductionFormFragment"
+        android:name="com.rige.dulcegest.ui.products.production.ProductionFormFragment"
         android:label="Registrar Producción"
         tools:layout="@layout/fragment_production_form" />
 
     <fragment
         android:id="@+id/productionListFragment"
-        android:name="com.rige.dulcegest.ui.products.ProductionListFragment"
+        android:name="com.rige.dulcegest.ui.products.production.ProductionListFragment"
         android:label="Registrar Producción"
         tools:layout="@layout/fragment_production_list" />
 

@@ -1,11 +1,11 @@
 package com.rige.dulcegest.data.repository
 
 import androidx.lifecycle.LiveData
-import com.rige.dulcegest.data.db.dao.ProductionBatchDao
-import com.rige.dulcegest.data.db.dao.ProductionConsumptionDao
-import com.rige.dulcegest.data.db.entities.ProductionBatch
-import com.rige.dulcegest.data.db.entities.ProductionConsumption
-import com.rige.dulcegest.data.db.relations.ProductionBatchWithProduct
+import com.rige.dulcegest.data.local.dao.ProductionBatchDao
+import com.rige.dulcegest.data.local.dao.ProductionConsumptionDao
+import com.rige.dulcegest.data.local.entities.ProductionBatch
+import com.rige.dulcegest.data.local.entities.ProductionConsumption
+import com.rige.dulcegest.data.local.entities.relations.ProductionBatchWithProduct
 import jakarta.inject.Inject
 
 class ProductionRepository @Inject constructor(
