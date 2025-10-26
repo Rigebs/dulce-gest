@@ -61,7 +61,7 @@
                 app:tint="?attr/colorOnSurface"/>
 
             <TextView
-                android:text="Registrar compra"
+                android:text="Compras"
                 android:textSize="18sp"
                 android:layout_marginStart="16dp"
                 android:layout_width="wrap_content"

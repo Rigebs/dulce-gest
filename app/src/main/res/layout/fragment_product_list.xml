@@ -22,7 +22,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                tools:listitem="@layout/item_product" />
+                tools:listitem="@layout/item_product"
+                tools:itemCount="5"/>
         </LinearLayout>
 
         <!-- === FABs flotantes === -->
@@ -35,44 +36,11 @@
             android:clipToPadding="false">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabViewProduction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:src="@drawable/ic_view"
-                android:backgroundTint="@color/golden"
-                app:borderWidth="0dp"
-                android:contentDescription="Ver producción"
-                android:visibility="gone" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabAddProduction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:src="@drawable/ic_production"
-                android:backgroundTint="@color/golden"
-                app:borderWidth="0dp"
-                android:contentDescription="Registrar producción"
-                android:visibility="gone" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabAddProduct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:src="@drawable/ic_add"
-                app:borderWidth="0dp"
-                android:backgroundTint="@color/golden"
-                android:contentDescription="Agregar producto"
-                android:visibility="gone" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabMain"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:src="@drawable/ic_menu"
                 android:contentDescription="Menú principal" />
         </FrameLayout>
     </FrameLayout>

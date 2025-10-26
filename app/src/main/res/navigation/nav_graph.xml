@@ -63,13 +63,13 @@
 
     <fragment
         android:id="@+id/productionFormFragment"
-        android:name="com.rige.dulcegest.ui.products.production.ProductionFormFragment"
+        android:name="com.rige.dulcegest.ui.products.productions.ProductionFormFragment"
         android:label="Registrar Producción"
         tools:layout="@layout/fragment_production_form" />
 
     <fragment
         android:id="@+id/productionListFragment"
-        android:name="com.rige.dulcegest.ui.products.production.ProductionListFragment"
+        android:name="com.rige.dulcegest.ui.products.productions.ProductionListFragment"
         android:label="Producción"
         tools:layout="@layout/fragment_production_list" />
 

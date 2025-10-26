@@ -26,4 +26,8 @@ class SupplyRepository @Inject constructor(
         dao.getLowStock(threshold)
 
     suspend fun getAllOnce(): List<Supply> = dao.getAllOnce()
+
+    suspend fun deleteAll() {
+        dao.deleteAllSupplies()
+    }
 }

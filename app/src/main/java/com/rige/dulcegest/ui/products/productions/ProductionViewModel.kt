@@ -1,4 +1,4 @@
-package com.rige.dulcegest.ui.products.production
+package com.rige.dulcegest.ui.products.productions
 
 import androidx.lifecycle.*
 import com.rige.dulcegest.data.local.entities.ProductionBatch
@@ -40,5 +40,9 @@ class ProductionViewModel @Inject constructor(
             }
         }
         return result
+    }
+
+    fun deleteAll() = viewModelScope.launch {
+        repo.deleteAll()
     }
 }

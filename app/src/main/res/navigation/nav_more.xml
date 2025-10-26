@@ -2,8 +2,26 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_mas"
-    app:startDestination="@id/reportListFragment">
+    android:id="@+id/nav_more"
+    app:startDestination="@id/moreMenuFragment">
+
+    <fragment
+        android:id="@+id/moreMenuFragment"
+        android:name="com.rige.dulcegest.ui.more.MoreMenuFragment"
+        android:label="Menu"
+        tools:layout="@layout/fragment_more_menu">
+
+        <action
+            android:id="@+id/action_moreMenu_to_reportsFragment"
+            app:destination="@id/reportListFragment" />
+        <action
+            android:id="@+id/action_moreMenu_to_suppliersFragment"
+            app:destination="@id/supplierListFragment" />
+        <action
+            android:id="@+id/action_moreMenu_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+
+    </fragment>
 
     <!-- =================== REPORTES =================== -->
     <fragment

@@ -33,4 +33,8 @@ class SaleRepository @Inject constructor(
 
     fun getTotalSalesToday() = saleDao.getTotalSalesToday()
     fun getTotalSalesThisWeek() = saleDao.getTotalSalesThisWeek()
+
+    suspend fun deleteAll() {
+        saleDao.deleteAllSales()
+    }
 }

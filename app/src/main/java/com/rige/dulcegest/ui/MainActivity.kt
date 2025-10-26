@@ -1,15 +1,18 @@
 package com.rige.dulcegest.ui
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.commit
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.rige.dulcegest.R
 import com.rige.dulcegest.databinding.ActivityMainBinding
+import com.rige.dulcegest.ui.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -106,6 +109,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun setToolbarVisible(visible: Boolean) {
+        binding.mainToolbar.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    fun setupToolbar(title: String, showBackButton: Boolean) {
+        binding.mainToolbar.apply {
+            this.title = title
+            navigationIcon = if (showBackButton) {
+                AppCompatResources.getDrawable(context, R.drawable.ic_arrow_back)
+            } else {
+                null
+            }
+
+            setNavigationOnClickListener {
+                if (showBackButton) onBackPressedDispatcher.onBackPressed()
+            }
+        }
+    }
+
     private fun createNavHost(navGraphId: Int): NavHostFragment {
         return NavHostFragment.create(navGraphId)
     }
@@ -116,7 +138,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.homeFragment -> switchNavHost(homeNavHost)
                 R.id.productMenuFragment -> switchNavHost(productsNavHost)
                 R.id.financeMenuFragment -> switchNavHost(financesNavHost)
-                R.id.reportListFragment -> switchNavHost(moreNavHost)
+                R.id.moreMenuFragment -> switchNavHost(moreNavHost)
             }
             true
         }
@@ -130,5 +152,20 @@ class MainActivity : AppCompatActivity() {
             show(target)
         }
         activeNavHost = target
+
+        supportFragmentManager.executePendingTransactions()
+        updateToolbarForCurrentFragment(target)
+    }
+
+    private fun updateToolbarForCurrentFragment(navHost: NavHostFragment) {
+        val fragment = navHost.childFragmentManager.primaryNavigationFragment
+        if (fragment is BaseFragment<*>) {
+            setToolbarVisible(fragment.showToolbar)
+            if (fragment.showToolbar) {
+                setupToolbar(fragment.toolbarTitle ?: "", fragment.showBackButton)
+            }
+        } else {
+            setToolbarVisible(false)
+        }
     }
 }

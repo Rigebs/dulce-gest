@@ -34,4 +34,7 @@ interface SaleDao {
 
     @Query("SELECT * FROM sales ORDER BY sale_date DESC LIMIT 5")
     fun getLastFiveSales(): LiveData<List<Sale>>
+
+    @Query("DELETE FROM sales")
+    suspend fun deleteAllSales()
 }

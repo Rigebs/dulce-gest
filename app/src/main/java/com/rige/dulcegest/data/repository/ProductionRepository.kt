@@ -25,4 +25,8 @@ class ProductionRepository @Inject constructor(
     }
 
     suspend fun deleteBatch(batch: ProductionBatch) = batchDao.delete(batch)
+
+    suspend fun deleteAll() {
+        batchDao.deleteAllProductions()
+    }
 }

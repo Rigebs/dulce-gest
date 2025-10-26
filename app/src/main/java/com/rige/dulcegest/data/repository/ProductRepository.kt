@@ -85,4 +85,8 @@ class ProductRepository @Inject constructor(
     fun getProductsWithPresentationsAndVariants(): LiveData<List<ProductWithPresentationsAndVariants>> {
         return productDao.getProductsWithPresentationsAndVariants()
     }
+
+    suspend fun deleteAll() {
+        productDao.deleteAllProducts()
+    }
 }

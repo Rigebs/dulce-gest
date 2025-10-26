@@ -29,4 +29,8 @@ class SaleViewModel @Inject constructor(
 
     fun getTotalSalesToday() = repo.getTotalSalesToday()
     fun getTotalSalesThisWeek() = repo.getTotalSalesThisWeek()
+
+    fun deleteAll() = viewModelScope.launch {
+        repo.deleteAll()
+    }
 }

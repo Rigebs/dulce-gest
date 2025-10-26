@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.products.production.ProductionFormFragment">
+    tools:context=".ui.products.productions.ProductionFormFragment">
 
     <!-- Contenido principal desplazable -->
     <ScrollView

@@ -38,4 +38,7 @@ interface SupplyDao {
 
     @Query("SELECT * FROM supplies")
     suspend fun getAllOnce(): List<Supply>
+
+    @Query("DELETE FROM supplies")
+    suspend fun deleteAllSupplies()
 }

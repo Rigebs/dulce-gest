@@ -42,4 +42,7 @@ interface ProductDao {
     @Transaction
     @Query("SELECT * FROM products ORDER BY name ASC")
     fun getProductsWithPresentationsAndVariants(): LiveData<List<ProductWithPresentationsAndVariants>>
+
+    @Query("DELETE FROM products")
+    suspend fun deleteAllProducts()
 }

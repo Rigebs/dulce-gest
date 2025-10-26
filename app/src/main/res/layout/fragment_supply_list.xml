@@ -35,18 +35,6 @@
             android:clipChildren="false"
             android:clipToPadding="false">
 
-            <!-- FAB: Agregar compra -->
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabAddPurchase"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_marginBottom="80dp"
-                android:src="@drawable/ic_supplies"
-                app:borderWidth="0dp"
-                android:contentDescription="Agregar compra"
-                android:visibility="visible" />
-
             <!-- FAB: Agregar insumo -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add_supply"

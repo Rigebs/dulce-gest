@@ -72,4 +72,8 @@ class ProductViewModel @Inject constructor(
 
         return result
     }
+
+    fun deleteAll() = viewModelScope.launch {
+        repo.deleteAll()
+    }
 }

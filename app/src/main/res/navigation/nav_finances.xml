@@ -16,6 +16,10 @@
             app:destination="@id/saleListFragment" />
 
         <action
+            android:id="@+id/action_financeMenu_to_purchaseListFragment"
+            app:destination="@id/purchaseListFragment" />
+
+        <action
             android:id="@+id/action_financeMenu_to_purchaseFormFragment"
             app:destination="@id/purchaseFormFragment" />
 
@@ -46,6 +50,17 @@
         tools:layout="@layout/fragment_sale_form" />
 
     <!-- =================== COMPRAS =================== -->
+
+    <fragment
+        android:id="@+id/purchaseListFragment"
+        android:name="com.rige.dulcegest.ui.finances.purchases.PurchaseListFragment"
+        android:label="Compras"
+        tools:layout="@layout/fragment_purchase_list" >
+        <action
+            android:id="@+id/action_purchaseListFragment_to_purchaseFormFragment"
+            app:destination="@id/purchaseFormFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/purchaseFormFragment"
         android:name="com.rige.dulcegest.ui.finances.purchases.PurchaseFormFragment"

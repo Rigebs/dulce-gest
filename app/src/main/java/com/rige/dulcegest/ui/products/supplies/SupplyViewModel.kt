@@ -25,4 +25,8 @@ class SupplyViewModel @Inject constructor(
     suspend fun getAllSuppliesOnce(): List<Supply> {
         return repo.getAllOnce()
     }
+
+    fun deleteAll() = viewModelScope.launch {
+        repo.deleteAll()
+    }
 }

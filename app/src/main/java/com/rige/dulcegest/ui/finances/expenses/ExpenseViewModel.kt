@@ -32,4 +32,8 @@ class ExpenseViewModel @Inject constructor(
 
     fun getTotalExpensesToday() = repo.getTotalExpensesToday()
     fun getTotalExpensesThisWeek() = repo.getTotalExpensesThisWeek()
+
+    fun deleteAll() = viewModelScope.launch {
+        repo.deleteAll()
+    }
 }

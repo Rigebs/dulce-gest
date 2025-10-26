@@ -31,4 +31,7 @@ interface ProductionBatchDao {
     @Transaction
     @Query("SELECT * FROM production_batches WHERE id = :id")
     suspend fun getBatchWithConsumptions(id: Long): BatchWithConsumptions?
+
+    @Query("DELETE FROM production_batches")
+    suspend fun deleteAllProductions()
 }

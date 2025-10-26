@@ -14,6 +14,7 @@ import com.rige.dulcegest.data.local.dao.ProductionConsumptionDao
 import com.rige.dulcegest.data.local.dao.PurchaseDao
 import com.rige.dulcegest.data.local.dao.SaleDao
 import com.rige.dulcegest.data.local.dao.SaleItemDao
+import com.rige.dulcegest.data.local.dao.SettingsDao
 import com.rige.dulcegest.data.local.dao.SupplyDao
 import com.rige.dulcegest.data.local.entities.Expense
 import com.rige.dulcegest.data.local.entities.Product
@@ -57,6 +58,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun saleItemDao(): SaleItemDao
     abstract fun expenseDao(): ExpenseDao
     abstract fun productVariantDao(): ProductVariantDao
+    abstract fun settingsDao(): SettingsDao
 
     companion object {
         val MIGRATION_8_9 = object : Migration(8, 9) {

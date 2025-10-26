@@ -7,37 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- ======== Reportes ======== -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardSupplies"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:strokeColor="@color/chocolate_700"
-        app:cardElevation="4dp">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:gravity="center_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:src="@drawable/ic_supplies"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:tint="?attr/colorOnSurface"/>
-
-            <TextView
-                android:text="Insumos"
-                android:textSize="18sp"
-                android:layout_marginStart="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardProducts"
+        android:id="@+id/cardReports"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -52,13 +24,13 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:src="@drawable/ic_cookie"
+                android:src="@drawable/ic_reports"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 app:tint="?attr/colorOnSurface"/>
 
             <TextView
-                android:text="Productos"
+                android:text="Reportes"
                 android:textSize="18sp"
                 android:layout_marginStart="16dp"
                 android:layout_width="wrap_content"
@@ -66,12 +38,15 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
+    <!-- ======== Proveedores ======== -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardProduction"
+        android:id="@+id/cardSuppliers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         app:strokeColor="@color/chocolate_700"
         app:cardElevation="4dp">
+
         <LinearLayout
             android:orientation="horizontal"
             android:padding="16dp"
@@ -80,13 +55,43 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:src="@drawable/ic_production"
+                android:src="@drawable/ic_truck"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 app:tint="?attr/colorOnSurface"/>
 
             <TextView
-                android:text="Producción"
+                android:text="Proveedores"
+                android:textSize="18sp"
+                android:layout_marginStart="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- ======== Configuración ======== -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:strokeColor="@color/chocolate_700"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/ic_config"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:tint="?attr/colorOnSurface"/>
+
+            <TextView
+                android:text="Configuración"
                 android:textSize="18sp"
                 android:layout_marginStart="16dp"
                 android:layout_width="wrap_content"

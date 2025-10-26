@@ -17,4 +17,8 @@ class ExpenseRepository @Inject constructor(
     fun getTotalExpenses() = dao.getTotalExpenses()
     fun getTotalExpensesToday() = dao.getTotalExpensesToday()
     fun getTotalExpensesThisWeek() = dao.getTotalExpensesThisWeek()
+
+    suspend fun deleteAll() {
+        dao.deleteAllExpenses()
+    }
 }

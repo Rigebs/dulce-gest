@@ -1,4 +1,4 @@
-package com.rige.dulcegest.ui.products.production
+package com.rige.dulcegest.ui.products.productions
 
 import android.view.LayoutInflater
 import android.view.View
