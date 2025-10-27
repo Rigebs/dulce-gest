@@ -5,6 +5,7 @@ import com.rige.dulcegest.data.local.dao.ProductDao
 import com.rige.dulcegest.data.local.dao.SaleDao
 import com.rige.dulcegest.data.local.dao.SaleItemDao
 import com.rige.dulcegest.data.local.entities.Sale
+import com.rige.dulcegest.data.local.entities.relations.SaleWithItems
 import jakarta.inject.Inject
 
 class SaleRepository @Inject constructor(
@@ -14,7 +15,9 @@ class SaleRepository @Inject constructor(
 ) {
     val allSales: LiveData<List<Sale>> = saleDao.getAll()
 
-    val lastFiveSales: LiveData<List<Sale>> = saleDao.getLastFiveSales()
+    val lastFiveSales: LiveData<List<SaleWithItems>> = saleDao.getLastFiveSales()
+
+    val salesOfThisWeek: LiveData<List<SaleWithItems>> = saleDao.getSalesThisWeek()
 
     suspend fun insertSale(sale: Sale, items: List<com.rige.dulcegest.data.local.entities.SaleItem>) {
         val saleId = saleDao.insert(sale)

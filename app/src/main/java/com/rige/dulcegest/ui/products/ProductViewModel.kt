@@ -1,6 +1,9 @@
 package com.rige.dulcegest.ui.products
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rige.dulcegest.data.local.entities.Product
 import com.rige.dulcegest.data.local.entities.ProductPresentation
 import com.rige.dulcegest.data.local.entities.ProductRecipe
@@ -20,6 +23,10 @@ class ProductViewModel @Inject constructor(
     val productsWithPresentations = repo.getProductsWithPresentationsAndVariants()
 
     fun getProductById(id: Long): LiveData<Product?> = repo.getById(id)
+
+    suspend fun getProductByIdOnce(productId: Long): Product? {
+        return repo.getProductByIdSuspend(productId)
+    }
 
     fun getRecipeWithSupplies(productId: Long): LiveData<List<ProductRecipeWithSupply>> {
         return repo.getRecipeWithSupplies(productId)

@@ -5,28 +5,39 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <TextView
-        android:id="@+id/txtCustomer"
-        android:layout_width="wrap_content"
+    <!-- Fila superior: Cliente a la izquierda, Monto a la derecha -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cliente"
-        android:textStyle="bold"
-        android:textSize="14sp"/>
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/txtAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="S/ 0.00"
-        android:textSize="13sp"
-        android:layout_marginTop="2dp"/>
+        <TextView
+            android:id="@+id/txtCustomer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cliente"
+            android:textStyle="bold"
+            android:textSize="14sp" />
 
+        <TextView
+            android:id="@+id/txtAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="S/ 0.00"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:gravity="end" />
+    </LinearLayout>
+
+    <!-- Fecha debajo -->
     <TextView
         android:id="@+id/txtDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="01/01/2025"
         android:textSize="12sp"
-        android:layout_marginTop="1dp"
-        android:textColor="#888888"/>
+        android:layout_marginTop="2dp"
+        android:textColor="#888888" />
 </LinearLayout>

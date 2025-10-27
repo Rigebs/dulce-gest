@@ -1,34 +1,36 @@
 package com.rige.dulcegest.ui.home
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.rige.dulcegest.R
-import com.rige.dulcegest.data.local.entities.Sale
+import com.rige.dulcegest.core.utils.toFriendlyDateTime
+import com.rige.dulcegest.data.local.entities.relations.SaleWithItems
+import com.rige.dulcegest.databinding.ItemRecentSaleBinding
 
 class RecentSalesAdapter(
-    private val sales: List<Sale>
+    private val sales: List<SaleWithItems>
 ) : RecyclerView.Adapter<RecentSalesAdapter.SaleViewHolder>() {
 
-    inner class SaleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val txtCustomer: TextView = itemView.findViewById(R.id.txtCustomer)
-        val txtAmount: TextView = itemView.findViewById(R.id.txtAmount)
-        val txtDate: TextView = itemView.findViewById(R.id.txtDate)
-    }
+    inner class SaleViewHolder(val binding: ItemRecentSaleBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SaleViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_recent_sale, parent, false)
-        return SaleViewHolder(view)
+        val binding = ItemRecentSaleBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return SaleViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SaleViewHolder, position: Int) {
-        val sale = sales[position]
-        holder.txtCustomer.text = sale.customer ?: "Cliente genérico"
-        holder.txtAmount.text = "S/ %.2f".format(sale.totalAmount)
-        holder.txtDate.text = sale.saleDate ?: ""
+        val saleWithItems = sales[position]
+        val binding = holder.binding
+
+        binding.txtCustomer.text = if (saleWithItems.sale.customer.isNullOrBlank()) "Cliente genérico" else saleWithItems.sale.customer
+
+        binding.txtAmount.text = "S/ %.2f".format(saleWithItems.sale.totalAmount)
+        binding.txtDate.text = saleWithItems.sale.saleDate?.toFriendlyDateTime() ?: "--/--/----"
     }
 
     override fun getItemCount(): Int = sales.size

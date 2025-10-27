@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Editar Producción"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/etQuantity"
+            android:inputType="numberDecimal"
+            android:layout_height="wrap_content"
+            android:hint="Cantidad"
+            android:layout_width="match_parent"/>
+
+
+        <EditText
+            android:id="@+id/etTotalCost"
+            android:inputType="numberDecimal"
+            android:hint="Costo total"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar cambios"
+        android:layout_marginTop="16dp"
+        style="?attr/materialButtonOutlinedStyle" />
+</LinearLayout>

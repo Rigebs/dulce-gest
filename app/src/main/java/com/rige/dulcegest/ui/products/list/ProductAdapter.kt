@@ -2,15 +2,16 @@ package com.rige.dulcegest.ui.products.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.rige.dulcegest.R
-import com.rige.dulcegest.databinding.ItemProductBinding
-import androidx.core.net.toUri
 import coil.transform.RoundedCornersTransformation
+import com.rige.dulcegest.R
+import com.rige.dulcegest.core.utils.toSoles
 import com.rige.dulcegest.data.local.entities.Product
+import com.rige.dulcegest.databinding.ItemProductBinding
 
 class ProductAdapter(
     private val onClick: (Product) -> Unit
@@ -21,7 +22,7 @@ class ProductAdapter(
 
         fun bind(product: Product) {
             binding.txtProductName.text = product.name
-            binding.txtProductInfo.text = "U.M.: ${product.unit}  |  Precio: $${product.price}"
+            binding.txtProductInfo.text = "U.M.: ${product.unit}  |  Precio: $${product.price.toSoles()}"
             binding.txtStock.text = "Stock: ${product.stockQty}"
 
             if (!product.imagePath.isNullOrEmpty()) {

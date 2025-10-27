@@ -1,7 +1,12 @@
 package com.rige.dulcegest.data.local.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 import com.rige.dulcegest.data.local.entities.Sale
 import com.rige.dulcegest.data.local.entities.relations.SaleWithItems
 
@@ -32,8 +37,18 @@ interface SaleDao {
     @Query("SELECT IFNULL(SUM(total_amount), 0) FROM sales WHERE DATE(sale_date) >= DATE('now', '-6 days', 'localtime')")
     fun getTotalSalesThisWeek(): LiveData<Double>
 
+    @Transaction
+    @Query("""
+        SELECT * FROM sales
+        WHERE strftime('%Y', REPLACE(sale_date, 'T', ' ')) = strftime('%Y', 'now', 'localtime')
+          AND strftime('%W', REPLACE(sale_date, 'T', ' ')) = strftime('%W', 'now', 'localtime')
+        ORDER BY sale_date DESC
+    """)
+    fun getSalesThisWeek(): LiveData<List<SaleWithItems>>
+
+    @Transaction
     @Query("SELECT * FROM sales ORDER BY sale_date DESC LIMIT 5")
-    fun getLastFiveSales(): LiveData<List<Sale>>
+    fun getLastFiveSales(): LiveData<List<SaleWithItems>>
 
     @Query("DELETE FROM sales")
     suspend fun deleteAllSales()

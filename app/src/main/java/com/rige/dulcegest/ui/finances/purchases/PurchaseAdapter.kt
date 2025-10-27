@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.rige.dulcegest.core.utils.toFriendlyDateTime
+import com.rige.dulcegest.core.utils.toSoles
 import com.rige.dulcegest.data.local.entities.Purchase
 import com.rige.dulcegest.databinding.ItemPurchaseBinding
 
@@ -19,8 +21,8 @@ private val onClick: (Purchase) -> Unit
         fun bind(item: Purchase) {
             with(binding) {
                 tvSupplierName.text = item.supplier ?: "General"
-                tvTotalAmount.text = "Total: $${item.totalPrice}"
-                tvDate.text = "Fecha: ${item.date?.substring(0, 10) ?: "--/--/----"}"
+                tvTotalAmount.text = "Total: ${item.totalPrice.toSoles()}"
+                tvDate.text = "Fecha: ${item.date?.toFriendlyDateTime() ?: "--/--/----"}"
 
                 root.setOnClickListener { onClick(item) }
             }

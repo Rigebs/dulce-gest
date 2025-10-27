@@ -41,14 +41,19 @@ interface SettingsDao {
 
     @Transaction
     suspend fun deleteAllData() {
+        // 1️⃣ Tablas hijas (dependen de otras)
         deleteAllProductionConsumptions()
-        deleteAllProductionBatches()
-        deleteAllProductRecipes()
-        deleteAllProductPresentations()
-        deleteAllProductVariants()
         deleteAllSaleItems()
+        deleteAllProductVariants()
+        deleteAllProductPresentations()
+        deleteAllProductRecipes()
+
+        // 2️⃣ Tablas intermedias
+        deleteAllProductionBatches()
         deleteAllSales()
         deleteAllPurchases()
+
+        // 3️⃣ Tablas principales
         deleteAllProducts()
         deleteAllSupplies()
         deleteAllExpenses()

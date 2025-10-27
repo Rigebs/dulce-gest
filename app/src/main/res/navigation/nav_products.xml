@@ -89,6 +89,12 @@
         android:id="@+id/productionFormFragment"
         android:name="com.rige.dulcegest.ui.products.productions.ProductionFormFragment"
         android:label="Registrar Producción"
-        tools:layout="@layout/fragment_production_form"/>
+        tools:layout="@layout/fragment_production_form">
+
+        <argument
+            android:name="batchId"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
 
 </navigation>

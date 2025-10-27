@@ -1,7 +1,10 @@
 package com.rige.dulcegest.data.local.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
 import com.rige.dulcegest.data.local.entities.Expense
 
 @Dao
@@ -12,6 +15,9 @@ interface ExpenseDao {
 
     @Query("SELECT * FROM expenses WHERE category = :category ORDER BY date DESC")
     suspend fun getByCategory(category: String): List<Expense>
+
+    @Query("SELECT SUM(amount) FROM expenses WHERE date BETWEEN :start AND :end")
+    fun getTotalExpensesBetween(start: String, end: String): LiveData<Double?>
 
     @Insert
     suspend fun insert(expense: Expense): Long
