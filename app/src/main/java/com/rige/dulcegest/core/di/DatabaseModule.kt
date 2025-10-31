@@ -6,8 +6,8 @@ import com.rige.dulcegest.core.database.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
@@ -26,7 +26,8 @@ object DatabaseModule {
                 AppDatabase.MIGRATION_8_9,
                 AppDatabase.MIGRATION_9_10,
                 AppDatabase.MIGRATION_10_11,
-                AppDatabase.MIGRATION_11_12
+                AppDatabase.MIGRATION_11_12,
+                AppDatabase.MIGRATION_12_13
             )
             .build()
 }

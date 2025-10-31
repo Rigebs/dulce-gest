@@ -22,4 +22,5 @@ object DaoModule {
     @Provides fun provideSaleItemDao(db: AppDatabase) = db.saleItemDao()
     @Provides fun provideExpenseDao(db: AppDatabase) = db.expenseDao()
     @Provides fun provideSettingsDao(db: AppDatabase) = db.settingsDao()
+    @Provides fun provideShoppingListDao(db: AppDatabase) = db.shoppingListDao()
 }

@@ -15,6 +15,7 @@ import com.rige.dulcegest.data.local.dao.PurchaseDao
 import com.rige.dulcegest.data.local.dao.SaleDao
 import com.rige.dulcegest.data.local.dao.SaleItemDao
 import com.rige.dulcegest.data.local.dao.SettingsDao
+import com.rige.dulcegest.data.local.dao.ShoppingListDao
 import com.rige.dulcegest.data.local.dao.SupplyDao
 import com.rige.dulcegest.data.local.entities.Expense
 import com.rige.dulcegest.data.local.entities.Product
@@ -26,6 +27,7 @@ import com.rige.dulcegest.data.local.entities.ProductionConsumption
 import com.rige.dulcegest.data.local.entities.Purchase
 import com.rige.dulcegest.data.local.entities.Sale
 import com.rige.dulcegest.data.local.entities.SaleItem
+import com.rige.dulcegest.data.local.entities.ShoppingListItem
 import com.rige.dulcegest.data.local.entities.Supply
 
 @Database(
@@ -40,9 +42,10 @@ import com.rige.dulcegest.data.local.entities.Supply
         ProductVariant::class,
         Sale::class,
         SaleItem::class,
-        Expense::class
+        Expense::class,
+        ShoppingListItem::class
     ],
-    version = 12,
+    version = 13,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -59,6 +62,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun expenseDao(): ExpenseDao
     abstract fun productVariantDao(): ProductVariantDao
     abstract fun settingsDao(): SettingsDao
+    abstract fun shoppingListDao(): ShoppingListDao
 
     companion object {
         val MIGRATION_8_9 = object : Migration(8, 9) {
@@ -150,6 +154,27 @@ abstract class AppDatabase : RoomDatabase() {
                 db.execSQL("CREATE INDEX index_product_recipes_product_id ON product_recipes(product_id)")
                 db.execSQL("CREATE INDEX index_product_recipes_supply_id ON product_recipes(supply_id)")
                 db.execSQL("CREATE UNIQUE INDEX index_product_recipes_product_id_supply_id ON product_recipes(product_id, supply_id)")
+            }
+        }
+
+        val MIGRATION_12_13 = object : Migration(12, 13) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """
+            CREATE TABLE IF NOT EXISTS shopping_list_items (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                supply_id INTEGER NOT NULL,
+                quantity REAL,
+                unit TEXT,
+                priority INTEGER NOT NULL DEFAULT 0,
+                purchased INTEGER NOT NULL DEFAULT 0,
+                notes TEXT,
+                created_at TEXT,
+                FOREIGN KEY(supply_id) REFERENCES supplies(id) ON DELETE NO ACTION
+            )
+            """.trimIndent()
+                )
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_shopping_list_items_supply_id ON shopping_list_items(supply_id)")
             }
         }
     }

@@ -7,7 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "purchases",
+    tableName = "shopping_list_items",
     foreignKeys = [
         ForeignKey(
             entity = Supply::class,
@@ -18,19 +18,22 @@ import androidx.room.PrimaryKey
     ],
     indices = [Index(value = ["supply_id"])]
 )
-data class Purchase(
+data class ShoppingListItem(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
 
     @ColumnInfo(name = "supply_id")
     val supplyId: Long,
 
-    val quantity: Double,
+    val quantity: Double? = null,
+    val unit: String? = null,
 
-    @ColumnInfo(name = "total_price")
-    val totalPrice: Double,
+    val priority: Int = 0,
 
-    val supplier: String? = null,
-    val date: String? = null,
-    val notes: String? = null
+    val purchased: Boolean = false,
+
+    val notes: String? = null,
+
+    @ColumnInfo(name = "created_at")
+    val createdAt: String? = null
 )

@@ -1,23 +1,27 @@
 package com.rige.dulcegest.data.local.entities
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "sale_items",
     foreignKeys = [
         ForeignKey(
-            entity = com.rige.dulcegest.data.local.entities.Sale::class,
+            entity = Sale::class,
             parentColumns = ["id"],
             childColumns = ["sale_id"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = com.rige.dulcegest.data.local.entities.Product::class,
+            entity = Product::class,
             parentColumns = ["id"],
             childColumns = ["product_id"],
             onDelete = ForeignKey.NO_ACTION
         ),
-        ForeignKey(entity = com.rige.dulcegest.data.local.entities.ProductPresentation::class,
+        ForeignKey(entity = ProductPresentation::class,
             parentColumns = ["id"],
             childColumns = ["presentation_id"],
             onDelete = ForeignKey.NO_ACTION)

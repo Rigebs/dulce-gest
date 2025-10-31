@@ -1,8 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.finances.sales.SaleListFragment">
+    tools:context=".ui.finances.shopping.ShoppingListFragment">
 
     <LinearLayout
         android:orientation="vertical"
@@ -10,20 +11,20 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerSales"
+            android:id="@+id/recyclerShoppingList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            tools:listitem="@layout/item_sale"
-            android:paddingBottom="12dp"/>
+            android:paddingBottom="12dp"
+            tools:listitem="@layout/item_shopping_list" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddSale"
-        android:src="@drawable/ic_add"
-        android:layout_height="wrap_content"
+        android:id="@+id/fabAddShoppingItem"
         android:layout_width="wrap_content"
-        android:contentDescription="Agregar venta"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add"
+        android:contentDescription="Agregar ítem a la lista de compras" />
 </FrameLayout>

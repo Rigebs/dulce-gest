@@ -1,7 +1,26 @@
 package com.rige.dulcegest.core.di
 
-import com.rige.dulcegest.data.local.dao.*
-import com.rige.dulcegest.data.repository.*
+import com.rige.dulcegest.data.local.dao.ExpenseDao
+import com.rige.dulcegest.data.local.dao.ProductDao
+import com.rige.dulcegest.data.local.dao.ProductPresentationDao
+import com.rige.dulcegest.data.local.dao.ProductRecipeDao
+import com.rige.dulcegest.data.local.dao.ProductVariantDao
+import com.rige.dulcegest.data.local.dao.ProductionBatchDao
+import com.rige.dulcegest.data.local.dao.ProductionConsumptionDao
+import com.rige.dulcegest.data.local.dao.PurchaseDao
+import com.rige.dulcegest.data.local.dao.SaleDao
+import com.rige.dulcegest.data.local.dao.SaleItemDao
+import com.rige.dulcegest.data.local.dao.SettingsDao
+import com.rige.dulcegest.data.local.dao.ShoppingListDao
+import com.rige.dulcegest.data.local.dao.SupplyDao
+import com.rige.dulcegest.data.repository.ExpenseRepository
+import com.rige.dulcegest.data.repository.ProductRepository
+import com.rige.dulcegest.data.repository.ProductionRepository
+import com.rige.dulcegest.data.repository.PurchaseRepository
+import com.rige.dulcegest.data.repository.SaleRepository
+import com.rige.dulcegest.data.repository.SettingsRepository
+import com.rige.dulcegest.data.repository.ShoppingListRepository
+import com.rige.dulcegest.data.repository.SupplyRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -53,4 +72,16 @@ object RepositoryModule {
         itemDao: SaleItemDao,
         productDao: ProductDao
     ): SaleRepository = SaleRepository(saleDao, itemDao, productDao)
+
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(
+        dao: SettingsDao
+    ): SettingsRepository = SettingsRepository(dao)
+
+    @Provides
+    @Singleton
+    fun provideShoppingListRepository(
+        dao: ShoppingListDao
+    ): ShoppingListRepository = ShoppingListRepository(dao)
 }

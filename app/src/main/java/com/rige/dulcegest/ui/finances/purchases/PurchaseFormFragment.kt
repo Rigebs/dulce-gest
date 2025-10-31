@@ -10,6 +10,7 @@ import com.rige.dulcegest.data.local.entities.Purchase
 import com.rige.dulcegest.data.local.entities.Supply
 import com.rige.dulcegest.databinding.FragmentPurchaseFormBinding
 import com.rige.dulcegest.ui.common.BaseFragment
+import com.rige.dulcegest.ui.finances.shopping.ShoppingListViewModel
 import com.rige.dulcegest.ui.products.supplies.SupplyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -25,10 +26,24 @@ class PurchaseFormFragment :
 
     private val viewModel: PurchaseViewModel by viewModels()
     private val supplyViewModel: SupplyViewModel by viewModels()
+    private val shoppingListViewModel: ShoppingListViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupSupplySpinner()
+
+        val preselectedId = arguments?.getLong("supplyId") ?: 0
+
+        supplyViewModel.supplies.observe(viewLifecycleOwner) { supplies ->
+            val adapter = SupplySpinnerAdapter(requireContext(), supplies)
+            binding.spinnerSupply.adapter = adapter
+
+            if (preselectedId != -1L) {
+                val index = supplies.indexOfFirst { it.id == preselectedId }
+                if (index >= 0) binding.spinnerSupply.setSelection(index)
+            }
+        }
+
         setupSaveButton()
     }
 
@@ -64,6 +79,8 @@ class PurchaseFormFragment :
                     notes = notes
                 )
                 viewModel.insert(purchase)
+
+                shoppingListViewModel.deleteItemBySupplyId(selectedSupply.id)
 
                 // 🔹 Convertir cantidad de compra a unidades base
                 val factor = selectedSupply.conversionFactor ?: 1.0

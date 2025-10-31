@@ -1,7 +1,7 @@
 package com.rige.dulcegest.ui.products.list
 
 import android.os.Bundle
-import android.view.*
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager

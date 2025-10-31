@@ -28,5 +28,9 @@ class FinanceMenuFragment :
         binding.cardExpenses.setOnClickListener {
             findNavController().navigate(R.id.action_financeMenu_to_expenseListFragment)
         }
+
+        binding.cardShoppingList.setOnClickListener {
+            findNavController().navigate(R.id.action_financeMenu_to_shoppingListFragment)
+        }
     }
 }

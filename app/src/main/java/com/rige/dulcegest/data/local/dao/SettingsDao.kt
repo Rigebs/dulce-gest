@@ -39,21 +39,22 @@ interface SettingsDao {
     @Query("DELETE FROM expenses")
     suspend fun deleteAllExpenses()
 
+    @Query("DELETE FROM shopping_list_items")
+    suspend fun deleteAllShoppingListItems()
+
     @Transaction
     suspend fun deleteAllData() {
-        // 1️⃣ Tablas hijas (dependen de otras)
         deleteAllProductionConsumptions()
         deleteAllSaleItems()
         deleteAllProductVariants()
         deleteAllProductPresentations()
         deleteAllProductRecipes()
+        deleteAllShoppingListItems()
 
-        // 2️⃣ Tablas intermedias
         deleteAllProductionBatches()
         deleteAllSales()
         deleteAllPurchases()
 
-        // 3️⃣ Tablas principales
         deleteAllProducts()
         deleteAllSupplies()
         deleteAllExpenses()

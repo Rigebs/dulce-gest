@@ -30,6 +30,11 @@
         <action
             android:id="@+id/action_financeMenu_to_saleFormFragment"
             app:destination="@id/saleFormFragment" />
+
+        <action
+            android:id="@+id/action_financeMenu_to_shoppingListFragment"
+            app:destination="@id/shoppingListFragment" />
+
     </fragment>
 
     <!-- =================== VENTAS =================== -->
@@ -65,7 +70,14 @@
         android:id="@+id/purchaseFormFragment"
         android:name="com.rige.dulcegest.ui.finances.purchases.PurchaseFormFragment"
         android:label="Registrar compra"
-        tools:layout="@layout/fragment_purchase_form" />
+        tools:layout="@layout/fragment_purchase_form" >
+
+        <argument
+            android:name="supplyId"
+            app:argType="long"
+            android:defaultValue="0L" />
+
+    </fragment>
 
     <!-- =================== GASTOS =================== -->
     <fragment
@@ -73,5 +85,24 @@
         android:name="com.rige.dulcegest.ui.finances.expenses.ExpenseListFragment"
         android:label="Gastos"
         tools:layout="@layout/fragment_expense_list" />
+
+    <fragment
+        android:id="@+id/shoppingListFragment"
+        android:name="com.rige.dulcegest.ui.finances.shopping.ShoppingListFragment"
+        android:label="Lista de compras"
+        tools:layout="@layout/fragment_shopping_list" >
+        <action
+            android:id="@+id/action_shoppingListFragment_to_addShoppingItemDialog"
+            app:destination="@id/addShoppingItemDialog" />
+        <action
+            android:id="@+id/action_shoppingListFragment_to_purchaseFormFragment"
+            app:destination="@id/purchaseFormFragment" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/addShoppingItemDialog"
+        android:name="com.rige.dulcegest.ui.finances.shopping.AddShoppingItemDialog"
+        android:label="Agregar ítem"
+        tools:layout="@layout/dialog_add_shopping_item" />
 
 </navigation>

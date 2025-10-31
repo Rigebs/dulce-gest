@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <style name="Theme.DulceGest" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Colores principales -->
         <item name="colorPrimary">@color/chocolate_700</item>
