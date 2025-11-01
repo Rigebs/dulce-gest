@@ -3,13 +3,15 @@ package com.rige.dulcegest.ui.finances.shopping
 import androidx.lifecycle.*
 import com.rige.dulcegest.data.local.entities.ShoppingListItem
 import com.rige.dulcegest.data.repository.ShoppingListRepository
+import com.rige.dulcegest.domain.usecases.finances.shopping.ToggleShoppingItemPurchasedStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ShoppingListViewModel @Inject constructor(
-    private val repository: ShoppingListRepository
+    private val repository: ShoppingListRepository,
+    private val togglePurchasedUseCase: ToggleShoppingItemPurchasedStatusUseCase
 ) : ViewModel() {
 
     val items = repository.getItemsWithSupply().asLiveData()
@@ -29,6 +31,6 @@ class ShoppingListViewModel @Inject constructor(
     }
 
     fun togglePurchased(item: ShoppingListItem) = viewModelScope.launch {
-        repository.update(item.copy(purchased = !item.purchased))
+        togglePurchasedUseCase.execute(item)
     }
 }

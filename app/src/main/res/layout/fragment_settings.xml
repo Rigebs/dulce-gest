@@ -18,7 +18,6 @@
         android:clipToPadding="false"
         android:clipChildren="false">
 
-        <!-- ======= SECCIÓN: INFORMACIÓN DEL NEGOCIO ======= -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,7 +58,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- ======= SECCIÓN: METAS ======= -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,7 +98,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- ======= SECCIÓN: OTRAS OPCIONES ======= -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -125,22 +122,28 @@
                     android:id="@+id/btnManageUnits"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Gestionar unidades de medida"/>
+                    android:text="Gestionar unidades de medida"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_marginBottom="8dp"/>
 
                 <Button
                     android:id="@+id/btnBackupData"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Respaldar datos"
-                    android:layout_marginTop="8dp"/>
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_marginBottom="20dp"/>
 
                 <Button
                     android:id="@+id/btnDeleteAll"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Eliminar todo"
-                    android:layout_marginTop="8dp"
-                    android:backgroundTint="@android:color/holo_red_dark" />
+                    android:layout_gravity="center_horizontal"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:textColor="?attr/colorError"
+                    app:icon="@drawable/ic_delete"
+                    app:iconTint="?attr/colorError"/>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

@@ -27,8 +27,20 @@ interface SupplyDao {
     @Delete
     suspend fun delete(supply: Supply)
 
-    @Query("UPDATE supplies SET stock_qty = stock_qty + :qty WHERE id = :id")
-    suspend fun addStock(id: Long, qty: Double)
+    @Query("""
+        UPDATE supplies
+        SET 
+            stock_qty = stock_qty + :quantity,
+            avg_cost = (
+                (stock_qty * avg_cost) + (:quantity * (:totalPrice / :quantity))
+            ) / (stock_qty + :quantity)
+        WHERE id = :id
+    """)
+    suspend fun updateStockAndCostAfterPurchase(
+        id: Long,
+        quantity: Double,
+        totalPrice: Double
+    )
 
     @Query("UPDATE supplies SET stock_qty = stock_qty - :qty WHERE id = :id")
     suspend fun consumeStock(id: Long, qty: Double)

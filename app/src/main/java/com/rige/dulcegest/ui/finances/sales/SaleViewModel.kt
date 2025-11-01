@@ -6,19 +6,25 @@ import androidx.lifecycle.viewModelScope
 import com.rige.dulcegest.data.local.entities.Sale
 import com.rige.dulcegest.data.local.entities.SaleItem
 import com.rige.dulcegest.data.repository.SaleRepository
+import com.rige.dulcegest.domain.usecases.finances.sales.GetTotalSalesForCurrentWeekUseCase
+import com.rige.dulcegest.domain.usecases.finances.sales.GetTotalSalesTodayUseCase
+import com.rige.dulcegest.domain.usecases.finances.sales.RegisterSaleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SaleViewModel @Inject constructor(
-    private val repo: SaleRepository
+    private val repo: SaleRepository,
+    private val registerSaleUseCase: RegisterSaleUseCase,
+    private val getTotalSalesTodayUseCase: GetTotalSalesTodayUseCase,
+    private val getTotalSalesForCurrentWeekUseCase: GetTotalSalesForCurrentWeekUseCase
 ) : ViewModel() {
 
     val sales = repo.allSales
 
     suspend fun insertSale(sale: Sale, items: List<SaleItem>) {
-        repo.insertSale(sale, items)
+        registerSaleUseCase.execute(sale, items)
     }
 
     fun getSaleWithItems(id: Long) = liveData {
@@ -29,10 +35,7 @@ class SaleViewModel @Inject constructor(
         repo.deleteSale(sale)
     }
 
-    fun getTotalSalesToday() = repo.getTotalSalesToday()
-    fun getTotalSalesThisWeek() = repo.getTotalSalesThisWeek()
+    fun getTotalSalesToday() = getTotalSalesTodayUseCase.execute()
 
-    fun deleteAll() = viewModelScope.launch {
-        repo.deleteAll()
-    }
+    fun getTotalSalesThisWeek() = getTotalSalesForCurrentWeekUseCase.execute()
 }

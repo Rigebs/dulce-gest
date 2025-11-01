@@ -311,40 +311,31 @@ class ProductFormFragment :
             return
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            val now = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        // 🟢 Recolectar listas finales desde los adapters
+        val recipeList = supplyAdapter.getItems().map { it.recipe }
+        val presentations = presentationAdapter.getItems()
+        val variants = variantAdapter.getItems()
 
-            val product = currentProduct?.copy(
-                name = name,
-                unit = unit,
-                price = price,
-                notes = notes,
-                imagePath = selectedImagePath ?: currentProduct?.imagePath,
-                updatedAt = now
-            ) ?: Product(
-                name = name,
-                unit = unit,
-                price = price,
-                stockQty = 0.0,
-                createdAt = now,
-                notes = notes,
-                imagePath = selectedImagePath
-            )
-
-            val recipeList = supplyAdapter.getItems().map { it.recipe.copy(productId = product.id) }
-            val presentations = presentationAdapter.getItems()
-            val variants = variantAdapter.getItems()
-
-            productViewModel.saveProduct(product, recipeList, presentations, variants)
-                .observe(viewLifecycleOwner) { success ->
-                    if (success) {
-                        Toast.makeText(requireContext(), "Producto guardado", Toast.LENGTH_SHORT).show()
-                        findNavController().navigateUp()
-                    } else {
-                        Toast.makeText(requireContext(), "Error al guardar", Toast.LENGTH_SHORT).show()
-                    }
+        // 🟢 Llamada al ViewModel con los datos recolectados, delegando la lógica al Use Case
+        productViewModel.saveProduct(
+            currentProduct, // Pasa el objeto Product base (null si es nuevo)
+            name,
+            unit,
+            price,
+            notes,
+            selectedImagePath,
+            recipeList,
+            presentations,
+            variants
+        )
+            .observe(viewLifecycleOwner) { success ->
+                if (success) {
+                    Toast.makeText(requireContext(), "Producto guardado", Toast.LENGTH_SHORT).show()
+                    findNavController().navigateUp()
+                } else {
+                    Toast.makeText(requireContext(), "Error al guardar el producto", Toast.LENGTH_SHORT).show()
                 }
-        }
+            }
     }
 
     private fun setupImageSelector() {

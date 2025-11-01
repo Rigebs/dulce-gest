@@ -36,4 +36,7 @@ interface ExpenseDao {
 
     @Query("DELETE FROM expenses")
     suspend fun deleteAllExpenses()
+
+    @Query("SELECT IFNULL(SUM(amount), 0) FROM expenses WHERE DATE(date) >= DATE('now', '-6 days', 'localtime')")
+    suspend fun getTotalExpensesThisWeekSuspend(): Double?
 }

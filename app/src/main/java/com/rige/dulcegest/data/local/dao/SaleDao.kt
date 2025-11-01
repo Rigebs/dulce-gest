@@ -46,6 +46,9 @@ interface SaleDao {
     """)
     fun getSalesThisWeek(): LiveData<List<SaleWithItems>>
 
+    @Query("SELECT SUM(total_amount) FROM sales WHERE sale_date BETWEEN :startDate AND :endDate || ' 23:59:59'")
+    fun getTotalSalesBetween(startDate: String, endDate: String): LiveData<Double?>
+
     @Transaction
     @Query("SELECT * FROM sales ORDER BY sale_date DESC LIMIT 5")
     fun getLastFiveSales(): LiveData<List<SaleWithItems>>

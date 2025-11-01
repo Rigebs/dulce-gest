@@ -15,11 +15,7 @@ class ExpenseRepository @Inject constructor(
 
     fun getTotalExpensesThisWeek() = dao.getTotalExpensesThisWeek()
 
-    suspend fun deleteAll() {
-        dao.deleteAllExpenses()
-    }
-
-    fun getTotalExpensesBetween(start: String, end: String): LiveData<Double?> {
-        return dao.getTotalExpensesBetween(start, end)
+    suspend fun getTotalExpensesThisWeekSuspend(): Double? {
+        return dao.getTotalExpensesThisWeekSuspend()
     }
 }

@@ -56,14 +56,17 @@ object RepositoryModule {
     @Singleton
     fun provideProductionRepository(
         batchDao: ProductionBatchDao,
-        consumptionDao: ProductionConsumptionDao
-    ): ProductionRepository = ProductionRepository(batchDao, consumptionDao)
+        consumptionDao: ProductionConsumptionDao,
+        productDao: ProductDao,
+        supplyDao: SupplyDao
+    ): ProductionRepository = ProductionRepository(batchDao, consumptionDao, productDao, supplyDao)
 
     @Provides
     @Singleton
     fun providePurchaseRepository(
-        dao: PurchaseDao
-    ): PurchaseRepository = PurchaseRepository(dao)
+        dao: PurchaseDao,
+        supplyDao: SupplyDao
+    ): PurchaseRepository = PurchaseRepository(dao, supplyDao)
 
     @Provides
     @Singleton

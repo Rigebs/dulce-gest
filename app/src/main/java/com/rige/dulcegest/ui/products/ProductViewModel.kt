@@ -10,13 +10,15 @@ import com.rige.dulcegest.data.local.entities.ProductRecipe
 import com.rige.dulcegest.data.local.entities.ProductVariant
 import com.rige.dulcegest.data.local.entities.relations.ProductRecipeWithSupply
 import com.rige.dulcegest.data.repository.ProductRepository
+import com.rige.dulcegest.domain.usecases.products.SaveProductUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ProductViewModel @Inject constructor(
-    private val repo: ProductRepository
+    private val repo: ProductRepository,
+    private val saveProductUseCase: SaveProductUseCase
 ) : ViewModel() {
 
     val products = repo.allProducts
@@ -44,43 +46,38 @@ class ProductViewModel @Inject constructor(
 
     fun delete(product: Product) = viewModelScope.launch { repo.delete(product) }
 
-    fun adjustStock(id: Long, qtyDelta: Double) = viewModelScope.launch {
-        println("FROM VIEWMODEL Adjusting stock for product $id by $qtyDelta")
-        repo.adjustStock(id, qtyDelta)
-    }
-
     fun saveProduct(
-        product: Product,
+        currentProduct: Product?,
+        name: String,
+        unit: String,
+        price: Double,
+        notes: String?,
+        imagePath: String?,
         recipeList: List<ProductRecipe>,
         presentations: List<ProductPresentation>,
         variants: List<ProductVariant>
     ): LiveData<Boolean> {
         val result = MutableLiveData<Boolean>()
-
         viewModelScope.launch {
             try {
-                val id = if (product.id == 0L) {
-                    repo.insert(product)
-                } else {
-                    repo.update(product)
-                    product.id
-                }
-
-                repo.setRecipe(id, recipeList.map { it.copy(productId = id) })
-                repo.setPresentations(id, presentations.map { it.copy(productId = id) })
-                repo.setVariants(id, variants.map { it.copy(productId = id) })
-
-                result.postValue(true)
+                val productId = saveProductUseCase.execute(
+                    currentProduct,
+                    name,
+                    unit,
+                    price,
+                    notes,
+                    imagePath,
+                    recipeList,
+                    presentations,
+                    variants
+                )
+                result.postValue(productId > 0)
+            } catch (e: IllegalArgumentException) {
+                result.postValue(false)
             } catch (e: Exception) {
-                e.printStackTrace()
                 result.postValue(false)
             }
         }
-
         return result
-    }
-
-    fun deleteAll() = viewModelScope.launch {
-        repo.deleteAll()
     }
 }

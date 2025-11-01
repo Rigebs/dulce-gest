@@ -3,20 +3,15 @@ package com.rige.dulcegest.ui.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rige.dulcegest.R
-import com.rige.dulcegest.data.local.entities.relations.SaleWithItems
 import com.rige.dulcegest.databinding.FragmentHomeBinding
 import com.rige.dulcegest.ui.MainActivity
 import com.rige.dulcegest.ui.common.BaseFragment
 import com.rige.dulcegest.ui.finances.expenses.ExpenseViewModel
 import com.rige.dulcegest.ui.finances.purchases.PurchaseViewModel
 import com.rige.dulcegest.ui.finances.sales.SaleViewModel
-import com.rige.dulcegest.ui.products.ProductViewModel
-import com.rige.dulcegest.ui.products.productions.ProductionViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment :
@@ -31,8 +26,6 @@ class HomeFragment :
     private val expenseViewModel: ExpenseViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
     private val purchaseViewModel: PurchaseViewModel by viewModels()
-    private val productionViewModel: ProductionViewModel by viewModels()
-    private val productViewModel: ProductViewModel by viewModels()
 
     // ───────────────────────────────
     // 🔹 Ciclo de vida
@@ -56,8 +49,9 @@ class HomeFragment :
             }
         }
 
-        homeViewModel.salesOfThisWeek.observe(viewLifecycleOwner) { sales ->
-            updateWeeklyProfit(sales)
+        // 🟢 Ganancia Neta Semanal (Llamada al nuevo LiveData del ViewModel)
+        homeViewModel.weeklyNetProfit.observe(viewLifecycleOwner) { netProfit ->
+            binding.txtWeeklyProfit.text = "S/ %.2f".format(netProfit ?: 0.0)
         }
 
         // Ventas semanales
@@ -90,32 +84,9 @@ class HomeFragment :
     }
 
     // ───────────────────────────────
-    // 🔹 Cálculo de ganancia semanal
+    // 🔹 Cálculo de ganancia semanal (Eliminada la implementación compleja)
     // ───────────────────────────────
-    private fun updateWeeklyProfit(sales: List<SaleWithItems>) {
-        lifecycleScope.launch {
-
-            var totalProfit = 0.0
-
-            for (sale in sales) {
-                for (item in sale.items) {
-                    println(" ITEMS: ${sale.items}")
-                    val product = productViewModel.getProductByIdOnce(item.productId)
-                    if (product != null) {
-                        val unitCost = productionViewModel.getAverageProductionCost(product.id)
-                        val totalCost = unitCost * item.presentationQuantity * item.qty
-                        val profitPerItem = (item.unitPrice * item.qty) - totalCost
-                        totalProfit += profitPerItem
-                    }
-                }
-            }
-
-            val weeklyExpenses = expenseViewModel.getTotalExpensesThisWeek().value ?: 0.0
-            val netProfit = totalProfit - weeklyExpenses
-
-            binding.txtWeeklyProfit.text = "S/ %.2f".format(netProfit)
-        }
-    }
+    // 🗑️ updateWeeklyProfit (Esta función se ha movido al Use Case / ViewModel)
 
     // ───────────────────────────────
     // 🔹 Objetivo semanal

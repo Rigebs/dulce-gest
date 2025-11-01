@@ -28,6 +28,37 @@ class ProductRepository @Inject constructor(
 
     suspend fun update(product: Product) = productDao.update(product)
 
+    // Lo que necesita el ProductRepository.kt:
+
+    suspend fun saveProductTransaction(
+        product: Product,
+        recipeItems: List<ProductRecipe>,
+        presentations: List<ProductPresentation>,
+        variants: List<ProductVariant>
+    ): Long {
+        // 1. Insertar/Actualizar el Producto (Cabecera) y obtener el ID.
+        val productId = if (product.id == 0L) {
+            productDao.insert(product)
+        } else {
+            productDao.update(product)
+            product.id
+        }
+
+        recipeDao.deleteByProductId(productId)
+        val updatedRecipe = recipeItems.map { it.copy(productId = productId) }
+        recipeDao.insertAll(updatedRecipe)
+
+        presentationDao.deleteByProductId(productId)
+        val updatedPresentations = presentations.map { it.copy(productId = productId) }
+        presentationDao.insertAll(updatedPresentations)
+
+        variantDao.deleteByProductId(productId)
+        val updatedVariants = variants.map { it.copy(productId = productId) }
+        variantDao.insertAll(updatedVariants)
+
+        return productId
+    }
+
     suspend fun delete(product: Product) = productDao.delete(product)
 
     suspend fun getProductByIdSuspend(productId: Long): Product? {
@@ -38,7 +69,7 @@ class ProductRepository @Inject constructor(
         recipeDao.getRecipeWithSupplies(productId)
 
     suspend fun setRecipe(productId: Long, supplies: List<ProductRecipe>) {
-        recipeDao.deleteByProduct(productId)
+        recipeDao.deleteByProductId(productId)
         recipeDao.insertAll(supplies)
     }
 

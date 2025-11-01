@@ -17,7 +17,4 @@ interface SaleItemDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<SaleItem>)
-
-    @Query("DELETE FROM sale_items WHERE sale_id = :saleId")
-    suspend fun deleteBySale(saleId: Long)
 }

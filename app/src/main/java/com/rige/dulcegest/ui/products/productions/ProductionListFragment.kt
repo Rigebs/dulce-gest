@@ -59,7 +59,7 @@ class ProductionListFragment :
         Snackbar.make(requireView(), "Producción eliminada", Snackbar.LENGTH_LONG)
             .setAction("DESHACER") {
                 lifecycleScope.launch {
-                    viewModel.insertBatch(deletedBatch, deletedConsumptions)
+                    viewModel.reinsertBatchTransaction(deletedBatch, deletedConsumptions)
                 }
             }
             .show()

@@ -57,6 +57,15 @@ interface ProductionBatchDao {
         endDate: String
     ): List<ProductionBatch>
 
-    @Query("SELECT SUM(total_cost) / SUM(quantity_produced) FROM production_batches WHERE product_id = :productId")
+    @Query("""
+        SELECT SUM(total_cost) * 1.0 / SUM(quantity_produced)
+        FROM (
+            SELECT total_cost, quantity_produced
+            FROM production_batches
+            WHERE product_id = :productId
+            ORDER BY id DESC
+            LIMIT 5
+        )
+    """)
     suspend fun getAverageProductionCost(productId: Long): Double?
 }

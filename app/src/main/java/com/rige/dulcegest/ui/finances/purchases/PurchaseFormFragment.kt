@@ -6,15 +6,12 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.rige.dulcegest.data.local.entities.Purchase
 import com.rige.dulcegest.data.local.entities.Supply
 import com.rige.dulcegest.databinding.FragmentPurchaseFormBinding
 import com.rige.dulcegest.ui.common.BaseFragment
-import com.rige.dulcegest.ui.finances.shopping.ShoppingListViewModel
 import com.rige.dulcegest.ui.products.supplies.SupplyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.threeten.bp.LocalDateTime
 
 @AndroidEntryPoint
 class PurchaseFormFragment :
@@ -26,7 +23,6 @@ class PurchaseFormFragment :
 
     private val viewModel: PurchaseViewModel by viewModels()
     private val supplyViewModel: SupplyViewModel by viewModels()
-    private val shoppingListViewModel: ShoppingListViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,59 +57,33 @@ class PurchaseFormFragment :
             val totalPrice = binding.inputTotalPrice.text.toString().toDoubleOrNull() ?: 0.0
             val supplier = binding.inputSupplier.text.toString().trim().ifEmpty { null }
             val notes = binding.inputNotes.text.toString().trim().ifEmpty { null }
-            val date = LocalDateTime.now().toString()
 
             if (selectedSupply == null || quantity <= 0.0 || totalPrice <= 0.0) {
                 Toast.makeText(requireContext(), "Completa los campos obligatorios", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // 🟢 El ViewModel y el Use Case manejan la transacción
             lifecycleScope.launch {
-                // Guardar la compra
-                val purchase = Purchase(
-                    supplyId = selectedSupply.id,
-                    quantity = quantity,
-                    totalPrice = totalPrice,
-                    supplier = supplier,
-                    date = date,
-                    notes = notes
-                )
-                viewModel.insert(purchase)
+                try {
+                    viewModel.registerPurchase(
+                        selectedSupply,
+                        quantity,
+                        totalPrice,
+                        supplier,
+                        notes
+                    ).join()
 
-                shoppingListViewModel.deleteItemBySupplyId(selectedSupply.id)
+                    Toast.makeText(
+                        requireContext(),
+                        "Compra registrada y stock actualizado.",
+                        Toast.LENGTH_LONG
+                    ).show()
 
-                // 🔹 Convertir cantidad de compra a unidades base
-                val factor = selectedSupply.conversionFactor ?: 1.0
-                val addedQty = quantity * factor // cantidad en unidades base
-                val newStock = selectedSupply.stockQty + addedQty
-
-                // 🔹 Calcular costo por unidad base
-                val newUnitCost = totalPrice / addedQty
-
-                // 🔹 Actualizar costo promedio
-                val oldStock = selectedSupply.stockQty
-                val oldCost = selectedSupply.avgCost
-                val newAvgCost = if (oldStock + addedQty > 0) {
-                    ((oldStock * oldCost) + (addedQty * newUnitCost)) / (oldStock + addedQty)
-                } else {
-                    newUnitCost
+                    findNavController().navigateUp()
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), "Error al registrar la compra.", Toast.LENGTH_LONG).show()
                 }
-
-                val updatedSupply = selectedSupply.copy(
-                    stockQty = newStock,
-                    avgCost = newAvgCost,
-                    updatedAt = LocalDateTime.now().toString()
-                )
-
-                supplyViewModel.update(updatedSupply)
-
-                Toast.makeText(
-                    requireContext(),
-                    "Compra registrada: +${addedQty} ${selectedSupply.unit} añadidas al stock\nNuevo costo promedio: ${"%.2f".format(newAvgCost)}",
-                    Toast.LENGTH_LONG
-                ).show()
-
-                findNavController().navigateUp()
             }
         }
     }

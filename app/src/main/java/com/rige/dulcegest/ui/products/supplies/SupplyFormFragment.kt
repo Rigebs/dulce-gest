@@ -5,15 +5,11 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.rige.dulcegest.R
-import com.rige.dulcegest.data.local.entities.Supply
 import com.rige.dulcegest.databinding.FragmentSupplyFormBinding
 import com.rige.dulcegest.ui.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import org.threeten.bp.LocalDateTime
 
 @AndroidEntryPoint
 class SupplyFormFragment :
@@ -26,12 +22,13 @@ class SupplyFormFragment :
     override val showBackButton = true
 
     private val viewModel: SupplyViewModel by viewModels()
-    private var supplyId: Long? = null
+    private var supplyId: Long = 0L
+    private lateinit var unitsAdapter: ArrayAdapter<CharSequence>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val unitsAdapter = ArrayAdapter.createFromResource(
+        unitsAdapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.units_array,
             android.R.layout.simple_spinner_item
@@ -40,23 +37,27 @@ class SupplyFormFragment :
         }
         binding.spinnerUnit.adapter = unitsAdapter
 
-        supplyId = arguments?.getLong("supplyId")
+        supplyId = arguments?.getLong("supplyId") ?: 0L
 
-        supplyId?.let { id ->
-            viewModel.getSupplyById(id).observe(viewLifecycleOwner) { supply ->
-                supply?.let {
-                    binding.inputName.setText(it.name)
-                    val unitPosition = unitsAdapter.getPosition(it.unit)
-                    if (unitPosition >= 0) binding.spinnerUnit.setSelection(unitPosition)
-                    binding.inputStock.setText(it.stockQty.toString())
-                    binding.inputPurchaseUnit.setText(it.purchaseUnit ?: "")
-                    binding.inputConversionFactor.setText(it.conversionFactor?.toString() ?: "")
-                    binding.inputNotes.setText(it.notes ?: "")
-                }
-            }
+        if (supplyId != 0L) {
+            loadExistingSupply(supplyId)
         }
 
         binding.btnSave.setOnClickListener { saveSupply() }
+    }
+
+    private fun loadExistingSupply(id: Long) {
+        viewModel.getSupplyById(id).observe(viewLifecycleOwner) { supply ->
+            supply?.let {
+                binding.inputName.setText(it.name)
+                val unitPosition = unitsAdapter.getPosition(it.unit)
+                if (unitPosition >= 0) binding.spinnerUnit.setSelection(unitPosition)
+                binding.inputStock.setText(it.stockQty.toString())
+                binding.inputPurchaseUnit.setText(it.purchaseUnit ?: "")
+                binding.inputConversionFactor.setText(it.conversionFactor?.toString() ?: "")
+                binding.inputNotes.setText(it.notes ?: "")
+            }
+        }
     }
 
     private fun saveSupply() {
@@ -72,26 +73,22 @@ class SupplyFormFragment :
             return
         }
 
-        val supply = Supply(
-            id = supplyId ?: 0L,
-            name = name,
-            unit = unit,
-            stockQty = stock,
-            purchaseUnit = purchaseUnit,
-            conversionFactor = conversionFactor,
-            updatedAt = LocalDateTime.now().toString(),
-            notes = notes
-        )
-
-        lifecycleScope.launch {
-            if (supplyId == null || supplyId == 0L) {
-                viewModel.insert(supply)
-                Toast.makeText(requireContext(), "Insumo agregado", Toast.LENGTH_SHORT).show()
+        viewModel.saveSupply(
+            supplyId,
+            name,
+            unit,
+            stock,
+            purchaseUnit,
+            conversionFactor,
+            notes
+        ).invokeOnCompletion { throwable ->
+            if (throwable == null) {
+                val message = if (supplyId == 0L) "Insumo agregado" else "Insumo actualizado"
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                findNavController().navigateUp()
             } else {
-                viewModel.update(supply)
-                Toast.makeText(requireContext(), "Insumo actualizado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error al guardar el insumo", Toast.LENGTH_SHORT).show()
             }
-            findNavController().navigateUp()
         }
     }
 }

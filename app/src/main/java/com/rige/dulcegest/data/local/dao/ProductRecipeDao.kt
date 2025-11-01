@@ -26,7 +26,7 @@ interface ProductRecipeDao {
     suspend fun delete(recipe: ProductRecipe)
 
     @Query("DELETE FROM product_recipes WHERE product_id = :productId")
-    suspend fun deleteByProduct(productId: Long)
+    suspend fun deleteByProductId(productId: Long)
 
     @Transaction
     @Query("SELECT * FROM product_recipes WHERE product_id = :productId")
