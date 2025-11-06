@@ -13,10 +13,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ProductListFragment :
-    BaseFragment<FragmentProductListBinding>(FragmentProductListBinding::inflate) {
+    BaseFragment<FragmentProductListBinding>(FragmentProductListBinding::inflate),
+    BaseFragment.SearchableFragment {
 
     override val toolbarTitle = "Productos"
     override val showToolbar = true
+    override val showSearchView = true
     override val showBackButton = true
 
     private val productViewModel: ProductViewModel by activityViewModels()
@@ -35,12 +37,20 @@ class ProductListFragment :
             adapter = this@ProductListFragment.adapter
         }
 
-        productViewModel.products.observe(viewLifecycleOwner) {
+        productViewModel.filteredProducts.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
+
+        productViewModel.filterProducts(null)
 
         binding.fabAddProduct.setOnClickListener {
             findNavController().navigate(R.id.action_productListFragment_to_productFormFragment)
         }
     }
+
+    override fun onQueryTextChange(newText: String?) {
+        productViewModel.filterProducts(newText)
+    }
+
+    override fun onQueryTextSubmit(query: String?) {}
 }

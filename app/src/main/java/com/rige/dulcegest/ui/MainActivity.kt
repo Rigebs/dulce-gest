@@ -1,7 +1,9 @@
 package com.rige.dulcegest.ui
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -113,9 +115,16 @@ class MainActivity : AppCompatActivity() {
         binding.mainToolbar.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
-    fun setupToolbar(title: String, showBackButton: Boolean) {
+    fun setupToolbar(title: String, showBackButton: Boolean, showSearchView: Boolean) {
         binding.mainToolbar.apply {
             this.title = title
+            menu.clear()
+
+            if (showSearchView) {
+                inflateMenu(R.menu.menu_search)
+                configureSearchView()
+            }
+
             navigationIcon = if (showBackButton) {
                 AppCompatResources.getDrawable(context, R.drawable.ic_arrow_back)
             } else {
@@ -126,6 +135,51 @@ class MainActivity : AppCompatActivity() {
                 if (showBackButton) onBackPressedDispatcher.onBackPressed()
             }
         }
+    }
+
+    private fun configureSearchView() {
+        val searchItem = binding.mainToolbar.menu.findItem(R.id.action_search)
+        val searchView = searchItem?.actionView as? androidx.appcompat.widget.SearchView
+
+        searchView?.queryHint = "Buscar..."
+
+        val currentFragment = activeNavHost?.childFragmentManager?.primaryNavigationFragment
+
+        searchView?.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Si el fragmento activo implementa la interfaz de búsqueda, le pasamos el query
+                if (currentFragment is BaseFragment.SearchableFragment) {
+                    currentFragment.onQueryTextSubmit(query)
+                } else {
+                    // Comportamiento por defecto si el fragmento no maneja la búsqueda
+                    query?.let {
+                        Toast.makeText(this@MainActivity, "Buscando: $it", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                searchView.clearFocus()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (currentFragment is BaseFragment.SearchableFragment) {
+                    currentFragment.onQueryTextChange(newText)
+                    return true
+                }
+                return false
+            }
+        })
+
+        searchItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                binding.mainToolbar.title = ""
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                updateToolbarForCurrentFragment(activeNavHost ?: homeNavHost)
+                return true
+            }
+        })
     }
 
     private fun createNavHost(navGraphId: Int): NavHostFragment {
@@ -160,9 +214,16 @@ class MainActivity : AppCompatActivity() {
     private fun updateToolbarForCurrentFragment(navHost: NavHostFragment) {
         val fragment = navHost.childFragmentManager.primaryNavigationFragment
         if (fragment is BaseFragment<*>) {
-            setToolbarVisible(fragment.showToolbar)
-            if (fragment.showToolbar) {
-                setupToolbar(fragment.toolbarTitle ?: "", fragment.showBackButton)
+            val showToolbar = fragment.showToolbar
+            val showSearchView = fragment.showSearchView
+
+            setToolbarVisible(showToolbar)
+
+            if (showToolbar) {
+                setupToolbar(
+                    fragment.toolbarTitle ?: "",
+                    fragment.showBackButton,
+                    showSearchView)
             }
         } else {
             setToolbarVisible(false)

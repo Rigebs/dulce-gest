@@ -45,7 +45,7 @@ import com.rige.dulcegest.data.local.entities.Supply
         Expense::class,
         ShoppingListItem::class
     ],
-    version = 13,
+    version = 14,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -175,6 +175,12 @@ abstract class AppDatabase : RoomDatabase() {
             """.trimIndent()
                 )
                 db.execSQL("CREATE INDEX IF NOT EXISTS index_shopping_list_items_supply_id ON shopping_list_items(supply_id)")
+            }
+        }
+
+        val MIGRATION_13_14 = object : Migration(13, 14) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE sales ADD COLUMN payment_method TEXT")
             }
         }
     }

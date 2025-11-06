@@ -21,13 +21,33 @@ class ProductViewModel @Inject constructor(
     private val saveProductUseCase: SaveProductUseCase
 ) : ViewModel() {
 
+    private val _allProducts: LiveData<List<Product>> = repo.allProducts
+
+    private val _filteredProducts = MutableLiveData<List<Product>>()
+    val filteredProducts: LiveData<List<Product>> = _filteredProducts
+
     val products = repo.allProducts
     val productsWithPresentations = repo.getProductsWithPresentationsAndVariants()
 
+    init {
+        _allProducts.observeForever { newList ->
+            _filteredProducts.value = newList
+        }
+    }
+
     fun getProductById(id: Long): LiveData<Product?> = repo.getById(id)
 
-    suspend fun getProductByIdOnce(productId: Long): Product? {
-        return repo.getProductByIdSuspend(productId)
+    fun filterProducts(query: String?) {
+        val currentList = _allProducts.value ?: return
+
+        val results = if (query.isNullOrBlank()) {
+            currentList
+        } else {
+            currentList.filter {
+                it.name.contains(query, ignoreCase = true)
+            }
+        }
+        _filteredProducts.value = results
     }
 
     fun getRecipeWithSupplies(productId: Long): LiveData<List<ProductRecipeWithSupply>> {

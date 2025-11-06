@@ -17,5 +17,8 @@ data class Sale(
     @ColumnInfo(name = "total_amount")
     val totalAmount: Double = 0.0,
 
+    @ColumnInfo(name = "payment_method")
+    val paymentMethod: String? = null,
+
     val notes: String? = null
 )

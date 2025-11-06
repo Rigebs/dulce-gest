@@ -16,9 +16,16 @@ abstract class BaseFragment<VB : ViewBinding>(
     private var _binding: VB? = null
     protected val binding get() = _binding!!
 
+    interface SearchableFragment {
+        fun onQueryTextChange(newText: String?)
+        fun onQueryTextSubmit(query: String?)
+    }
+
     open val showToolbar: Boolean = true
     open val toolbarTitle: String? = null
     open val showBackButton: Boolean = false
+
+    open val showSearchView: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,9 +43,7 @@ abstract class BaseFragment<VB : ViewBinding>(
 
         activity.setToolbarVisible(showToolbar)
 
-        if (showToolbar) {
-            activity.setupToolbar(toolbarTitle ?: "", showBackButton)
-        }
+        updateToolbarState()
     }
 
     private fun updateToolbarState() {
@@ -46,8 +51,7 @@ abstract class BaseFragment<VB : ViewBinding>(
         activity.setToolbarVisible(showToolbar)
 
         if (showToolbar) {
-            activity.setupToolbar(toolbarTitle ?: "", showBackButton)
-        }
+            activity.setupToolbar(toolbarTitle ?: "", showBackButton, showSearchView)        }
     }
 
     override fun onDestroyView() {

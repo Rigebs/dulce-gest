@@ -9,11 +9,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.rige.dulcegest.core.utils.toSoles
 import com.rige.dulcegest.data.local.entities.Product
-import com.rige.dulcegest.data.local.entities.ProductPresentation
 import com.rige.dulcegest.data.local.entities.Sale
+import com.rige.dulcegest.data.local.entities.SaleItem
 import com.rige.dulcegest.data.local.entities.relations.SaleItemWithProduct
 import com.rige.dulcegest.databinding.FragmentSaleFormBinding
+import com.rige.dulcegest.domain.models.SelectableSaleItem
 import com.rige.dulcegest.ui.common.BaseFragment
 import com.rige.dulcegest.ui.products.ProductViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,25 +37,52 @@ class SaleFormFragment :
     private lateinit var adapter: SaleItemAdapter
     private val selectedItems = mutableListOf<SaleItemWithProduct>()
     private val baseProducts = mutableListOf<Product>()
-    private val productPresentations = mutableMapOf<Long, List<ProductPresentation>>()
+    private val allSelectableItems = mutableListOf<SelectableSaleItem>()
+    private var selectedPaymentMethod: String = "Efectivo"
 
-    private var selectedProduct: Product? = null
-    private var selectedPresentation: ProductPresentation? = null
+    private var currentSelectedItem: SelectableSaleItem? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecycler()
         observeProducts()
+        setupPaymentMethodSelector()
         setupAddButton()
         setupSaveButton()
         updateTotal()
     }
 
+    private fun setupPaymentMethodSelector() {
+        // Inicializar con el valor por defecto (Efectivo) al inicio
+        binding.rgPaymentMethod.check(binding.rbCash.id)
+
+        binding.rgPaymentMethod.setOnCheckedChangeListener { group, checkedId ->
+            selectedPaymentMethod = when (checkedId) {
+                binding.rbCash.id -> "Efectivo"
+                binding.rbPlinYape.id -> "Plin/Yape"
+                binding.rbOther.id -> "Otro"
+                else -> "Desconocido"
+            }
+        }
+    }
+
     private fun setupRecycler() {
         adapter = SaleItemAdapter(
-            onRemove = { item ->
-                selectedItems.remove(item)
+            onQuantityChange = { item, newQty ->
+                if (newQty <= 0.0) {
+                    selectedItems.remove(item)
+                } else {
+                    val index = selectedItems.indexOf(item)
+                    if (index != -1) {
+                        val updatedItem = item.item.copy(
+                            qty = newQty,
+                            lineTotal = newQty * item.item.unitPrice
+                        )
+                        selectedItems[index] = item.copy(item = updatedItem)
+                    }
+                }
+
                 adapter.submitList(selectedItems.toList())
                 updateTotal()
             }
@@ -65,20 +94,49 @@ class SaleFormFragment :
     private fun observeProducts() {
         productViewModel.productsWithPresentations.observe(viewLifecycleOwner) { list ->
             baseProducts.clear()
-            productPresentations.clear()
+            allSelectableItems.clear()
 
-            list.forEach {
-                baseProducts.add(it.product)
-                productPresentations[it.product.id] = it.presentations
+            val placeholder = SelectableSaleItem(
+                productId = -1L,
+                name = "Seleccione un producto",
+                price = 0.0
+            )
+            allSelectableItems.add(placeholder)
+
+            list.forEach { productWithPresentation ->
+                val product = productWithPresentation.product
+                baseProducts.add(product)
+
+                allSelectableItems.add(
+                    SelectableSaleItem(
+                        productId = product.id,
+                        name = "${product.name} (Unidad)",
+                        price = product.price
+                    )
+                )
+
+                productWithPresentation.presentations.forEach { presentation ->
+                    allSelectableItems.add(
+                        SelectableSaleItem(
+                            productId = product.id,
+                            presentationId = presentation.id,
+                            name = "${product.name} (${presentation.name})",
+                            price = presentation.price,
+                            presentationQuantity = presentation.quantity
+                        )
+                    )
+                }
             }
 
-            val productNames = mutableListOf("Seleccione un producto")
-            productNames.addAll(baseProducts.map { it.name })
+            // 2. Configurar el ÚNICO Spinner
+            val itemNames = allSelectableItems.map {
+                if (it.productId == -1L) it.name else "${it.name} — S/${"%.2f".format(it.price)}"
+            }
 
             val productAdapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
-                productNames
+                itemNames
             ).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_list_item_1)
             }
@@ -89,56 +147,11 @@ class SaleFormFragment :
                 override fun onItemSelected(
                     parent: AdapterView<*>?, view: View?, position: Int, id: Long
                 ) {
-                    if (position == 0) {
-                        selectedProduct = null
-                        binding.spinnerPresentation.visibility = View.GONE
-                        return
-                    }
-
-                    selectedProduct = baseProducts[position - 1]
-                    selectedPresentation = null
-                    setupPresentationSpinner(selectedProduct!!)
+                    currentSelectedItem = if (position == 0) null else allSelectableItems[position]
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    selectedProduct = null
-                }
-            }
-        }
-    }
-
-    private fun setupPresentationSpinner(product: Product) {
-        val presentations = productPresentations[product.id].orEmpty()
-
-        if (presentations.isEmpty()) {
-            binding.spinnerPresentation.visibility = View.GONE
-            selectedPresentation = null
-            return
-        }
-
-        val presentationNames = mutableListOf("Unidad — S/${product.price}")
-        presentationNames.addAll(presentations.map { "${it.name} — S/${it.price}" })
-
-        val presentationAdapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            presentationNames
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_list_item_1)
-        }
-
-        binding.spinnerPresentation.apply {
-            adapter = presentationAdapter
-            visibility = View.VISIBLE
-            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
-                ) {
-                    selectedPresentation = if (position == 0) null else presentations[position - 1]
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    selectedPresentation = null
+                    currentSelectedItem = null
                 }
             }
         }
@@ -146,9 +159,9 @@ class SaleFormFragment :
 
     private fun setupAddButton() {
         binding.btnAddProduct.setOnClickListener {
-            val base = selectedProduct
-            if (base == null) {
-                Toast.makeText(requireContext(), "Seleccione un producto", Toast.LENGTH_SHORT).show()
+            val selected = currentSelectedItem
+            if (selected == null || selected.productId == -1L) {
+                Toast.makeText(requireContext(), "Seleccione un producto y presentación", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -158,39 +171,34 @@ class SaleFormFragment :
                 return@setOnClickListener
             }
 
-            val price = selectedPresentation?.price ?: base.price
-            val displayName = if (selectedPresentation != null)
-                "${base.name} (${selectedPresentation!!.name})"
-            else base.name
-
-            val item = com.rige.dulcegest.data.local.entities.SaleItem(
+            val item = SaleItem(
                 saleId = 0L,
-                productId = base.id,
-                presentationId = selectedPresentation?.id,
+                productId = selected.productId,
+                presentationId = selected.presentationId,
                 qty = qty,
-                unitPrice = price,
-                lineTotal = qty * price,
-                presentationQuantity = selectedPresentation?.quantity ?: 1.0
+                unitPrice = selected.price,
+                lineTotal = qty * selected.price,
+                presentationQuantity = selected.presentationQuantity
             )
 
-            val displayProduct = base.copy(name = displayName)
+            val displayProduct = Product(
+                id = selected.productId,
+                name = selected.name,
+                price = selected.price
+            )
             val itemWithProduct = SaleItemWithProduct(item, displayProduct)
             selectedItems.add(itemWithProduct)
 
             adapter.submitList(selectedItems.toList())
             updateTotal()
 
-            // limpiar campos
             binding.etQuantity.text?.clear()
             binding.spinnerProduct.setSelection(0)
-            binding.spinnerPresentation.visibility = View.GONE
-            selectedProduct = null
-            selectedPresentation = null
+            currentSelectedItem = null
         }
     }
 
     private fun setupSaveButton() {
-
         binding.btnSave.setOnClickListener {
             if (selectedItems.isEmpty()) {
                 Toast.makeText(requireContext(), "Agrega al menos un producto", Toast.LENGTH_SHORT).show()
@@ -200,10 +208,9 @@ class SaleFormFragment :
             val sale = Sale(
                 saleDate = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
                 totalAmount = selectedItems.sumOf { it.item.lineTotal },
-                customer = binding.etCustomer.text.toString()
+                customer = binding.etCustomer.text.toString(),
+                paymentMethod = selectedPaymentMethod
             )
-
-            println(sale)
 
             binding.btnSave.isEnabled = false
 
@@ -217,7 +224,7 @@ class SaleFormFragment :
 
     private fun updateTotal() {
         val total = selectedItems.sumOf { it.item.lineTotal }
-        binding.tvTotal.text = "Total: S/${"%.2f".format(total)}"
+        binding.tvTotal.text = "Total: ${total.toSoles()}"
         binding.recyclerSaleItems.visibility = if (selectedItems.isEmpty()) View.GONE else View.VISIBLE
         binding.emptyStateLayout.visibility = if (selectedItems.isEmpty()) View.VISIBLE else View.GONE
     }

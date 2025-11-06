@@ -7,7 +7,9 @@ import com.rige.dulcegest.data.local.dao.SaleItemDao
 import com.rige.dulcegest.data.local.entities.Sale
 import com.rige.dulcegest.data.local.entities.SaleItem
 import com.rige.dulcegest.data.local.entities.relations.SaleWithItems
+import com.rige.dulcegest.domain.models.DailySalesResult
 import jakarta.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
 class SaleRepository @Inject constructor(
     private val saleDao: SaleDao,
@@ -20,38 +22,22 @@ class SaleRepository @Inject constructor(
 
     val salesOfThisWeek: LiveData<List<SaleWithItems>> = saleDao.getSalesThisWeek()
 
-    /**
-     * 🟢 1. IMPLEMENTACIÓN DE LA TRANSACCIÓN (RENOMBRADO y AJUSTE DE RETORNO)
-     *
-     * Nota: Este método DEBE ejecutarse como una transacción atómica de Room.
-     * Si no tienes acceso a la AppDatabase aquí, se asume que los DAOs o la inyección
-     * de dependencias garantizan el rollback si falla.
-     */
     suspend fun insertSaleTransaction(sale: Sale, items: List<SaleItem>): Long {
-        // 1. Insertar la Venta y obtener el ID
         val saleId = saleDao.insert(sale)
 
-        // 2. Preparar e Insertar los Ítems
         val itemList = items.map { it.copy(saleId = saleId) }
         itemDao.insertAll(itemList)
 
-        // 3. Reducir Stock (la lógica ya estaba en la versión anterior)
         itemList.forEach { item ->
-            // Aseguramos un valor por defecto de 1.0 para presentationQuantity
             val presentationFactor = item.presentationQuantity ?: 1.0
             val qtyToSubtract = item.qty * presentationFactor
             productDao.reduceStock(item.productId, qtyToSubtract)
         }
 
-        return saleId // Se requiere el ID para el Use Case
+        return saleId
     }
 
-    // 🟢 2. NUEVO MÉTODO PARA CONSULTA POR RANGO DE FECHAS
-    // Necesario para los Use Cases de totales semanales y diarios.
     fun getTotalSalesBetween(startDate: String, endDate: String): LiveData<Double?> {
-        // ⚠️ Asume que SaleDao tiene el método:
-        // @Query("SELECT SUM(totalAmount) FROM sales WHERE saleDate BETWEEN :startDate AND :endDate || ' 23:59:59'")
-        // fun getTotalSalesBetween(startDate: String, endDate: String): LiveData<Double?>
         return saleDao.getTotalSalesBetween(startDate, endDate)
     }
 
@@ -59,16 +45,15 @@ class SaleRepository @Inject constructor(
 
     suspend fun deleteSale(sale: Sale) = saleDao.delete(sale)
 
-    // 🗑️ Estos métodos ya no son necesarios si los Use Cases de fechas son la fuente de la verdad
-    // fun getTotalSalesToday() = saleDao.getTotalSalesToday()
-    // fun getTotalSalesThisWeek() = saleDao.getTotalSalesThisWeek()
-    // Puedes dejarlos si se usan en otros sitios, pero ya no los necesitará el ViewModel.
+    fun getTotalSalesByDateRange(startDate: String, endDate: String): Double? {
+        return saleDao.getTotalSalesByDateRange(startDate, endDate)
+    }
 
-    fun getTotalSalesToday() = saleDao.getTotalSalesToday()
-    fun getTotalSalesThisWeek() = saleDao.getTotalSalesThisWeek()
+    fun getSalesByDateRange(startDate: String, endDate: String): Flow<List<Sale>> {
+        return saleDao.getSalesByDateRange(startDate, endDate)
+    }
 
-
-    suspend fun deleteAll() {
-        saleDao.deleteAllSales()
+    suspend fun getDailySalesByDateRange(startDate: String, endDate: String): List<DailySalesResult> {
+        return saleDao.getDailySalesByDateRange(startDate, endDate)
     }
 }

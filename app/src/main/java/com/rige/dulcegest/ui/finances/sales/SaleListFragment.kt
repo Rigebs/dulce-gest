@@ -36,10 +36,21 @@ class SaleListFragment :
 
         saleViewModel.sales.observe(viewLifecycleOwner) { sales ->
             adapter.submitList(sales)
+            toggleEmptyState(sales.isEmpty())
         }
 
         binding.fabAddSale.setOnClickListener {
             findNavController().navigate(R.id.action_saleListFragment_to_saleFormFragment)
+        }
+    }
+
+    private fun toggleEmptyState(isEmpty: Boolean) {
+        if (isEmpty) {
+            binding.emptyState.visibility = View.VISIBLE
+            binding.recyclerSales.visibility = View.GONE
+        } else {
+            binding.emptyState.visibility = View.GONE
+            binding.recyclerSales.visibility = View.VISIBLE
         }
     }
 }

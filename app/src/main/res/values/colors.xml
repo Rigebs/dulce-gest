@@ -5,6 +5,8 @@
     <color name="black">#000000</color>
     <color name="bg_light">#FFF8F2</color>        <!-- fondo claro, crema -->
     <color name="bg_dark">#1B1A18</color>         <!-- fondo oscuro -->
+    
+    <color name="gray">#949090</color>
 
     <!-- primarios -->
     <color name="chocolate_900">#3E2A1F</color>

@@ -9,6 +9,8 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.rige.dulcegest.data.local.entities.Sale
 import com.rige.dulcegest.data.local.entities.relations.SaleWithItems
+import com.rige.dulcegest.domain.models.DailySalesResult
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SaleDao {
@@ -55,4 +57,21 @@ interface SaleDao {
 
     @Query("DELETE FROM sales")
     suspend fun deleteAllSales()
+
+    @Query("SELECT SUM(total_amount) FROM sales WHERE sale_date BETWEEN :startDate AND :endDate")
+    fun getTotalSalesByDateRange(startDate: String, endDate: String): Double?
+
+    @Query("SELECT * FROM sales WHERE sale_date BETWEEN :startDate AND :endDate ORDER BY sale_date DESC")
+    fun getSalesByDateRange(startDate: String, endDate: String): Flow<List<Sale>>
+
+    @Query("""
+        SELECT 
+            strftime('%Y-%m-%d', sale_date) as sale_date,
+            SUM(total_amount) AS total_sales
+        FROM sales
+        WHERE strftime('%Y-%m-%d', sale_date) BETWEEN :startDate AND :endDate
+        GROUP BY strftime('%Y-%m-%d', sale_date)
+        ORDER BY sale_date DESC
+    """)
+    suspend fun getDailySalesByDateRange(startDate: String, endDate: String): List<DailySalesResult>
 }

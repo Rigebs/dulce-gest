@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.finances.sales.SaleFormFragment">
 
-    <!-- 🔹 Contenido principal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -25,20 +24,57 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- 🧍 Cliente -->
                 <EditText
                     android:id="@+id/etCustomer"
-                    android:hint="Cliente"
+                    android:hint="Cliente (Opcional)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <!-- 🧾 Selector de producto -->
                 <TextView
-                    android:text="Producto:"
+                    android:text="Método de pago:"
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="16dp" />
+
+                <RadioGroup
+                    android:id="@+id/rgPaymentMethod"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <RadioButton
+                        android:id="@+id/rbCash"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Efectivo"
+                        android:checked="true"
+                        android:layout_marginEnd="16dp"/>
+
+                    <RadioButton
+                        android:id="@+id/rbPlinYape"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Plin / Yape"
+                        android:layout_marginEnd="16dp"/>
+
+                    <RadioButton
+                        android:id="@+id/rbOther"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Otro"
+                        android:layout_marginEnd="16dp"
+                        android:visibility="gone"/>
+
+                </RadioGroup>
+
+                <TextView
+                    android:text="Producto/Presentación:"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp" />
 
                 <Spinner
                     android:id="@+id/spinnerProduct"
@@ -49,25 +85,6 @@
                     android:background="@drawable/spinner_background"
                     android:spinnerMode="dropdown" />
 
-                <!-- 🧾 Selector de presentación -->
-                <TextView
-                    android:text="Presentación:"
-                    android:textStyle="bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp" />
-
-                <Spinner
-                    android:id="@+id/spinnerPresentation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    android:layout_marginVertical="8dp"
-                    android:background="@drawable/spinner_background"
-                    android:spinnerMode="dropdown"
-                    android:visibility="gone" />
-
-                <!-- 🔢 Cantidad + Botón Agregar -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -91,7 +108,6 @@
                         android:layout_marginStart="8dp" />
                 </LinearLayout>
 
-                <!-- 🧺 Lista de productos -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerSaleItems"
                     android:layout_width="match_parent"
@@ -99,7 +115,6 @@
                     tools:listitem="@layout/item_sale_item"
                     tools:itemCount="3" />
 
-                <!-- 😶 Estado vacío -->
                 <LinearLayout
                     android:id="@+id/emptyStateLayout"
                     android:layout_width="match_parent"
@@ -131,7 +146,6 @@
         </ScrollView>
     </LinearLayout>
 
-    <!-- 🔹 Total + Guardar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

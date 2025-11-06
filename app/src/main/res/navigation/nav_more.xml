@@ -28,7 +28,19 @@
         android:id="@+id/reportListFragment"
         android:name="com.rige.dulcegest.ui.more.reports.ReportListFragment"
         android:label="Reportes"
-        tools:layout="@layout/fragment_report_list" />
+        tools:layout="@layout/fragment_report_list" >
+
+        <action
+            android:id="@+id/action_reportList_to_salesReportsFragment"
+            app:destination="@id/salesReportsFragment" />
+    </fragment>
+
+    <!-- =================== REPORTE DE VENTAS (Detalle) =================== -->
+    <fragment
+        android:id="@+id/salesReportsFragment"
+        android:name="com.rige.dulcegest.ui.more.reports.SalesReportsFragment"
+        android:label="Ventas Diarias y Semanales"
+        tools:layout="@layout/fragment_sales_reports" />
 
     <!-- =================== CONFIGURACIÓN =================== -->
     <fragment

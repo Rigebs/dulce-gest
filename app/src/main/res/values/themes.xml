@@ -1,9 +1,9 @@
 <resources>
     <style name="Theme.DulceGest" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Colores principales -->
-        <item name="colorPrimary">@color/chocolate_700</item>
+        <item name="colorPrimary">@color/golden</item>
         <item name="colorPrimaryVariant">@color/chocolate_900</item>
-        <item name="colorOnPrimary">@color/cream</item>
+        <item name="colorOnPrimary">@color/black</item>
 
         <!-- Colores secundarios / acento -->
         <item name="colorSecondary">@color/raspberry</item>
@@ -17,6 +17,9 @@
 
         <!-- Textos -->
         <item name="android:textColorPrimary">@color/text_primary_light</item>
+
+        <item name="colorControlNormal">#BC8F9D</item>
+
         <item name="android:textColorSecondary">@color/text_secondary_light</item>
 
         <!-- Estados -->
@@ -35,6 +38,10 @@
         <item name="bottomNavigationStyle">@style/Widget.DulceGest.BottomNav.Modern</item>
 
         <item name="colorSecondaryContainer">#BC8F9D</item>
+
+        <item name="android:progressBarStyleHorizontal">@style/Widget.DulceGest.ProgressBar.Horizontal</item>
+        <item name="searchViewStyle">@style/AppTheme.SearchView</item>
+
     </style>
 
     <!-- Overlay para diálogos -->
@@ -75,5 +82,30 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">24dp</item>
         <item name="cornerSizeTopRight">24dp</item>
+    </style>
+
+    <style name="CustomSearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="autoCompleteTextViewStyle">@style/CustomSearchAutoComplete</item>
+    </style>
+
+    <style name="CustomSearchAutoComplete" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">#A0A0A0</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="ThemeOverlay.DulceGest.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorHint">@color/gray</item>
+    </style>
+
+    <style name="Widget.DulceGest.ProgressBar.Horizontal" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressTint">@color/raspberry</item>
+        <item name="android:progressBackgroundTint">@color/text_secondary_light</item>
+        <item name="android:minHeight">6dp</item>
+    </style>
+
+    <style name="AppTheme.SearchView" parent="Widget.AppCompat.SearchView">
+        <item name="searchHintIcon">@null</item>
+        <item name="searchIcon">@null</item>
     </style>
 </resources>
