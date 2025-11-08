@@ -14,10 +14,7 @@ class RegisterSupplyPurchaseUseCase @Inject constructor(
     private val supplyRepo: SupplyRepository,
     private val shoppingListRepo: ShoppingListRepository
 ) {
-    /**
-     * Registra una compra, actualiza el stock y costo promedio del insumo,
-     * y elimina el insumo de la lista de compras.
-     */
+
     suspend fun execute(
         selectedSupply: Supply,
         purchaseQuantity: Double,
@@ -27,10 +24,9 @@ class RegisterSupplyPurchaseUseCase @Inject constructor(
     ) {
         val now = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
 
-        // 1. 🥇 Registrar la Compra
         val purchase = Purchase(
             supplyId = selectedSupply.id,
-            quantity = purchaseQuantity, // Cantidad en unidades de compra
+            quantity = purchaseQuantity,
             totalPrice = totalPrice,
             supplier = supplier,
             date = now,
@@ -38,19 +34,13 @@ class RegisterSupplyPurchaseUseCase @Inject constructor(
         )
         purchaseRepo.insert(purchase)
 
-        // 2. 🗑️ Eliminar ítem de la Lista de Compras
         shoppingListRepo.deleteItemBySupplyId(selectedSupply.id)
 
-        // 3. 📈 Lógica de Actualización de Stock y Costo Promedio (Centralizada aquí)
-
-        // Convertir cantidad de compra a unidades base
         val factor = selectedSupply.conversionFactor ?: 1.0
-        val addedQty = purchaseQuantity * factor // cantidad en unidades base
+        val addedQty = purchaseQuantity * factor
 
-        // Calcular costo por unidad base (precio de compra)
         val newUnitCost = totalPrice / addedQty
 
-        // Recalcular costo promedio ponderado
         val oldStock = selectedSupply.stockQty
         val oldCost = selectedSupply.avgCost
 
@@ -62,7 +52,6 @@ class RegisterSupplyPurchaseUseCase @Inject constructor(
 
         val newStock = oldStock + addedQty
 
-        // 4. 💾 Persistir la actualización del Insumo
         val updatedSupply = selectedSupply.copy(
             stockQty = newStock,
             avgCost = newAvgCost,

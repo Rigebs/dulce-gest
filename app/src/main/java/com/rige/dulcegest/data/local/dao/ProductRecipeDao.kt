@@ -31,4 +31,7 @@ interface ProductRecipeDao {
     @Transaction
     @Query("SELECT * FROM product_recipes WHERE product_id = :productId")
     fun getRecipeWithSupplies(productId: Long): LiveData<List<ProductRecipeWithSupply>>
+
+    @Query("DELETE FROM product_recipes")
+    suspend fun deleteAllProductRecipes()
 }

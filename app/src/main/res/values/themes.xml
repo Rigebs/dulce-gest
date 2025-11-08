@@ -41,7 +41,6 @@
 
         <item name="android:progressBarStyleHorizontal">@style/Widget.DulceGest.ProgressBar.Horizontal</item>
         <item name="searchViewStyle">@style/AppTheme.SearchView</item>
-
     </style>
 
     <!-- Overlay para diálogos -->

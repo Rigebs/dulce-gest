@@ -22,10 +22,6 @@ class ProductionRepository @Inject constructor(
     val allFullBatches: LiveData<List<ProductionBatchWithProductAndConsumptions>> =
         batchDao.getFullBatches()
 
-    suspend fun getAverageProductionCost(productId: Long): Double {
-        return batchDao.getAverageProductionCost(productId) ?: 0.0
-    }
-
     suspend fun getBatchesForProductInPeriod(
         productId: Long,
         startDate: String,
@@ -41,51 +37,35 @@ class ProductionRepository @Inject constructor(
 
     suspend fun getBatchWithConsumptions(id: Long) = batchDao.getBatchWithConsumptions(id)
 
-    /**
-     * Inserta un nuevo lote de producción y sus consumos, ajustando los stocks de productos e insumos.
-     * Esta es la transacción multi-DAO que garantiza la atomicidad.
-     */
+    suspend fun getLastFiveBatchesForProduct(productId: Long): List<ProductionBatch> {
+        return batchDao.getLastFiveBatchesForProduct(productId)
+    }
+
     suspend fun saveNewBatchTransaction(
         batch: ProductionBatch,
         consumptions: List<ProductionConsumption>
     ) {
-        // 1. Insertar el Lote (Cabecera)
         val batchId = batchDao.insert(batch)
 
-        // 2. Insertar los Consumos (Detalle)
         val list = consumptions.map { it.copy(batchId = batchId) }
         consumptionDao.insertAll(list)
 
-        // 3. Actualizar Stock del Producto Producido
         productDao.addStock(batch.productId, batch.quantityProduced)
 
-        // 4. Reducir Stock de Insumos
         list.forEach { consumption ->
             supplyDao.consumeStock(consumption.supplyId, consumption.qtyUsed)
         }
     }
 
-    /**
-     * Transacción para actualizar un lote de producción (cantidad) y recalcular su impacto.
-     * Esta transacción asume que solo la CANTIDAD y el COSTO total han cambiado proporcionalmente,
-     * pero no la lista de insumos.
-     *
-     * @param updatedBatch El objeto ProductionBatch con la nueva cantidad y costo.
-     * @param oldQty La cantidad original producida para calcular la diferencia de stock.
-     * @param updatedConsumptions La lista de consumos con las nuevas cantidades usadas y costos.
-     */
     suspend fun updateBatchTransaction(
         updatedBatch: ProductionBatch,
         oldQty: Double,
         updatedConsumptions: List<ProductionConsumption>
     ) {
-        // 1. Calcular la diferencia de stock del producto terminado.
         val qtyDelta = updatedBatch.quantityProduced - oldQty
 
-        // 2. Actualizar el Lote (Cabecera).
         batchDao.update(updatedBatch)
 
-        // 3. Ajustar Stock del Producto Producido.
         if (qtyDelta != 0.0) {
             if (qtyDelta > 0) {
                 productDao.addStock(updatedBatch.productId, qtyDelta)

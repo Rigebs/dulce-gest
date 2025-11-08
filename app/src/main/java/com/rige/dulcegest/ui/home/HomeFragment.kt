@@ -17,9 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment :
     BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
-    // ───────────────────────────────
-    // 🔹 Configuración general
-    // ───────────────────────────────
     override val showToolbar: Boolean = false
 
     private val saleViewModel: SaleViewModel by viewModels()
@@ -27,9 +24,6 @@ class HomeFragment :
     private val homeViewModel: HomeViewModel by viewModels()
     private val purchaseViewModel: PurchaseViewModel by viewModels()
 
-    // ───────────────────────────────
-    // 🔹 Ciclo de vida
-    // ───────────────────────────────
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupObservers()
@@ -37,11 +31,7 @@ class HomeFragment :
         setupDailyTip()
     }
 
-    // ───────────────────────────────
-    // 🔹 Observadores
-    // ───────────────────────────────
     private fun setupObservers() {
-        // Ventas recientes
         homeViewModel.recentSales.observe(viewLifecycleOwner) { sales ->
             binding.rvRecentSales.apply {
                 layoutManager = LinearLayoutManager(requireContext())
@@ -49,29 +39,24 @@ class HomeFragment :
             }
         }
 
-        // 🟢 Ganancia Neta Semanal (Llamada al nuevo LiveData del ViewModel)
         homeViewModel.weeklyNetProfit.observe(viewLifecycleOwner) { netProfit ->
             binding.txtWeeklyProfit.text = "S/ %.2f".format(netProfit ?: 0.0)
         }
 
-        // Ventas semanales
         saleViewModel.getTotalSalesThisWeek().observe(viewLifecycleOwner) { weeklySales ->
             val total = weeklySales ?: 0.0
             binding.txtWeeklySales.text = "S/ %.2f".format(total)
             updateWeeklyGoal(total)
         }
 
-        // Gastos semanales
         expenseViewModel.getTotalExpensesThisWeek().observe(viewLifecycleOwner) { weeklyExpenses ->
             binding.txtWeeklyExpenses.text = "S/ %.2f".format(weeklyExpenses ?: 0.0)
         }
 
-        // Compras semanales
         purchaseViewModel.getTotalPurchasesThisWeek().observe(viewLifecycleOwner) { weeklyPurchases ->
             binding.txtWeeklyPurchases.text = "S/ %.2f".format(weeklyPurchases ?: 0.0)
         }
 
-        // Insumos con poco stock
         homeViewModel.lowStockSupplies.observe(viewLifecycleOwner) { lowStock ->
             if (lowStock.isEmpty()) {
                 binding.cardLowStock.visibility = View.GONE
@@ -83,14 +68,6 @@ class HomeFragment :
         }
     }
 
-    // ───────────────────────────────
-    // 🔹 Cálculo de ganancia semanal (Eliminada la implementación compleja)
-    // ───────────────────────────────
-    // 🗑️ updateWeeklyProfit (Esta función se ha movido al Use Case / ViewModel)
-
-    // ───────────────────────────────
-    // 🔹 Objetivo semanal
-    // ───────────────────────────────
     private fun updateWeeklyGoal(weeklySales: Double) {
         val goalAmount = 100.0
         val progress = ((weeklySales / goalAmount) * 100).coerceAtMost(100.0)
@@ -101,9 +78,6 @@ class HomeFragment :
         binding.txtGoalProgress.text = "%.0f%%".format(progress)
     }
 
-    // ───────────────────────────────
-    // 🔹 Acciones rápidas
-    // ───────────────────────────────
     private fun setupQuickActions() {
         val mainActivity = requireActivity() as MainActivity
 
@@ -124,9 +98,6 @@ class HomeFragment :
         }
     }
 
-    // ───────────────────────────────
-    // 🔹 Tip del día
-    // ───────────────────────────────
     private fun setupDailyTip() {
         val tips = listOf(
             "Revisa productos con stock bajo para evitar rupturas.",

@@ -14,45 +14,51 @@ class CalculateWeeklyNetProfitUseCase @Inject constructor(
     private val productionRepo: ProductionRepository,
     private val expenseRepo: ExpenseRepository
 ) {
-    /**
-     * Calcula la ganancia neta de la semana procesando las ventas, restando el costo de producción
-     * de los productos vendidos, y finalmente restando los gastos generales semanales.
-     *
-     * @param salesOfThisWeek Lista de ventas completas de la semana actual.
-     * @return El valor de la Ganancia Neta de la semana.
-     */
+
     suspend fun execute(salesOfThisWeek: List<SaleWithItems>): Double {
         var totalGrossProfit = 0.0
 
         for (sale in salesOfThisWeek) {
             for (item in sale.items) {
-                // 1. Obtener el Producto
-                val product = productRepo.getProductByIdSuspend(item.productId) // Asume que ProductRepository tiene este método
+
+                val product = productRepo.getProductByIdSuspend(item.productId)
 
                 if (product != null) {
-                    // 2. Obtener el Costo de Producción Promedio
-                    // Esta llamada es la que consume más tiempo (IO)
-                    val unitCost = productionRepo.getAverageProductionCost(product.id) // Asume este método en ProductionRepository
 
-                    // 3. Cálculo de Costo y Ganancia Bruta por ítem
-                    // Cantidad vendida en unidades base: qty * factor de conversión a base
-                    val presentationQuantity = item.presentationQuantity ?: 1.0
+                    val unitCost = calculateAverageUnitCost(product.id)
+
+                    val presentationQuantity = item.presentationQuantity
+
                     val totalCost = unitCost * presentationQuantity * item.qty
 
-                    // Ganancia bruta = (Precio de venta * Cantidad vendida) - Costo total
                     val grossProfitPerItem = (item.unitPrice * item.qty) - totalCost
                     totalGrossProfit += grossProfitPerItem
                 }
             }
         }
 
-        // 4. Obtener Gastos Semanales
-        val weeklyExpenses = expenseRepo.getTotalExpensesThisWeekSuspend() ?: 0.0
+        val weeklyExpenses = expenseRepo.getTotalExpensesThisWeekSuspend()
 
-        // 5. Cálculo de Ganancia Neta
         val netProfit = totalGrossProfit - weeklyExpenses
 
-        // 6. Redondear el resultado
         return round(netProfit * 100) / 100.0
+    }
+
+    private suspend fun calculateAverageUnitCost(productId: Long): Double {
+
+        val lastBatches = productionRepo.getLastFiveBatchesForProduct(productId)
+
+        if (lastBatches.isEmpty()) {
+            return 0.0
+        }
+
+        val totalCostSum: Double = lastBatches.sumOf { it.totalCost }
+
+        val totalQuantitySum: Double = lastBatches.sumOf { it.quantityProduced.toDouble() }
+
+        if (totalQuantitySum == 0.0) {
+            return 0.0
+        }
+        return totalCostSum / totalQuantitySum
     }
 }

@@ -22,4 +22,7 @@ interface ShoppingListDao {
 
     @Update
     suspend fun update(item: ShoppingListItem)
+
+    @Query("DELETE FROM shopping_list_items")
+    suspend fun deleteAllShoppingListItems()
 }

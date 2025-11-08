@@ -2,6 +2,7 @@ package com.rige.dulcegest.ui.products.list
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,8 @@ class ProductListFragment :
     private val productViewModel: ProductViewModel by activityViewModels()
     private lateinit var adapter: ProductAdapter
 
+    private var currentSearchQuery: String? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -37,8 +40,10 @@ class ProductListFragment :
             adapter = this@ProductListFragment.adapter
         }
 
-        productViewModel.filteredProducts.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+        productViewModel.filteredProducts.observe(viewLifecycleOwner) { products ->
+            adapter.submitList(products)
+            updateEmptyState(products.isEmpty(), currentSearchQuery)
+            binding.swipeRefreshLayout.isRefreshing = false
         }
 
         productViewModel.filterProducts(null)
@@ -46,9 +51,38 @@ class ProductListFragment :
         binding.fabAddProduct.setOnClickListener {
             findNavController().navigate(R.id.action_productListFragment_to_productFormFragment)
         }
+
+        binding.btnClearSearch.setOnClickListener {
+            productViewModel.filterProducts(null)
+            currentSearchQuery = null
+            clearSearchViewText()
+        }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            productViewModel.filterProducts(currentSearchQuery)
+        }
+    }
+
+    private fun updateEmptyState(isEmpty: Boolean, searchQuery: String?) {
+        binding.emptyStateContainer.isVisible = isEmpty
+        binding.swipeRefreshLayout.isVisible = !isEmpty
+
+        if (isEmpty) {
+            if (!searchQuery.isNullOrBlank()) {
+                binding.emptyStateTitle.text = getString(R.string.empty_search_title)
+                binding.emptyStateMessage.text = getString(R.string.empty_search_message)
+                binding.btnClearSearch.isVisible = true
+            }
+            else {
+                binding.emptyStateTitle.text = getString(R.string.empty_list_title)
+                binding.emptyStateMessage.text = getString(R.string.empty_list_message)
+                binding.btnClearSearch.isVisible = false
+            }
+        }
     }
 
     override fun onQueryTextChange(newText: String?) {
+        currentSearchQuery = newText
         productViewModel.filterProducts(newText)
     }
 

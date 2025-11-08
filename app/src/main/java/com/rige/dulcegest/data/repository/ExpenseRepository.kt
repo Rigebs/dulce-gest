@@ -15,7 +15,5 @@ class ExpenseRepository @Inject constructor(
 
     fun getTotalExpensesThisWeek() = dao.getTotalExpensesThisWeek()
 
-    suspend fun getTotalExpensesThisWeekSuspend(): Double? {
-        return dao.getTotalExpensesThisWeekSuspend()
-    }
+    suspend fun getTotalExpensesThisWeekSuspend(): Double = dao.getTotalExpensesThisWeekSuspend()
 }

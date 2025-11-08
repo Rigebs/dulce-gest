@@ -3,12 +3,14 @@ package com.rige.dulcegest.ui
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.SearchView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var productsNavHost: NavHostFragment
     private lateinit var financesNavHost: NavHostFragment
     private lateinit var moreNavHost: NavHostFragment
+    private var currentSearchView: SearchView? = null
 
     private var activeNavHost: NavHostFragment? = null
 
@@ -45,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (savedInstanceState == null) {
-
+            // ... (CÓDIGO EXISTENTE PARA LA PRIMERA VEZ)
             homeNavHost = createNavHost(R.navigation.nav_home)
             productsNavHost = createNavHost(R.navigation.nav_products)
             financesNavHost = createNavHost(R.navigation.nav_finances)
@@ -59,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             }
             activeNavHost = homeNavHost
         } else {
+            // ... (CÓDIGO EXISTENTE PARA LA RESTAURACIÓN)
             homeNavHost =
                 supportFragmentManager.findFragmentByTag("home") as NavHostFragment
             productsNavHost =
@@ -70,6 +74,31 @@ class MainActivity : AppCompatActivity() {
 
             activeNavHost = listOf(homeNavHost, productsNavHost, financesNavHost, moreNavHost)
                 .firstOrNull { !it.isHidden }
+
+            // ✨ NUEVA LÓGICA DE RESTAURACIÓN CON CALLBACK
+            activeNavHost?.let { navHost ->
+                supportFragmentManager.registerFragmentLifecycleCallbacks(
+                    object : FragmentManager.FragmentLifecycleCallbacks() {
+                        override fun onFragmentStarted(
+                            fm: FragmentManager,
+                            f: Fragment
+                        ) {
+                            super.onFragmentStarted(fm, f)
+                            if (f == navHost) {
+                                // Ejecutar la actualización después de que el Fragmento hijo
+                                // (el actual) haya comenzado.
+                                // Usamos post para asegurarnos de que se ejecute después de cualquier
+                                // restauración pendiente de Views.
+                                binding.navHostContainer.post {
+                                    updateToolbarForCurrentFragment(navHost)
+                                    // Remover el callback inmediatamente después de su uso.
+                                    supportFragmentManager.unregisterFragmentLifecycleCallbacks(this)
+                                }
+                            }
+                        }
+                    }, false
+                )
+            }
         }
 
         setupBottomNav()
@@ -137,21 +166,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun clearSearchViewText() {
+        currentSearchView?.apply {
+            setQuery("", false)
+            clearFocus()
+        }
+    }
+
     private fun configureSearchView() {
         val searchItem = binding.mainToolbar.menu.findItem(R.id.action_search)
-        val searchView = searchItem?.actionView as? androidx.appcompat.widget.SearchView
+        val searchView = searchItem?.actionView as? SearchView
+
+        currentSearchView = searchView
 
         searchView?.queryHint = "Buscar..."
 
         val currentFragment = activeNavHost?.childFragmentManager?.primaryNavigationFragment
 
-        searchView?.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // Si el fragmento activo implementa la interfaz de búsqueda, le pasamos el query
                 if (currentFragment is BaseFragment.SearchableFragment) {
                     currentFragment.onQueryTextSubmit(query)
                 } else {
-                    // Comportamiento por defecto si el fragmento no maneja la búsqueda
                     query?.let {
                         Toast.makeText(this@MainActivity, "Buscando: $it", Toast.LENGTH_SHORT).show()
                     }

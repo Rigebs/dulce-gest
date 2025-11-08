@@ -28,4 +28,7 @@ interface ProductVariantDao {
 
     @Query("DELETE FROM product_variants WHERE product_id = :productId")
     suspend fun deleteByProductId(productId: Long)
+
+    @Query("DELETE FROM product_variants")
+    suspend fun deleteAllProductVariants()
 }

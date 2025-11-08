@@ -16,8 +16,11 @@ interface ExpenseDao {
     @Query("SELECT * FROM expenses WHERE category = :category ORDER BY date DESC")
     suspend fun getByCategory(category: String): List<Expense>
 
-    @Query("SELECT SUM(amount) FROM expenses WHERE date BETWEEN :start AND :end")
-    fun getTotalExpensesBetween(start: String, end: String): LiveData<Double?>
+    @Query("SELECT IFNULL(SUM(amount), 0) FROM expenses WHERE date BETWEEN :start AND :end")
+    fun getTotalExpensesBetween(start: String, end: String): LiveData<Double>
+
+    @Query("SELECT IFNULL(SUM(amount), 0) FROM expenses WHERE DATE(date) >= DATE('now', '-6 days', 'localtime')")
+    suspend fun getTotalExpensesThisWeekSuspend(): Double
 
     @Insert
     suspend fun insert(expense: Expense): Long
@@ -36,7 +39,4 @@ interface ExpenseDao {
 
     @Query("DELETE FROM expenses")
     suspend fun deleteAllExpenses()
-
-    @Query("SELECT IFNULL(SUM(amount), 0) FROM expenses WHERE DATE(date) >= DATE('now', '-6 days', 'localtime')")
-    suspend fun getTotalExpensesThisWeekSuspend(): Double?
 }

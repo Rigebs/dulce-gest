@@ -11,4 +11,13 @@
         <item>unidad(es)</item>
         <item>porción</item>
     </string-array>
+
+    <string name="empty_list_title">Lista vacía</string>
+    <string name="empty_list_message">Toca el botón \'+\' para añadir.</string>
+
+    <string name="empty_search_title">Sin Resultados</string>
+    <string name="empty_search_message">No encontramos coincidencias. Prueba con otra palabra clave.</string>
+
+    <string name="empty_filter_range_title">Sin Registros en el Período</string>
+    <string name="empty_filter_range_message">El rango de fechas seleccionado no contiene registros. Ajusta el período o borra el filtro.</string>
 </resources>

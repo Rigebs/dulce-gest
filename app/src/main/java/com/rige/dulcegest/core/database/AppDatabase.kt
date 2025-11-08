@@ -14,7 +14,6 @@ import com.rige.dulcegest.data.local.dao.ProductionConsumptionDao
 import com.rige.dulcegest.data.local.dao.PurchaseDao
 import com.rige.dulcegest.data.local.dao.SaleDao
 import com.rige.dulcegest.data.local.dao.SaleItemDao
-import com.rige.dulcegest.data.local.dao.SettingsDao
 import com.rige.dulcegest.data.local.dao.ShoppingListDao
 import com.rige.dulcegest.data.local.dao.SupplyDao
 import com.rige.dulcegest.data.local.entities.Expense
@@ -61,7 +60,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun saleItemDao(): SaleItemDao
     abstract fun expenseDao(): ExpenseDao
     abstract fun productVariantDao(): ProductVariantDao
-    abstract fun settingsDao(): SettingsDao
     abstract fun shoppingListDao(): ShoppingListDao
 
     companion object {

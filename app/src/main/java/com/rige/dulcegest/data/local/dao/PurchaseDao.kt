@@ -34,4 +34,7 @@ interface PurchaseDao {
     WHERE date >= date('now', '-7 day')
 """)
     fun getTotalThisWeek(): LiveData<Double>
+
+    @Query("DELETE FROM purchases")
+    suspend fun deleteAllPurchases()
 }

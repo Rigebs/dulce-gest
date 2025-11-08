@@ -8,6 +8,7 @@ import com.rige.dulcegest.data.repository.ExpenseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.launch
+
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
     private val repo: ExpenseRepository

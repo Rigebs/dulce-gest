@@ -17,6 +17,7 @@ import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.TextStyle
 import java.util.Locale
 import javax.inject.Inject
+
 @HiltViewModel
 class SalesReportsViewModel @Inject constructor(
     private val saleRepository: SaleRepository
@@ -85,15 +86,14 @@ class SalesReportsViewModel @Inject constructor(
                 val startStr = effectiveStart.format(dateFormatterDB)
                 val endStr = endOfWeek.format(dateFormatterDB)
 
-                // Usamos el método de rango de fechas del Repository
-                val total = saleRepository.getTotalSalesByDateRange(startStr, endStr)
+                val total = saleRepository.getTotalSalesBetweenSuspend(startStr, endStr)
 
                 val key = "${effectiveStart.format(dateFormatterUI)} - ${endOfWeek.format(dateFormatterUI)}"
 
                 monthlyData.add(
                     DailySalesSummary(
                         dateOrPeriodLabel = key,
-                        totalSales = total ?: 0.00,
+                        totalSales = total,
                         date = startStr
                     )
                 )
@@ -116,7 +116,7 @@ class SalesReportsViewModel @Inject constructor(
                 todayStr -> "Hoy"
                 yesterdayStr -> "Ayer"
                 dayBeforeYesterdayStr -> "Anteayer"
-                else -> "${dateParsed.getDayOfWeek().getDisplayName(
+                else -> "${dateParsed.dayOfWeek.getDisplayName(
                     TextStyle.FULL,
                     Locale("es", "ES")
                 ).replaceFirstChar { it.uppercase() }} (${dateParsed.format(dateFormatterUI)})"

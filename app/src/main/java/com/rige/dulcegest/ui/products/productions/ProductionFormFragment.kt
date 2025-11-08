@@ -26,11 +26,8 @@ class ProductionFormFragment :
     override val showToolbar = true
     override val showBackButton = true
 
-    // Se mantiene para obtener la lista de productos y la receta
     private val productViewModel: ProductViewModel by activityViewModels()
     private val productionViewModel: ProductionViewModel by activityViewModels()
-    // ⚠️ SupplyViewModel ya NO se necesita aquí.
-
     private val args: ProductionFormFragmentArgs by navArgs()
 
     private var productList = emptyList<Product>()

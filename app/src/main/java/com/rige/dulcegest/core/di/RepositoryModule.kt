@@ -10,7 +10,6 @@ import com.rige.dulcegest.data.local.dao.ProductionConsumptionDao
 import com.rige.dulcegest.data.local.dao.PurchaseDao
 import com.rige.dulcegest.data.local.dao.SaleDao
 import com.rige.dulcegest.data.local.dao.SaleItemDao
-import com.rige.dulcegest.data.local.dao.SettingsDao
 import com.rige.dulcegest.data.local.dao.ShoppingListDao
 import com.rige.dulcegest.data.local.dao.SupplyDao
 import com.rige.dulcegest.data.repository.ExpenseRepository
@@ -58,8 +57,13 @@ object RepositoryModule {
         batchDao: ProductionBatchDao,
         consumptionDao: ProductionConsumptionDao,
         productDao: ProductDao,
-        supplyDao: SupplyDao
-    ): ProductionRepository = ProductionRepository(batchDao, consumptionDao, productDao, supplyDao)
+        supplyDao: SupplyDao,
+    ): ProductionRepository = ProductionRepository(
+        batchDao,
+        consumptionDao,
+        productDao,
+        supplyDao
+    )
 
     @Provides
     @Singleton
@@ -79,8 +83,34 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideSettingsRepository(
-        dao: SettingsDao
-    ): SettingsRepository = SettingsRepository(dao)
+        productionConsumptionDao: ProductionConsumptionDao,
+        saleItemDao: SaleItemDao,
+        productVariantDao: ProductVariantDao,
+        productPresentationDao: ProductPresentationDao,
+        productRecipeDao: ProductRecipeDao,
+        shoppingListDao: ShoppingListDao,
+        productionBatchDao: ProductionBatchDao,
+        saleDao: SaleDao,
+        purchaseDao: PurchaseDao,
+        productDao: ProductDao,
+        supplyDao: SupplyDao,
+        expenseDao: ExpenseDao
+    ): SettingsRepository {
+        return SettingsRepository(
+            productionConsumptionDao,
+            saleItemDao,
+            productVariantDao,
+            productPresentationDao,
+            productRecipeDao,
+            shoppingListDao,
+            productionBatchDao,
+            saleDao,
+            purchaseDao,
+            productDao,
+            supplyDao,
+            expenseDao
+        )
+    }
 
     @Provides
     @Singleton

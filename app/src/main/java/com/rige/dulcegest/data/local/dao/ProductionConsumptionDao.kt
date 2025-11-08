@@ -20,4 +20,7 @@ interface ProductionConsumptionDao {
 
     @Query("DELETE FROM production_consumptions WHERE batch_id = :batchId")
     suspend fun deleteByBatchId(batchId: Long)
+
+    @Query("DELETE FROM production_consumptions")
+    suspend fun deleteAllProductionConsumptions()
 }

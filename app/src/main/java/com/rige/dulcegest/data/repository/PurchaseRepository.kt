@@ -14,19 +14,34 @@ class PurchaseRepository @Inject constructor(
 
     suspend fun getById(id: Long): Purchase? = dao.getById(id)
 
-    /**
-     * Inserta una nueva compra y actualiza el stock y el costo promedio del insumo.
-     * Esta operación es la transacción de negocio clave para las compras.
-     */
     suspend fun insert(purchase: Purchase): Long {
-        // 1. Insertar el registro de la compra
+
         val purchaseId = dao.insert(purchase)
 
-        // 2. Actualizar stock y costo promedio en la tabla Supply
-        supplyDao.updateStockAndCostAfterPurchase(
-            id = purchase.supplyId,
-            quantity = purchase.quantity,
-            totalPrice = purchase.totalPrice
+        val currentSupply = supplyDao.getByIdOnce(purchase.supplyId)
+            ?: throw IllegalStateException("Supply con ID ${purchase.supplyId} no encontrada")
+
+        val factor = currentSupply.conversionFactor ?: 1.0
+        val addedQty = purchase.quantity * factor
+
+        val newUnitCost = purchase.totalPrice / addedQty
+
+        val oldStock = currentSupply.stockQty
+        val oldCost = currentSupply.avgCost
+        val totalStockAfterPurchase = oldStock + addedQty
+
+        val newAvgCost = if (totalStockAfterPurchase > 0) {
+            ((oldStock * oldCost) + (addedQty * newUnitCost)) / totalStockAfterPurchase
+        } else {
+            newUnitCost
+        }
+
+        val newStock = totalStockAfterPurchase
+
+        supplyDao.updateStockAndCost(
+            id = currentSupply.id,
+            newStock = newStock,
+            newAvgCost = newAvgCost
         )
         return purchaseId
     }

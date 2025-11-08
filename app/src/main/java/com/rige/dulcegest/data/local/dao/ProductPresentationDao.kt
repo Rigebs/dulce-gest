@@ -21,4 +21,7 @@ interface ProductPresentationDao {
 
     @Query("DELETE FROM product_presentations WHERE product_id = :productId")
     suspend fun deleteByProductId(productId: Long)
+
+    @Query("DELETE FROM product_presentations")
+    suspend fun deleteAllProductPresentations()
 }

@@ -21,6 +21,13 @@ abstract class BaseFragment<VB : ViewBinding>(
         fun onQueryTextSubmit(query: String?)
     }
 
+    protected val mainActivity: MainActivity
+        get() = requireActivity() as MainActivity
+
+    protected fun clearSearchViewText() {
+        mainActivity.clearSearchViewText()
+    }
+
     open val showToolbar: Boolean = true
     open val toolbarTitle: String? = null
     open val showBackButton: Boolean = false
