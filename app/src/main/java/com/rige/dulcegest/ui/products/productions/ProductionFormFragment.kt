@@ -48,7 +48,6 @@ class ProductionFormFragment :
             binding.inputNotes.visibility = View.GONE
             binding.btnSave.text = "Actualizar cantidad"
         } else {
-            // Observar el resultado del guardado solo en modo registro
             observeSaveResult()
         }
     }
@@ -68,9 +67,7 @@ class ProductionFormFragment :
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerProduct.adapter = adapter
 
-            // Si es edición, seleccionamos el producto correcto después de cargar la lista
             if (isEditMode) {
-                // La carga del lote ya maneja la selección
             } else {
                 binding.spinnerProduct.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

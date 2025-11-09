@@ -22,13 +22,10 @@ class HomeViewModel @Inject constructor(
 
     val recentSales: LiveData<List<SaleWithItems>> = saleRepo.lastFiveSales
 
-    // 1. Fuente de datos para el cálculo (Ventas de la semana)
     private val salesOfThisWeek: LiveData<List<SaleWithItems>> = saleRepo.salesOfThisWeek
 
     val lowStockSupplies: LiveData<List<Supply>> = supplyRepo.getLowStock()
 
-    // 2. 🟢 Nuevo LiveData para la Ganancia Neta calculado usando switchMap
-    // Cada vez que 'salesOfThisWeek' cambia, se dispara el liveData builder
     val weeklyNetProfit: LiveData<Double?> = salesOfThisWeek.switchMap { salesList ->
         liveData {
             if (salesList.isNotEmpty()) {

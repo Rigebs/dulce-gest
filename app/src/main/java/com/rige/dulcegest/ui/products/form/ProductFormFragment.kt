@@ -311,14 +311,12 @@ class ProductFormFragment :
             return
         }
 
-        // 🟢 Recolectar listas finales desde los adapters
         val recipeList = supplyAdapter.getItems().map { it.recipe }
         val presentations = presentationAdapter.getItems()
         val variants = variantAdapter.getItems()
 
-        // 🟢 Llamada al ViewModel con los datos recolectados, delegando la lógica al Use Case
         productViewModel.saveProduct(
-            currentProduct, // Pasa el objeto Product base (null si es nuevo)
+            currentProduct,
             name,
             unit,
             price,

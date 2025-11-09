@@ -1,10 +1,12 @@
 package com.rige.dulcegest.ui.products.form
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.rige.dulcegest.core.utils.toSoles
 import com.rige.dulcegest.data.local.entities.ProductPresentation
 import com.rige.dulcegest.databinding.ItemProductPresentationBinding
 
@@ -18,8 +20,15 @@ class ProductPresentationAdapter(
         fun bind(item: ProductPresentation) {
             binding.txtPresentationName.text = item.name
             binding.txtPresentationQuantity.text = "${item.quantity} ${item.unit}"
-            binding.txtPresentationPrice.text = "S/. ${item.price}"
-            binding.btnRemove.setOnClickListener { onRemove(item) }
+            binding.txtPresentationPrice.text = item.price.toSoles()
+
+            if (item.id != 0L) {
+                binding.btnRemove.visibility = View.GONE
+                binding.btnRemove.setOnClickListener(null)
+            } else {
+                binding.btnRemove.visibility = View.VISIBLE
+                binding.btnRemove.setOnClickListener { onRemove(item) }
+            }
         }
     }
 

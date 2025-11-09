@@ -14,7 +14,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Nombre -->
             <EditText
                 android:id="@+id/inputName"
                 android:layout_width="match_parent"
@@ -23,7 +22,12 @@
                 android:inputType="textCapWords"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Unidad -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Unidad de medida"
+                android:layout_marginBottom="12dp"/>
+
             <Spinner
                 android:id="@+id/spinnerUnit"
                 android:layout_width="match_parent"
@@ -33,20 +37,29 @@
                 android:background="@drawable/spinner_background"
                 android:spinnerMode="dropdown" />
 
-            <EditText
-                android:id="@+id/input_purchase_unit"
-                android:hint="Unidad de compra (ej. caja)"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/purchase_unit_prompt"
+                android:layout_marginBottom="12dp"/>
+
+            <Spinner
+                android:id="@+id/spinnerPurchaseUnit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/spinner_background"
+                android:spinnerMode="dropdown" />
 
             <EditText
                 android:id="@+id/input_conversion_factor"
                 android:hint="Factor de conversión (ej. 6)"
                 android:inputType="numberDecimal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
 
-            <!-- Stock -->
             <EditText
                 android:id="@+id/inputStock"
                 android:layout_width="match_parent"
@@ -55,7 +68,6 @@
                 android:inputType="numberDecimal"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Notas -->
             <EditText
                 android:id="@+id/inputNotes"
                 android:layout_width="match_parent"
@@ -65,7 +77,6 @@
                 android:minLines="2"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Botón -->
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"

@@ -22,7 +22,7 @@ class ProductAdapter(
 
         fun bind(product: Product) {
             binding.txtProductName.text = product.name
-            binding.txtProductInfo.text = "U.M.: ${product.unit}  |  Precio: $${product.price.toSoles()}"
+            binding.txtProductInfo.text = "U.M.: ${product.unit}  |  Precio: ${product.price.toSoles()}"
             binding.txtStock.text = "Stock: ${product.stockQty}"
 
             if (!product.imagePath.isNullOrEmpty()) {

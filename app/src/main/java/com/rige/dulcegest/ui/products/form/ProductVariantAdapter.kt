@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rige.dulcegest.R
+import com.rige.dulcegest.core.utils.toSoles
 import com.rige.dulcegest.data.local.entities.ProductVariant
 
 class ProductVariantAdapter(
@@ -22,7 +23,7 @@ class ProductVariantAdapter(
 
         fun bind(variant: ProductVariant) {
             name.text = variant.name
-            price.text = "S/ ${variant.price}"
+            price.text = variant.price.toSoles()
             removeBtn.setOnClickListener { onRemove(variant) }
         }
     }

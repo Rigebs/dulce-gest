@@ -36,8 +36,7 @@ class RegisterSupplyPurchaseUseCase @Inject constructor(
 
         shoppingListRepo.deleteItemBySupplyId(selectedSupply.id)
 
-        val factor = selectedSupply.conversionFactor ?: 1.0
-        val addedQty = purchaseQuantity * factor
+        val addedQty = purchaseQuantity
 
         val newUnitCost = totalPrice / addedQty
 

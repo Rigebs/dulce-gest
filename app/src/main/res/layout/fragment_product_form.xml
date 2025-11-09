@@ -284,8 +284,7 @@
                         app:icon="@drawable/ic_add"
                         app:iconPadding="8dp"
                         android:paddingHorizontal="16dp"
-                        android:backgroundTint="?attr/colorPrimary"
-                        android:textColor="@android:color/white"/>
+                        android:backgroundTint="@color/gray"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

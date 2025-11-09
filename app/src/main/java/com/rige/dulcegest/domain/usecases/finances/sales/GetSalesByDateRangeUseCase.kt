@@ -9,6 +9,8 @@ class GetSalesByDateRangeUseCase @Inject constructor(
     private val saleDao: SaleDao
 ) {
     fun execute(startDate: String, endDate: String): Flow<List<Sale>> {
+        println(startDate)
+        println(endDate)
         return saleDao.getSalesByDateRange(startDate, endDate)
     }
 }

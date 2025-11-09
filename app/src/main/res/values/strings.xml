@@ -12,6 +12,14 @@
         <item>porción</item>
     </string-array>
 
+    <string-array name="purchase_units_array">
+        <item>kg</item>
+        <item>litro</item>
+        <item>caja</item>
+        <item>saco</item>
+        <item>unidad(es)</item>
+    </string-array>
+
     <string name="empty_list_title">Lista vacía</string>
     <string name="empty_list_message">Toca el botón \'+\' para añadir.</string>
 
@@ -20,4 +28,5 @@
 
     <string name="empty_filter_range_title">Sin Registros en el Período</string>
     <string name="empty_filter_range_message">El rango de fechas seleccionado no contiene registros. Ajusta el período o borra el filtro.</string>
+    <string name="purchase_unit_prompt">Unidad de compra (Opcional)</string>
 </resources>

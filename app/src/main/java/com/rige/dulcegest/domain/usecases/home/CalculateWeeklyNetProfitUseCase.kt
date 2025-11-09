@@ -54,7 +54,7 @@ class CalculateWeeklyNetProfitUseCase @Inject constructor(
 
         val totalCostSum: Double = lastBatches.sumOf { it.totalCost }
 
-        val totalQuantitySum: Double = lastBatches.sumOf { it.quantityProduced.toDouble() }
+        val totalQuantitySum: Double = lastBatches.sumOf { it.quantityProduced }
 
         if (totalQuantitySum == 0.0) {
             return 0.0

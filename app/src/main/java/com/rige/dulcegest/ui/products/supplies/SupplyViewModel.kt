@@ -1,6 +1,7 @@
 package com.rige.dulcegest.ui.products.supplies
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rige.dulcegest.data.local.entities.Supply
@@ -16,14 +17,34 @@ class SupplyViewModel @Inject constructor(
     private val saveSupplyUseCase: SaveSupplyUseCase
 ) : ViewModel() {
 
+    private val _allSupplies: LiveData<List<Supply>> = repo.allSupplies
+
+    private val _filteredSupplies = MutableLiveData<List<Supply>>()
+    val filteredSupplies: LiveData<List<Supply>> = _filteredSupplies
+
     val supplies = repo.allSupplies
+
+    init {
+        _allSupplies.observeForever { newList ->
+            _filteredSupplies.value = newList
+        }
+    }
+
+    fun filterSupplies(query: String?) { // <-- Añadido
+        val currentList = _allSupplies.value ?: return
+
+        val results = if (query.isNullOrBlank()) {
+            currentList
+        } else {
+            currentList.filter {
+                it.name.contains(query, ignoreCase = true)
+            }
+        }
+        _filteredSupplies.value = results
+    }
 
     fun getSupplyById(id: Long): LiveData<Supply?> = repo.getById(id)
 
-    /**
-     * 🟢 Centraliza la lógica de insertar/actualizar en el Use Case.
-     * La UI solo le pasa los datos crudos.
-     */
     fun saveSupply(
         id: Long?,
         name: String,
@@ -33,8 +54,6 @@ class SupplyViewModel @Inject constructor(
         conversionFactor: Double?,
         notes: String?
     ) = viewModelScope.launch {
-        // La validación, construcción del objeto Supply y la elección de insert/update
-        // se manejan internamente en el Use Case.
         saveSupplyUseCase.execute(
             id ?: 0L,
             name,

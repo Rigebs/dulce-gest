@@ -46,7 +46,11 @@ interface SaleDao {
     """)
     fun getSalesThisWeek(): LiveData<List<SaleWithItems>>
 
-    @Query("SELECT IFNULL(SUM(total_amount), 0) FROM sales WHERE sale_date BETWEEN :startDate AND :endDate || ' 23:59:59'")
+    @Query("""
+        SELECT IFNULL(SUM(total_amount), 0) FROM sales 
+        WHERE strftime('%Y-%m-%d', sale_date) >= :startDate 
+          AND strftime('%Y-%m-%d', sale_date) <= :endDate
+    """)
     fun getTotalSalesBetween(startDate: String, endDate: String): LiveData<Double>
 
     // Dentro de @Dao interface SaleDao
@@ -60,7 +64,12 @@ interface SaleDao {
     @Query("DELETE FROM sales")
     suspend fun deleteAllSales()
 
-    @Query("SELECT * FROM sales WHERE sale_date BETWEEN :startDate AND :endDate ORDER BY sale_date DESC")
+    @Query("""
+        SELECT * FROM sales 
+        WHERE strftime('%Y-%m-%d', sale_date) >= :startDate 
+          AND strftime('%Y-%m-%d', sale_date) <= :endDate 
+        ORDER BY sale_date DESC
+    """)
     fun getSalesByDateRange(startDate: String, endDate: String): Flow<List<Sale>>
 
     @Query("""  
