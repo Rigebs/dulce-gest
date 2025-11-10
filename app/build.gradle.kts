@@ -70,4 +70,9 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.base)
     implementation(libs.coil.gif)
+
+    implementation(libs.androidx.work.runtime.ktx)
+
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
 }

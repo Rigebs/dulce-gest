@@ -1,5 +1,8 @@
 package com.rige.dulcegest.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -8,16 +11,28 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.rige.dulcegest.R
+import com.rige.dulcegest.core.utils.NotificationHelper
+import com.rige.dulcegest.core.workers.LowStockCheckWorker
 import com.rige.dulcegest.databinding.ActivityMainBinding
 import com.rige.dulcegest.ui.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import jakarta.inject.Inject
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -32,6 +47,10 @@ class MainActivity : AppCompatActivity() {
 
     private var activeNavHost: NavHostFragment? = null
 
+    companion object {
+        private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,6 +58,10 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupNotifications()
+
+        requestNotificationPermission()
 
         onBackPressedDispatcher.addCallback(this) {
             val currentNavController = activeNavHost?.navController
@@ -170,6 +193,50 @@ class MainActivity : AppCompatActivity() {
         currentSearchView?.apply {
             setQuery("", false)
             clearFocus()
+        }
+    }
+
+    private fun setupNotifications() {
+        NotificationHelper.createNotificationChannel(this)
+
+        schedulePeriodicCheck()
+    }
+
+    private fun schedulePeriodicCheck() {
+        // ⭐ CAMBIO CLAVE: Usamos PeriodicWorkRequestBuilder para que se repita cada 24 horas.
+        val workRequest = PeriodicWorkRequestBuilder<LowStockCheckWorker>(
+            24, TimeUnit.HOURS // Intervalo de 24 horas
+        )
+            // Opcional: Establecer un tiempo de 'flex' para que se ejecute en un rango
+            // .setFlexTimeInterval(1, TimeUnit.HOURS) // Se ejecutará en la última hora del periodo
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
+                    .build()
+            )
+            .build()
+
+        // Usamos enqueueUniquePeriodicWork para que solo exista una tarea de este tipo
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "low_stock_check_periodic", // Nuevo nombre para distinguir la periódica
+            ExistingPeriodicWorkPolicy.KEEP, // Mantenemos la existente si ya está programada
+            workRequest
+        )
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    NOTIFICATION_PERMISSION_REQUEST_CODE
+                )
+            }
         }
     }
 
