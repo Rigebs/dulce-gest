@@ -44,6 +44,7 @@ class HomeFragment :
         }
 
         saleViewModel.getTotalSalesThisWeek().observe(viewLifecycleOwner) { weeklySales ->
+            println("total: $weeklySales")
             val total = weeklySales ?: 0.0
             binding.txtWeeklySales.text = "S/ %.2f".format(total)
             updateWeeklyGoal(total)

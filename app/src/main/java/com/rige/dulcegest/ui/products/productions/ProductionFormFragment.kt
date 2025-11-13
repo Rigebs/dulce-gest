@@ -47,8 +47,6 @@ class ProductionFormFragment :
             binding.sectionSupplies.visibility = View.GONE
             binding.inputNotes.visibility = View.GONE
             binding.btnSave.text = "Actualizar cantidad"
-        } else {
-            observeSaveResult()
         }
     }
 
@@ -67,8 +65,7 @@ class ProductionFormFragment :
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerProduct.adapter = adapter
 
-            if (isEditMode) {
-            } else {
+            if (!isEditMode) {
                 binding.spinnerProduct.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         val product = productList[position]
@@ -81,7 +78,6 @@ class ProductionFormFragment :
     }
 
     private fun loadSuppliesForProduct(productId: Long) {
-        // Se mantiene la obtención de la receta para poblar el adaptador de la UI
         productViewModel.getRecipeWithSupplies(productId).observe(viewLifecycleOwner) { list ->
             if (list.isNotEmpty()) {
                 binding.sectionSupplies.visibility = View.VISIBLE
@@ -105,52 +101,44 @@ class ProductionFormFragment :
         }
     }
 
-    private fun observeSaveResult() {
-        productionViewModel.saveResult.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is SaveProductionUseCase.Result.Success -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "Lote producido correctamente.\nCosto total: ${"%.2f".format(result.totalCost)}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    findNavController().navigateUp()
-                }
-                is SaveProductionUseCase.Result.Error -> {
-                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-    }
-
     private fun saveProduction() {
         val qtyProduced = binding.inputQuantity.text.toString().toDoubleOrNull()
 
-        // 1. Validación de UI (Mínima)
         if (qtyProduced == null || qtyProduced <= 0) {
             Toast.makeText(requireContext(), "Ingrese una cantidad válida", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (isEditMode) {
-            // 2. Lógica de EDICIÓN (Llamada simple al ViewModel)
             productionViewModel.updateBatchQuantity(args.batchId, qtyProduced)
             Toast.makeText(requireContext(), "Cantidad de lote actualizada", Toast.LENGTH_SHORT).show()
             findNavController().navigateUp()
         } else {
-            // 3. Lógica de REGISTRO NUEVO (Llamada al Use Case a través del ViewModel)
             if (productList.isEmpty()) return
             val selectedProduct = productList[binding.spinnerProduct.selectedItemPosition]
             val supplyUsages = adapter?.getQuantities() ?: emptyMap()
             val notes = binding.inputNotes.text.toString().ifEmpty { null }
 
-            // El Use Case dentro del ViewModel valida los insumos y realiza toda la transacción
             productionViewModel.registerNewProduction(
                 selectedProduct,
                 qtyProduced,
                 supplyUsages,
                 notes
-            )
+            ).observe(viewLifecycleOwner) { result ->
+                when (result) {
+                    is SaveProductionUseCase.Result.Success -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "Lote producido correctamente.\nCosto total: ${"%.2f".format(result.totalCost)}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        findNavController().navigateUp()
+                    }
+                    is SaveProductionUseCase.Result.Error -> {
+                        Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
         }
     }
 }

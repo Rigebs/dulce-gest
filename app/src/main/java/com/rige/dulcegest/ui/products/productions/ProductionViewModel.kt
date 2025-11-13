@@ -1,7 +1,6 @@
 package com.rige.dulcegest.ui.products.productions
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
@@ -24,22 +23,19 @@ class ProductionViewModel @Inject constructor(
 
     val batchesWithProductAndConsumptions = repo.allFullBatches
 
-    private val _saveResult = MutableLiveData<SaveProductionUseCase.Result>()
-    val saveResult: LiveData<SaveProductionUseCase.Result> = _saveResult
-
     fun registerNewProduction(
         selectedProduct: Product,
         qtyProduced: Double,
         supplyUsages: Map<Long, Double>,
         notes: String?
-    ) = viewModelScope.launch {
+    ): LiveData<SaveProductionUseCase.Result> = liveData {
         val result = saveProductionUseCase.execute(
             selectedProduct,
             qtyProduced,
             supplyUsages,
             notes
         )
-        _saveResult.postValue(result)
+        emit(result)
     }
 
     fun updateBatchQuantity(
@@ -48,7 +44,6 @@ class ProductionViewModel @Inject constructor(
     ) = viewModelScope.launch {
         updateProductionBatchUseCase.execute(batchId, newQty)
     }
-
 
     fun deleteBatch(batch: ProductionBatch) = viewModelScope.launch {
         repo.deleteBatch(batch)
